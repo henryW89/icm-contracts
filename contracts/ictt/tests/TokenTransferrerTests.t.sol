@@ -370,9 +370,11 @@ abstract contract TokenTransferrerTest is Test {
 
     function _getDefaultMessageSourceBlockchainID() internal pure virtual returns (bytes32);
 
-    function _formatErrorMessage(
-        string memory message
-    ) internal pure virtual returns (bytes memory);
+    function _formatErrorMessage(string memory message)
+        internal
+        pure
+        virtual
+        returns (bytes memory);
 
     function _encodeSingleHopSendMessage(
         uint256 amount,

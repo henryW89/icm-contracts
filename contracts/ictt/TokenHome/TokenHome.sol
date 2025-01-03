@@ -600,9 +600,7 @@ abstract contract TokenHome is
      * @param amount The initial amount sent to this contract.
      * @return The actual amount deposited to this contract.
      */
-    function _deposit(
-        uint256 amount
-    ) internal virtual returns (uint256);
+    function _deposit(uint256 amount) internal virtual returns (uint256);
 
     /**
      * @notice Withdraws tokens to the recipient address.
@@ -800,9 +798,7 @@ abstract contract TokenHome is
             senderBalance - amount;
     }
 
-    function _validateSendAndCallInput(
-        SendAndCallInput memory input
-    ) private pure {
+    function _validateSendAndCallInput(SendAndCallInput memory input) private pure {
         require(input.recipientContract != address(0), "TokenHome: zero recipient contract address");
         require(input.requiredGasLimit > 0, "TokenHome: zero required gas limit");
         require(input.recipientGasLimit > 0, "TokenHome: zero recipient gas limit");
@@ -814,9 +810,7 @@ abstract contract TokenHome is
         require(input.secondaryFee == 0, "TokenHome: non-zero secondary fee");
     }
 
-    function _validateSendTokensInput(
-        SendTokensInput memory input
-    ) private pure {
+    function _validateSendTokensInput(SendTokensInput memory input) private pure {
         require(input.recipient != address(0), "TokenHome: zero recipient address");
         require(input.requiredGasLimit > 0, "TokenHome: zero required gas limit");
         require(input.secondaryFee == 0, "TokenHome: non-zero secondary fee");

@@ -38,7 +38,5 @@ interface IWrappedNativeToken is IERC20 {
      * @notice Withdraws native tokens for wrapped tokens.
      * @param amount Amount of native tokens to withdraw
      */
-    function withdraw(
-        uint256 amount
-    ) external;
+    function withdraw(uint256 amount) external;
 }

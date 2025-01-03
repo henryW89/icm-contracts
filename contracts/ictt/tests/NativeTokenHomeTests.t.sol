@@ -154,11 +154,8 @@ contract NativeTokenHomeTest is NativeTokenTransferrerTest, TokenHomeTest {
         emit Deposit(address(nativeTokenTransferrer), amount);
     }
 
-    // solhint-disable no-empty-blocks
-    function _setUpDeposit(
-        uint256 amount
-    ) internal virtual override {}
-    // solhint-enable no-empty-blocks
+    // solhint-disable-next-line no-empty-blocks
+    function _setUpDeposit(uint256 amount) internal virtual override {}
 
     function _setUpExpectedZeroAmountRevert() internal override {
         vm.expectRevert("SafeWrappedNativeTokenDeposit: balance not increased");

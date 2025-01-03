@@ -26,7 +26,5 @@ interface IPoAValidatorManager is IValidatorManager {
      * started by a successful call to {completeValidatorRegistration} with the given validationID.
      * @param validationID The ID of the validation period being ended.
      */
-    function initializeEndValidation(
-        bytes32 validationID
-    ) external;
+    function initializeEndValidation(bytes32 validationID) external;
 }
