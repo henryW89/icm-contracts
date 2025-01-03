@@ -15,7 +15,7 @@ library ValidatorMessages {
     // The validationID is the SHA-256 hash of the concatenation of the CODEC_ID,
     // REGISTER_L1_VALIDATOR_MESSAGE_TYPE_ID, and the concatenated ValidationPeriod fields.
     struct ValidationPeriod {
-        bytes32 l1ID;
+        bytes32 subnetID;
         bytes nodeID;
         bytes blsPublicKey;
         uint64 registrationExpiry;
@@ -66,11 +66,9 @@ library ValidatorMessages {
      * @param conversionID The subnet conversion ID to pack into the message.
      * @return The packed message.
      */
-    function packSubnetToL1ConversionMessage(bytes32 conversionID)
-        external
-        pure
-        returns (bytes memory)
-    {
+    function packSubnetToL1ConversionMessage(
+        bytes32 conversionID
+    ) external pure returns (bytes memory) {
         return abi.encodePacked(CODEC_ID, SUBNET_TO_L1_CONVERSION_MESSAGE_TYPE_ID, conversionID);
     }
 
@@ -81,11 +79,9 @@ library ValidatorMessages {
      * @param input The byte array to unpack.
      * @return The unpacked conversionID.
      */
-    function unpackSubnetToL1ConversionMessage(bytes memory input)
-        external
-        pure
-        returns (bytes32)
-    {
+    function unpackSubnetToL1ConversionMessage(
+        bytes memory input
+    ) external pure returns (bytes32) {
         if (input.length != 38) {
             revert InvalidMessageLength(uint32(input.length), 38);
         }
@@ -126,7 +122,7 @@ library ValidatorMessages {
      * +----------------+-----------------+--------------------------------------------------------+
      * |       codecID  :          uint16 |                                                2 bytes |
      * +----------------+-----------------+--------------------------------------------------------+
-     * |       l1ID :        [32]byte |                                               32 bytes |
+     * |       subnetID :        [32]byte |                                               32 bytes |
      * +----------------+-----------------+--------------------------------------------------------+
      * | managerChainID :        [32]byte |                                               32 bytes |
      * +----------------+-----------------+--------------------------------------------------------+
@@ -152,16 +148,14 @@ library ValidatorMessages {
      * @param conversionData The struct representing data to pack into the message.
      * @return The packed message.
      */
-    function packConversionData(ConversionData memory conversionData)
-        external
-        pure
-        returns (bytes memory)
-    {
+    function packConversionData(
+        ConversionData memory conversionData
+    ) external pure returns (bytes memory) {
         // Hardcoded 20 is for length of the managerAddress on EVM chains
         // solhint-disable-next-line func-named-parameters
         bytes memory res = abi.encodePacked(
             CODEC_ID,
-            conversionData.l1ID,
+            conversionData.subnetID,
             conversionData.validatorManagerBlockchainID,
             uint32(20),
             conversionData.validatorManagerAddress,
@@ -192,7 +186,7 @@ library ValidatorMessages {
      * +-----------------------+-------------+--------------------------------------------------------------------+
      * |                typeID :      uint32 |                                                            4 bytes |
      * +-----------------------+-------------+-------------------------------------------------------------------+
-     * |              l1ID :    [32]byte |                                                           32 bytes |
+     * |              subnetID :    [32]byte |                                                           32 bytes |
      * +-----------------------+-------------+--------------------------------------------------------------------+
      * |                nodeID :      []byte |                                              4 + len(nodeID) bytes |
      * +-----------------------+-------------+--------------------------------------------------------------------+
@@ -221,11 +215,9 @@ library ValidatorMessages {
      * @param validationPeriod The information to pack into the message.
      * @return The validationID and the packed message.
      */
-    function packRegisterL1ValidatorMessage(ValidationPeriod memory validationPeriod)
-        external
-        pure
-        returns (bytes32, bytes memory)
-    {
+    function packRegisterL1ValidatorMessage(
+        ValidationPeriod memory validationPeriod
+    ) external pure returns (bytes32, bytes memory) {
         if (validationPeriod.blsPublicKey.length != 48) {
             revert InvalidBLSPublicKey();
         }
@@ -234,7 +226,7 @@ library ValidatorMessages {
         bytes memory res = abi.encodePacked(
             CODEC_ID,
             REGISTER_L1_VALIDATOR_MESSAGE_TYPE_ID,
-            validationPeriod.l1ID,
+            validationPeriod.subnetID,
             uint32(validationPeriod.nodeID.length),
             validationPeriod.nodeID,
             validationPeriod.blsPublicKey,
@@ -265,11 +257,9 @@ library ValidatorMessages {
      * @param input The byte array to unpack.
      * @return The unpacked ValidationPeriod.
      */
-    function unpackRegisterL1ValidatorMessage(bytes memory input)
-        external
-        pure
-        returns (ValidationPeriod memory)
-    {
+    function unpackRegisterL1ValidatorMessage(
+        bytes memory input
+    ) external pure returns (ValidationPeriod memory) {
         uint32 index = 0;
         ValidationPeriod memory validation;
 
@@ -298,13 +288,13 @@ library ValidatorMessages {
             index += 4;
         }
 
-        // Unpack the l1ID
+        // Unpack the subnetID
         {
-            bytes32 l1ID;
+            bytes32 subnetID;
             for (uint256 i; i < 32; ++i) {
-                l1ID |= bytes32(uint256(uint8(input[i + index])) << (8 * (31 - i)));
+                subnetID |= bytes32(uint256(uint8(input[i + index])) << (8 * (31 - i)));
             }
-            validation.l1ID = l1ID;
+            validation.subnetID = subnetID;
             index += 32;
         }
 
@@ -473,11 +463,9 @@ library ValidatorMessages {
      * @return The validationID and whether the validation period was registered or is not a
      * validator and never will be a validator due to the expiry time passing.
      */
-    function unpackL1ValidatorRegistrationMessage(bytes memory input)
-        external
-        pure
-        returns (bytes32, bool)
-    {
+    function unpackL1ValidatorRegistrationMessage(
+        bytes memory input
+    ) external pure returns (bytes32, bool) {
         if (input.length != 39) {
             revert InvalidMessageLength(uint32(input.length), 39);
         }
@@ -550,11 +538,9 @@ library ValidatorMessages {
      * @param input The byte array to unpack.
      * @return The validationID, nonce, and weight.
      */
-    function unpackL1ValidatorWeightMessage(bytes memory input)
-        external
-        pure
-        returns (bytes32, uint64, uint64)
-    {
+    function unpackL1ValidatorWeightMessage(
+        bytes memory input
+    ) external pure returns (bytes32, uint64, uint64) {
         if (input.length != 54) {
             revert InvalidMessageLength(uint32(input.length), 54);
         }
@@ -631,11 +617,9 @@ library ValidatorMessages {
      * @param input The byte array to unpack.
      * @return The validationID and uptime.
      */
-    function unpackValidationUptimeMessage(bytes memory input)
-        external
-        pure
-        returns (bytes32, uint64)
-    {
+    function unpackValidationUptimeMessage(
+        bytes memory input
+    ) external pure returns (bytes32, uint64) {
         if (input.length != 46) {
             revert InvalidMessageLength(uint32(input.length), 46);
         }

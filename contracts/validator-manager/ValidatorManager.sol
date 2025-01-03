@@ -36,8 +36,8 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
 
     struct ValidatorManagerStorage {
-        /// @notice The l1ID associated with this validator manager.
-        bytes32 _l1ID;
+        /// @notice The subnetID associated with this validator manager.
+        bytes32 _subnetID;
         /// @notice The number of seconds after which to reset the churn tracker.
         uint64 _churnPeriodSeconds;
         /// @notice The maximum churn rate allowed per churn period.
@@ -109,21 +109,19 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         IWarpMessenger(0x0200000000000000000000000000000000000005);
 
     // solhint-disable-next-line func-name-mixedcase
-    function __ValidatorManager_init(ValidatorManagerSettings calldata settings)
-        internal
-        onlyInitializing
-    {
+    function __ValidatorManager_init(
+        ValidatorManagerSettings calldata settings
+    ) internal onlyInitializing {
         __Context_init();
         __ValidatorManager_init_unchained(settings);
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __ValidatorManager_init_unchained(ValidatorManagerSettings calldata settings)
-        internal
-        onlyInitializing
-    {
+    function __ValidatorManager_init_unchained(
+        ValidatorManagerSettings calldata settings
+    ) internal onlyInitializing {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
-        $._l1ID = settings.l1ID;
+        $._subnetID = settings.subnetID;
 
         if (
             settings.maximumChurnPercentage > MAXIMUM_CHURN_PERCENTAGE_LIMIT
@@ -174,7 +172,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
 
             // Validation ID of the initial validators is the sha256 hash of the
             // convert subnet to L1 tx ID and the index of the initial validator.
-            bytes32 validationID = sha256(abi.encodePacked(conversionData.l1ID, i));
+            bytes32 validationID = sha256(abi.encodePacked(conversionData.subnetID, i));
 
             // Save the initial validator as an active validator.
 
@@ -213,7 +211,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         $._initializedValidatorSet = true;
     }
 
-    function _validatePChainOwner(PChainOwner calldata pChainOwner) internal pure {
+    function _validatePChainOwner(
+        PChainOwner calldata pChainOwner
+    ) internal pure {
         // If threshold is 0, addresses must be empty.
         if (pChainOwner.threshold == 0 && pChainOwner.addresses.length != 0) {
             revert InvalidPChainOwnerThreshold(pChainOwner.threshold, pChainOwner.addresses.length);
@@ -277,7 +277,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         (bytes32 validationID, bytes memory registerL1ValidatorMessage) = ValidatorMessages
             .packRegisterL1ValidatorMessage(
             ValidatorMessages.ValidationPeriod({
-                l1ID: $._l1ID,
+                subnetID: $._subnetID,
                 nodeID: input.nodeID,
                 blsPublicKey: input.blsPublicKey,
                 remainingBalanceOwner: input.remainingBalanceOwner,
@@ -309,7 +309,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     /**
      * @notice See {IValidatorManager-resendRegisterValidatorMessage}.
      */
-    function resendRegisterValidatorMessage(bytes32 validationID) external {
+    function resendRegisterValidatorMessage(
+        bytes32 validationID
+    ) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         // The initial validator set must have been set already to have pending register validation messages.
         if ($._pendingRegisterValidationMessages[validationID].length == 0) {
@@ -326,7 +328,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     /**
      * @notice See {IValidatorManager-completeValidatorRegistration}.
      */
-    function completeValidatorRegistration(uint32 messageIndex) external {
+    function completeValidatorRegistration(
+        uint32 messageIndex
+    ) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         (bytes32 validationID, bool validRegistration) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
@@ -354,7 +358,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * @notice Returns a validation ID registered to the given nodeID
      * @param nodeID ID of the node associated with the validation ID
      */
-    function registeredValidators(bytes calldata nodeID) public view returns (bytes32) {
+    function registeredValidators(
+        bytes calldata nodeID
+    ) public view returns (bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         return $._registeredValidators[nodeID];
     }
@@ -363,7 +369,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * @notice Returns a validator registered to the given validationID
      * @param validationID ID of the validation period associated with the validator
      */
-    function getValidator(bytes32 validationID) public view returns (Validator memory) {
+    function getValidator(
+        bytes32 validationID
+    ) public view returns (Validator memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         return $._validationPeriods[validationID];
     }
@@ -374,11 +382,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * Any rewards for this validation period will stop accruing when this function is called.
      * @param validationID The ID of the validation period being ended.
      */
-    function _initializeEndValidation(bytes32 validationID)
-        internal
-        virtual
-        returns (Validator memory)
-    {
+    function _initializeEndValidation(
+        bytes32 validationID
+    ) internal virtual returns (Validator memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Ensure the validation period is active.
@@ -410,7 +416,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     /**
      * @notice See {IValidatorManager-resendEndValidatorMessage}.
      */
-    function resendEndValidatorMessage(bytes32 validationID) external {
+    function resendEndValidatorMessage(
+        bytes32 validationID
+    ) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         Validator memory validator = $._validationPeriods[validationID];
 
@@ -432,10 +440,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * {registrationExpiry} being reached.
      * @return (Validation ID, Validator instance) representing the completed validation period.
      */
-    function _completeEndValidation(uint32 messageIndex)
-        internal
-        returns (bytes32, Validator memory)
-    {
+    function _completeEndValidation(
+        uint32 messageIndex
+    ) internal returns (bytes32, Validator memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Get the Warp message.
@@ -474,16 +481,16 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         return (validationID, validator);
     }
 
-    function _incrementAndGetNonce(bytes32 validationID) internal returns (uint64) {
+    function _incrementAndGetNonce(
+        bytes32 validationID
+    ) internal returns (uint64) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         return ++$._validationPeriods[validationID].messageNonce;
     }
 
-    function _getPChainWarpMessage(uint32 messageIndex)
-        internal
-        view
-        returns (WarpMessage memory)
-    {
+    function _getPChainWarpMessage(
+        uint32 messageIndex
+    ) internal view returns (WarpMessage memory) {
         (WarpMessage memory warpMessage, bool valid) =
             WARP_MESSENGER.getVerifiedWarpMessage(messageIndex);
         if (!valid) {

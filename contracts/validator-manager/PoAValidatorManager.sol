@@ -21,7 +21,9 @@ import {OwnableUpgradeable} from
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
 contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableUpgradeable {
-    constructor(ICMInitializable init) {
+    constructor(
+        ICMInitializable init
+    ) {
         if (init == ICMInitializable.Disallowed) {
             _disableInitializers();
         }
@@ -62,14 +64,18 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
     /**
      * @notice See {IPoAValidatorManager-initializeEndValidation}.
      */
-    function initializeEndValidation(bytes32 validationID) external override onlyOwner {
+    function initializeEndValidation(
+        bytes32 validationID
+    ) external override onlyOwner {
         _initializeEndValidation(validationID);
     }
 
     /**
      * @notice See {IValidatorManager-completeEndValidation}.
      */
-    function completeEndValidation(uint32 messageIndex) external {
+    function completeEndValidation(
+        uint32 messageIndex
+    ) external {
         _completeEndValidation(messageIndex);
     }
 }

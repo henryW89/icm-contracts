@@ -234,7 +234,9 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
         return app;
     }
 
-    function _getStakeAssetBalance(address account) internal view override returns (uint256) {
+    function _getStakeAssetBalance(
+        address account
+    ) internal view override returns (uint256) {
         return token.balanceOf(account);
     }
 }

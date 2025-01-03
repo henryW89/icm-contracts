@@ -51,12 +51,12 @@ struct ValidatorChurnPeriod {
 
 /**
  * @notice Validator Manager settings, used to initialize the Validator Manager
- * @notice The l1ID is the ID of the L1 that the Validator Manager is managing
+ * @notice The subnetID is the ID of the L1 that the Validator Manager is managing
  * @notice The churnPeriodSeconds is the duration of the churn period in seconds
  * @notice The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
  */
 struct ValidatorManagerSettings {
-    bytes32 l1ID;
+    bytes32 subnetID;
     uint64 churnPeriodSeconds;
     uint8 maximumChurnPercentage;
 }
@@ -68,7 +68,7 @@ struct ValidatorManagerSettings {
  * and verified by the Validator Manager.
  */
 struct ConversionData {
-    bytes32 l1ID;
+    bytes32 subnetID;
     bytes32 validatorManagerBlockchainID;
     address validatorManagerAddress;
     InitialValidator[] initialValidators;
@@ -186,21 +186,27 @@ interface IValidatorManager {
      * Only necessary if the original message can't be delivered due to validator churn.
      * @param validationID The ID of the validation period being registered.
      */
-    function resendRegisterValidatorMessage(bytes32 validationID) external;
+    function resendRegisterValidatorMessage(
+        bytes32 validationID
+    ) external;
 
     /**
      * @notice Completes the validator registration process by returning an acknowledgement of the registration of a
      * validationID from the P-Chain.
      * @param messageIndex The index of the ICM message to be received providing the acknowledgement.
      */
-    function completeValidatorRegistration(uint32 messageIndex) external;
+    function completeValidatorRegistration(
+        uint32 messageIndex
+    ) external;
 
     /**
      * @notice Resubmits a validator end message to be sent to the P-Chain.
      * Only necessary if the original message can't be delivered due to validator churn.
      * @param validationID The ID of the validation period being ended.
      */
-    function resendEndValidatorMessage(bytes32 validationID) external;
+    function resendEndValidatorMessage(
+        bytes32 validationID
+    ) external;
 
     /**
      * @notice Completes the process of ending a validation period by receiving an acknowledgement from the P-Chain
@@ -211,5 +217,7 @@ interface IValidatorManager {
      * @param messageIndex The index of the ICM message to be received providing the proof the validation is not active
      * and never will be active on the P-Chain.
      */
-    function completeEndValidation(uint32 messageIndex) external;
+    function completeEndValidation(
+        uint32 messageIndex
+    ) external;
 }

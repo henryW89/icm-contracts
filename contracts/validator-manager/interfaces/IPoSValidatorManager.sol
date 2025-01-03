@@ -30,7 +30,7 @@ enum DelegatorStatus {
  * @notice weightToValueFactor is the factor used to convert validator weight to value
  * @notice rewardCalculator is the reward calculator used to calculate rewards for this validator manager
  * @notice uptimeBlockchainID is the ID of the blockchain that submits uptime proofs.
- * This must be a blockchain validated by the l1ID that this contract manages.
+ * This must be a blockchain validated by the subnetID that this contract manages.
  */
 struct PoSValidatorManagerSettings {
     ValidatorManagerSettings baseSettings;
@@ -271,7 +271,9 @@ interface IPoSValidatorManager is IValidatorManager {
      * Only necessary if the original message can't be delivered due to validator churn.
      * @param delegationID The ID of the delegation.
      */
-    function resendUpdateDelegation(bytes32 delegationID) external;
+    function resendUpdateDelegation(
+        bytes32 delegationID
+    ) external;
 
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
@@ -290,7 +292,9 @@ interface IPoSValidatorManager is IValidatorManager {
      * @notice Withdraws the delegation fees from completed delegations to the owner of the validator.
      * @param validationID The ID of the validation period being ended.
      */
-    function claimDelegationFees(bytes32 validationID) external;
+    function claimDelegationFees(
+        bytes32 validationID
+    ) external;
 
     /**
      * @notice Changes the address of the recipient of the validator's rewards for a validation period. This method can be called any time before {completeEndValidation}.
