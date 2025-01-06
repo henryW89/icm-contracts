@@ -49,7 +49,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		fundedKey,
 		false,
 	)
-	stakingManagerAddress := network.GetValidatorManager(l1AInfo.L1ID)
+	stakingManagerAddress := network.GetValidatorManager(l1AInfo.SubnetID)
 	nativeStakingManager, err := nativetokenstakingmanager.NewNativeTokenStakingManager(
 		stakingManagerAddress,
 		l1AInfo.RPCClient,
@@ -60,7 +60,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	signatureAggregator := utils.NewSignatureAggregator(
 		cChainInfo.NodeURIs[0],
 		[]ids.ID{
-			l1AInfo.L1ID,
+			l1AInfo.SubnetID,
 		},
 	)
 	defer signatureAggregator.Shutdown()
