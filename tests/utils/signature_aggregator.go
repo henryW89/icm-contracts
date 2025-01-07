@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,17 +15,18 @@ import (
 
 	"github.com/ava-labs/avalanchego/ids"
 	avalancheWarp "github.com/ava-labs/avalanchego/vms/platformvm/warp"
+	"github.com/ethereum/go-ethereum/log"
 
 	. "github.com/onsi/gomega"
 )
 
 const (
 	DEFAULT_SIG_AGG_PATH = "~/.teleporter-deps/icm-services/signature-aggregator"
-	DEFAULT_API_PORT     = 9090
+	DEFAULT_API_PORT     = 8080
 	SIG_AGG_API_PATH     = "/aggregate-signatures"
 )
 
-// This is a wrapper around a signature aggregator binar instead of importing the package directly
+// This is a wrapper around a signature aggregator binary instead of importing the package directly
 // to avoid cyclic dependencies
 type SignatureAggregator struct {
 	cmd        *exec.Cmd
@@ -56,9 +58,8 @@ type SignatureAggregatorResponse struct {
 	SignedMessage string `json:"signed-message"`
 }
 
-func (s *SignatureAggregator) Shutdown() error {
+func (s *SignatureAggregator) Shutdown() {
 	s.cancelFunc()
-	return s.cmd.Wait()
 }
 
 // Aggregator utils
@@ -98,6 +99,14 @@ func NewSignatureAggregator(apiUri string, l1IDs []ids.ID) *SignatureAggregator 
 	cmd.Stderr = os.Stderr
 	err = cmd.Start()
 	Expect(err).Should(BeNil())
+	go func() {
+		err := cmd.Wait()
+		// Context cancellation is the only expected way for the process to exit, otherwise log an error
+		// Don't panic to allow for easier cleanup
+		if !errors.Is(ctx.Err(), context.Canceled) {
+			log.Error("Signature aggregator exited abnormally", err)
+		}
+	}()
 
 	// TODO: when the signature aggregator health check endpoint is improved to not return
 	// before ready to serve requests replace this sleep.
@@ -137,6 +146,7 @@ func (s *SignatureAggregator) CreateSignedMessage(
 	}
 	req.Header.Set("Content-Type", "application/json")
 	res, err := client.Do(req)
+	defer res.Body.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +154,6 @@ func (s *SignatureAggregator) CreateSignedMessage(
 		return nil, fmt.Errorf("expected status code 200, got %d", res.StatusCode)
 	}
 
-	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
