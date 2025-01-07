@@ -21,9 +21,8 @@ import (
 )
 
 const (
-	DEFAULT_SIG_AGG_PATH = "~/.teleporter-deps/icm-services/signature-aggregator"
-	DEFAULT_API_PORT     = 8080
-	SIG_AGG_API_PATH     = "/aggregate-signatures"
+	DEFAULT_API_PORT = 8080
+	SIG_AGG_API_PATH = "/aggregate-signatures"
 )
 
 // This is a wrapper around a signature aggregator binary instead of importing the package directly
@@ -65,9 +64,7 @@ func (s *SignatureAggregator) Shutdown() {
 // Aggregator utils
 func NewSignatureAggregator(apiUri string, l1IDs []ids.ID) *SignatureAggregator {
 	sigAggPath := os.Getenv("SIG_AGG_PATH")
-	if sigAggPath == "" {
-		sigAggPath = DEFAULT_SIG_AGG_PATH
-	}
+	Expect(sigAggPath).ShouldNot(BeEmpty())
 	l1IdStrings := make([]string, 0, len(l1IDs))
 	for _, l1Id := range l1IDs {
 		l1IdStrings = append(l1IdStrings, l1Id.String())
@@ -146,10 +143,10 @@ func (s *SignatureAggregator) CreateSignedMessage(
 	}
 	req.Header.Set("Content-Type", "application/json")
 	res, err := client.Do(req)
-	defer res.Body.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("expected status code 200, got %d", res.StatusCode)
 	}
