@@ -64,28 +64,35 @@ abstract contract ValidatorManagerTest is Test {
 
     event ValidationPeriodCreated(
         bytes32 indexed validationID,
-        bytes indexed nodeID,
         bytes32 indexed registerValidationMessageID,
-        uint64 weight,
+        uint64 indexed weight,
+        bytes nodeID,
         uint64 registrationExpiry
     );
 
     event InitialValidatorCreated(
-        bytes32 indexed validationID, bytes indexed nodeID, uint64 weight
+        bytes32 indexed validationID, uint64 indexed weight, bytes nodeID
     );
 
     event ValidationPeriodRegistered(
-        bytes32 indexed validationID, uint64 weight, uint256 timestamp
+        bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp
     );
 
     event ValidatorRemovalInitialized(
         bytes32 indexed validationID,
         bytes32 indexed setWeightMessageID,
-        uint64 weight,
+        uint64 indexed weight,
         uint256 endTime
     );
 
     event ValidationPeriodEnded(bytes32 indexed validationID, ValidatorStatus indexed status);
+
+    event ValidatorWeightUpdate(
+        bytes32 indexed validationID,
+        uint64 indexed nonce,
+        uint64 indexed weight,
+        bytes32 setWeightMessageID
+    );
 
     receive() external payable {}
     fallback() external payable {}
@@ -446,7 +453,7 @@ abstract contract ValidatorManagerTest is Test {
 
         _beforeSend(_weightToValue(weight), address(this));
         vm.expectEmit(true, true, true, true, address(validatorManager));
-        emit ValidationPeriodCreated(validationID, nodeID, bytes32(0), weight, registrationExpiry);
+        emit ValidationPeriodCreated(validationID, bytes32(0), weight, nodeID, registrationExpiry);
 
         _initializeValidatorRegistration(
             ValidatorRegistrationInput({

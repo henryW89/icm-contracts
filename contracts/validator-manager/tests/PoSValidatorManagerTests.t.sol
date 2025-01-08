@@ -68,23 +68,19 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
     );
 
     event DelegatorRegistered(
-        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime
+        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime
     );
 
     event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID);
 
-    event ValidatorWeightUpdate(
-        bytes32 indexed validationID,
-        uint64 indexed nonce,
-        uint64 weight,
-        bytes32 setWeightMessageID
-    );
-
     event DelegationEnded(
-        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees
+        bytes32 indexed delegationID,
+        bytes32 indexed validationID,
+        uint256 indexed rewards,
+        uint256 fees
     );
 
-    event UptimeUpdated(bytes32 indexed validationID, uint64 uptime);
+    event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime);
 
     function testDelegationFeeBipsTooLow() public {
         vm.expectRevert(

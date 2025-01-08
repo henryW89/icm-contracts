@@ -325,11 +325,14 @@ func InitializeValidatorSet(
 	)
 	manager, err := ivalidatormanager.NewIValidatorManager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
+
+	// Check that the first initial validator was registered successfully
 	initialValidatorCreatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
 		manager.ParseInitialValidatorCreated,
 	)
 	Expect(err).Should(BeNil())
+	Expect(initialValidatorCreatedEvent.NodeID).Should(Equal(nodes[0].NodeID.Bytes()))
 	var validationIDs []ids.ID
 	for i := range nodes {
 		validationIDs = append(validationIDs, l1Info.SubnetID.Append(uint32(i)))
@@ -399,6 +402,7 @@ func InitializeNativeValidatorRegistration(
 		stakingManager.ParseValidationPeriodCreated,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -443,6 +447,7 @@ func InitializeERC20ValidatorRegistration(
 		stakingManager.ParseValidationPeriodCreated,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -473,6 +478,7 @@ func InitializePoAValidatorRegistration(
 		validatorManager.ParseValidationPeriodCreated,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
