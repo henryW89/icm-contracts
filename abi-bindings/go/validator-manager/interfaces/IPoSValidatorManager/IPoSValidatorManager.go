@@ -46,7 +46,7 @@ type InitialValidator struct {
 
 // IPoSValidatorManagerMetaData contains all meta data concerning the IPoSValidatorManager contract.
 var IPoSValidatorManagerMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"rewards\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fees\",\"type\":\"uint256\"}],\"name\":\"DelegationEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegatorAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"validatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"delegatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"}],\"name\":\"DelegatorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"uptime\",\"type\":\"uint64\"}],\"name\":\"UptimeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeDelegatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeValidatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"claimDelegationFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"resendUpdateDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"submitUptimeProof\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewards\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fees\",\"type\":\"uint256\"}],\"name\":\"DelegationEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegatorAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"validatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"delegatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"}],\"name\":\"DelegatorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"uptime\",\"type\":\"uint64\"}],\"name\":\"UptimeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeDelegatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeValidatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"claimDelegationFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"resendUpdateDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"submitUptimeProof\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // IPoSValidatorManagerABI is the input ABI used to generate the binding from.
@@ -693,8 +693,8 @@ type IPoSValidatorManagerDelegationEnded struct {
 
 // FilterDelegationEnded is a free log retrieval operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
 //
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed rewards, uint256 fees)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegationEnded(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, rewards []*big.Int) (*IPoSValidatorManagerDelegationEndedIterator, error) {
+// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegationEnded(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IPoSValidatorManagerDelegationEndedIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -704,12 +704,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegationEnded
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var rewardsRule []interface{}
-	for _, rewardsItem := range rewards {
-		rewardsRule = append(rewardsRule, rewardsItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule, rewardsRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -718,8 +714,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegationEnded
 
 // WatchDelegationEnded is a free log subscription operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
 //
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed rewards, uint256 fees)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegationEnded(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerDelegationEnded, delegationID [][32]byte, validationID [][32]byte, rewards []*big.Int) (event.Subscription, error) {
+// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegationEnded(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerDelegationEnded, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -729,12 +725,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegationEnded(
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var rewardsRule []interface{}
-	for _, rewardsItem := range rewards {
-		rewardsRule = append(rewardsRule, rewardsItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule, rewardsRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -768,7 +760,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegationEnded(
 
 // ParseDelegationEnded is a log parse operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
 //
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed rewards, uint256 fees)
+// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseDelegationEnded(log types.Log) (*IPoSValidatorManagerDelegationEnded, error) {
 	event := new(IPoSValidatorManagerDelegationEnded)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "DelegationEnded", log); err != nil {
@@ -1021,8 +1013,8 @@ type IPoSValidatorManagerDelegatorRegistered struct {
 
 // FilterDelegatorRegistered is a free log retrieval operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
 //
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegatorRegistered(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, startTime []*big.Int) (*IPoSValidatorManagerDelegatorRegisteredIterator, error) {
+// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegatorRegistered(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IPoSValidatorManagerDelegatorRegisteredIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -1032,12 +1024,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegatorRegist
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var startTimeRule []interface{}
-	for _, startTimeItem := range startTime {
-		startTimeRule = append(startTimeRule, startTimeItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule, startTimeRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1046,8 +1034,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterDelegatorRegist
 
 // WatchDelegatorRegistered is a free log subscription operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
 //
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegatorRegistered(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerDelegatorRegistered, delegationID [][32]byte, validationID [][32]byte, startTime []*big.Int) (event.Subscription, error) {
+// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegatorRegistered(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerDelegatorRegistered, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -1057,12 +1045,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegatorRegiste
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var startTimeRule []interface{}
-	for _, startTimeItem := range startTime {
-		startTimeRule = append(startTimeRule, startTimeItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule, startTimeRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1096,7 +1080,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchDelegatorRegiste
 
 // ParseDelegatorRegistered is a log parse operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
 //
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime)
+// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseDelegatorRegistered(log types.Log) (*IPoSValidatorManagerDelegatorRegistered, error) {
 	event := new(IPoSValidatorManagerDelegatorRegistered)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "DelegatorRegistered", log); err != nil {
@@ -1336,19 +1320,15 @@ type IPoSValidatorManagerInitialValidatorCreated struct {
 
 // FilterInitialValidatorCreated is a free log retrieval operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte, weight []uint64) (*IPoSValidatorManagerInitialValidatorCreatedIterator, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte) (*IPoSValidatorManagerInitialValidatorCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1357,19 +1337,15 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitialValidato
 
 // WatchInitialValidatorCreated is a free log subscription operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerInitialValidatorCreated, validationID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerInitialValidatorCreated, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1403,7 +1379,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitialValidator
 
 // ParseInitialValidatorCreated is a log parse operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseInitialValidatorCreated(log types.Log) (*IPoSValidatorManagerInitialValidatorCreated, error) {
 	event := new(IPoSValidatorManagerInitialValidatorCreated)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "InitialValidatorCreated", log); err != nil {
@@ -1489,19 +1465,15 @@ type IPoSValidatorManagerUptimeUpdated struct {
 
 // FilterUptimeUpdated is a free log retrieval operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
-// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterUptimeUpdated(opts *bind.FilterOpts, validationID [][32]byte, uptime []uint64) (*IPoSValidatorManagerUptimeUpdatedIterator, error) {
+// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterUptimeUpdated(opts *bind.FilterOpts, validationID [][32]byte) (*IPoSValidatorManagerUptimeUpdatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var uptimeRule []interface{}
-	for _, uptimeItem := range uptime {
-		uptimeRule = append(uptimeRule, uptimeItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "UptimeUpdated", validationIDRule, uptimeRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "UptimeUpdated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1510,19 +1482,15 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterUptimeUpdated(o
 
 // WatchUptimeUpdated is a free log subscription operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
-// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerUptimeUpdated, validationID [][32]byte, uptime []uint64) (event.Subscription, error) {
+// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerUptimeUpdated, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var uptimeRule []interface{}
-	for _, uptimeItem := range uptime {
-		uptimeRule = append(uptimeRule, uptimeItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "UptimeUpdated", validationIDRule, uptimeRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "UptimeUpdated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1556,7 +1524,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(op
 
 // ParseUptimeUpdated is a log parse operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
-// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime)
+// Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseUptimeUpdated(log types.Log) (*IPoSValidatorManagerUptimeUpdated, error) {
 	event := new(IPoSValidatorManagerUptimeUpdated)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "UptimeUpdated", log); err != nil {
@@ -1645,8 +1613,8 @@ type IPoSValidatorManagerValidationPeriodCreated struct {
 
 // FilterValidationPeriodCreated is a free log retrieval operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, registerValidationMessageID [][32]byte, weight []uint64) (*IPoSValidatorManagerValidationPeriodCreatedIterator, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, registerValidationMessageID [][32]byte) (*IPoSValidatorManagerValidationPeriodCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1656,12 +1624,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPerio
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1670,8 +1634,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPerio
 
 // WatchValidationPeriodCreated is a free log subscription operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidationPeriodCreated, validationID [][32]byte, registerValidationMessageID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidationPeriodCreated, validationID [][32]byte, registerValidationMessageID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1681,12 +1645,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriod
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1720,7 +1680,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriod
 
 // ParseValidationPeriodCreated is a log parse operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseValidationPeriodCreated(log types.Log) (*IPoSValidatorManagerValidationPeriodCreated, error) {
 	event := new(IPoSValidatorManagerValidationPeriodCreated)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "ValidationPeriodCreated", log); err != nil {
@@ -1960,23 +1920,15 @@ type IPoSValidatorManagerValidationPeriodRegistered struct {
 
 // FilterValidationPeriodRegistered is a free log retrieval operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPeriodRegistered(opts *bind.FilterOpts, validationID [][32]byte, weight []uint64, timestamp []*big.Int) (*IPoSValidatorManagerValidationPeriodRegisteredIterator, error) {
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPeriodRegistered(opts *bind.FilterOpts, validationID [][32]byte) (*IPoSValidatorManagerValidationPeriodRegisteredIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
-	var timestampRule []interface{}
-	for _, timestampItem := range timestamp {
-		timestampRule = append(timestampRule, timestampItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidationPeriodRegistered", validationIDRule, weightRule, timestampRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidationPeriodRegistered", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1985,23 +1937,15 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidationPerio
 
 // WatchValidationPeriodRegistered is a free log subscription operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriodRegistered(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidationPeriodRegistered, validationID [][32]byte, weight []uint64, timestamp []*big.Int) (event.Subscription, error) {
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriodRegistered(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidationPeriodRegistered, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
-	var timestampRule []interface{}
-	for _, timestampItem := range timestamp {
-		timestampRule = append(timestampRule, timestampItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidationPeriodRegistered", validationIDRule, weightRule, timestampRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidationPeriodRegistered", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2035,7 +1979,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidationPeriod
 
 // ParseValidationPeriodRegistered is a log parse operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseValidationPeriodRegistered(log types.Log) (*IPoSValidatorManagerValidationPeriodRegistered, error) {
 	event := new(IPoSValidatorManagerValidationPeriodRegistered)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "ValidationPeriodRegistered", log); err != nil {
@@ -2123,8 +2067,8 @@ type IPoSValidatorManagerValidatorRemovalInitialized struct {
 
 // FilterValidatorRemovalInitialized is a free log retrieval operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorRemovalInitialized(opts *bind.FilterOpts, validationID [][32]byte, setWeightMessageID [][32]byte, weight []uint64) (*IPoSValidatorManagerValidatorRemovalInitializedIterator, error) {
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorRemovalInitialized(opts *bind.FilterOpts, validationID [][32]byte, setWeightMessageID [][32]byte) (*IPoSValidatorManagerValidatorRemovalInitializedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -2134,12 +2078,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorRemova
 	for _, setWeightMessageIDItem := range setWeightMessageID {
 		setWeightMessageIDRule = append(setWeightMessageIDRule, setWeightMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2148,8 +2088,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorRemova
 
 // WatchValidatorRemovalInitialized is a free log subscription operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorRemovalInitialized(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidatorRemovalInitialized, validationID [][32]byte, setWeightMessageID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorRemovalInitialized(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidatorRemovalInitialized, validationID [][32]byte, setWeightMessageID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -2159,12 +2099,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorRemoval
 	for _, setWeightMessageIDItem := range setWeightMessageID {
 		setWeightMessageIDRule = append(setWeightMessageIDRule, setWeightMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2198,7 +2134,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorRemoval
 
 // ParseValidatorRemovalInitialized is a log parse operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseValidatorRemovalInitialized(log types.Log) (*IPoSValidatorManagerValidatorRemovalInitialized, error) {
 	event := new(IPoSValidatorManagerValidatorRemovalInitialized)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "ValidatorRemovalInitialized", log); err != nil {
@@ -2286,8 +2222,8 @@ type IPoSValidatorManagerValidatorWeightUpdate struct {
 
 // FilterValidatorWeightUpdate is a free log retrieval operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorWeightUpdate(opts *bind.FilterOpts, validationID [][32]byte, nonce []uint64, weight []uint64) (*IPoSValidatorManagerValidatorWeightUpdateIterator, error) {
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorWeightUpdate(opts *bind.FilterOpts, validationID [][32]byte, nonce []uint64) (*IPoSValidatorManagerValidatorWeightUpdateIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -2297,12 +2233,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorWeight
 	for _, nonceItem := range nonce {
 		nonceRule = append(nonceRule, nonceItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2311,8 +2243,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterValidatorWeight
 
 // WatchValidatorWeightUpdate is a free log subscription operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorWeightUpdate(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidatorWeightUpdate, validationID [][32]byte, nonce []uint64, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
+func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorWeightUpdate(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerValidatorWeightUpdate, validationID [][32]byte, nonce []uint64) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -2322,12 +2254,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorWeightU
 	for _, nonceItem := range nonce {
 		nonceRule = append(nonceRule, nonceItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule, weightRule)
+	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2361,7 +2289,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchValidatorWeightU
 
 // ParseValidatorWeightUpdate is a log parse operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
 func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseValidatorWeightUpdate(log types.Log) (*IPoSValidatorManagerValidatorWeightUpdate, error) {
 	event := new(IPoSValidatorManagerValidatorWeightUpdate)
 	if err := _IPoSValidatorManager.contract.UnpackLog(event, "ValidatorWeightUpdate", log); err != nil {

@@ -46,7 +46,7 @@ type InitialValidator struct {
 
 // IValidatorManagerMetaData contains all meta data concerning the IValidatorManager contract.
 var IValidatorManagerMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // IValidatorManagerABI is the input ABI used to generate the binding from.
@@ -377,19 +377,15 @@ type IValidatorManagerInitialValidatorCreated struct {
 
 // FilterInitialValidatorCreated is a free log retrieval operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte, weight []uint64) (*IValidatorManagerInitialValidatorCreatedIterator, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte) (*IValidatorManagerInitialValidatorCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -398,19 +394,15 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterInitialValidatorCreat
 
 // WatchInitialValidatorCreated is a free log subscription operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerInitialValidatorCreated, validationID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerInitialValidatorCreated, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -444,7 +436,7 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreate
 
 // ParseInitialValidatorCreated is a log parse operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 indexed weight, bytes nodeID)
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseInitialValidatorCreated(log types.Log) (*IValidatorManagerInitialValidatorCreated, error) {
 	event := new(IValidatorManagerInitialValidatorCreated)
 	if err := _IValidatorManager.contract.UnpackLog(event, "InitialValidatorCreated", log); err != nil {
@@ -533,8 +525,8 @@ type IValidatorManagerValidationPeriodCreated struct {
 
 // FilterValidationPeriodCreated is a free log retrieval operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, registerValidationMessageID [][32]byte, weight []uint64) (*IValidatorManagerValidationPeriodCreatedIterator, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, registerValidationMessageID [][32]byte) (*IValidatorManagerValidationPeriodCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -544,12 +536,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreat
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -558,8 +546,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreat
 
 // WatchValidationPeriodCreated is a free log subscription operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodCreated, validationID [][32]byte, registerValidationMessageID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodCreated, validationID [][32]byte, registerValidationMessageID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -569,12 +557,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreate
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -608,7 +592,7 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreate
 
 // ParseValidationPeriodCreated is a log parse operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 indexed weight, bytes nodeID, uint64 registrationExpiry)
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseValidationPeriodCreated(log types.Log) (*IValidatorManagerValidationPeriodCreated, error) {
 	event := new(IValidatorManagerValidationPeriodCreated)
 	if err := _IValidatorManager.contract.UnpackLog(event, "ValidationPeriodCreated", log); err != nil {
@@ -848,23 +832,15 @@ type IValidatorManagerValidationPeriodRegistered struct {
 
 // FilterValidationPeriodRegistered is a free log retrieval operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodRegistered(opts *bind.FilterOpts, validationID [][32]byte, weight []uint64, timestamp []*big.Int) (*IValidatorManagerValidationPeriodRegisteredIterator, error) {
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodRegistered(opts *bind.FilterOpts, validationID [][32]byte) (*IValidatorManagerValidationPeriodRegisteredIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
-	var timestampRule []interface{}
-	for _, timestampItem := range timestamp {
-		timestampRule = append(timestampRule, timestampItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodRegistered", validationIDRule, weightRule, timestampRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodRegistered", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -873,23 +849,15 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodRegis
 
 // WatchValidationPeriodRegistered is a free log subscription operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodRegistered(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodRegistered, validationID [][32]byte, weight []uint64, timestamp []*big.Int) (event.Subscription, error) {
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodRegistered(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodRegistered, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
-	var timestampRule []interface{}
-	for _, timestampItem := range timestamp {
-		timestampRule = append(timestampRule, timestampItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodRegistered", validationIDRule, weightRule, timestampRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodRegistered", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -923,7 +891,7 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodRegist
 
 // ParseValidationPeriodRegistered is a log parse operation binding the contract event 0x8629ec2bfd8d3b792ba269096bb679e08f20ba2caec0785ef663cf94788e349b.
 //
-// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp)
+// Solidity: event ValidationPeriodRegistered(bytes32 indexed validationID, uint64 weight, uint256 timestamp)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseValidationPeriodRegistered(log types.Log) (*IValidatorManagerValidationPeriodRegistered, error) {
 	event := new(IValidatorManagerValidationPeriodRegistered)
 	if err := _IValidatorManager.contract.UnpackLog(event, "ValidationPeriodRegistered", log); err != nil {
@@ -1011,8 +979,8 @@ type IValidatorManagerValidatorRemovalInitialized struct {
 
 // FilterValidatorRemovalInitialized is a free log retrieval operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorRemovalInitialized(opts *bind.FilterOpts, validationID [][32]byte, setWeightMessageID [][32]byte, weight []uint64) (*IValidatorManagerValidatorRemovalInitializedIterator, error) {
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorRemovalInitialized(opts *bind.FilterOpts, validationID [][32]byte, setWeightMessageID [][32]byte) (*IValidatorManagerValidatorRemovalInitializedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1022,12 +990,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorRemovalIniti
 	for _, setWeightMessageIDItem := range setWeightMessageID {
 		setWeightMessageIDRule = append(setWeightMessageIDRule, setWeightMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1036,8 +1000,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorRemovalIniti
 
 // WatchValidatorRemovalInitialized is a free log subscription operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorRemovalInitialized(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidatorRemovalInitialized, validationID [][32]byte, setWeightMessageID [][32]byte, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorRemovalInitialized(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidatorRemovalInitialized, validationID [][32]byte, setWeightMessageID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1047,12 +1011,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorRemovalInitia
 	for _, setWeightMessageIDItem := range setWeightMessageID {
 		setWeightMessageIDRule = append(setWeightMessageIDRule, setWeightMessageIDItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidatorRemovalInitialized", validationIDRule, setWeightMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1086,7 +1046,7 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorRemovalInitia
 
 // ParseValidatorRemovalInitialized is a log parse operation binding the contract event 0xfbfc4c00cddda774e9bce93712e29d12887b46526858a1afb0937cce8c30fa42.
 //
-// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 indexed weight, uint256 endTime)
+// Solidity: event ValidatorRemovalInitialized(bytes32 indexed validationID, bytes32 indexed setWeightMessageID, uint64 weight, uint256 endTime)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseValidatorRemovalInitialized(log types.Log) (*IValidatorManagerValidatorRemovalInitialized, error) {
 	event := new(IValidatorManagerValidatorRemovalInitialized)
 	if err := _IValidatorManager.contract.UnpackLog(event, "ValidatorRemovalInitialized", log); err != nil {
@@ -1174,8 +1134,8 @@ type IValidatorManagerValidatorWeightUpdate struct {
 
 // FilterValidatorWeightUpdate is a free log retrieval operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorWeightUpdate(opts *bind.FilterOpts, validationID [][32]byte, nonce []uint64, weight []uint64) (*IValidatorManagerValidatorWeightUpdateIterator, error) {
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorWeightUpdate(opts *bind.FilterOpts, validationID [][32]byte, nonce []uint64) (*IValidatorManagerValidatorWeightUpdateIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1185,12 +1145,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorWeightUpdate
 	for _, nonceItem := range nonce {
 		nonceRule = append(nonceRule, nonceItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1199,8 +1155,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) FilterValidatorWeightUpdate
 
 // WatchValidatorWeightUpdate is a free log subscription operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorWeightUpdate(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidatorWeightUpdate, validationID [][32]byte, nonce []uint64, weight []uint64) (event.Subscription, error) {
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorWeightUpdate(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidatorWeightUpdate, validationID [][32]byte, nonce []uint64) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
@@ -1210,12 +1166,8 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorWeightUpdate(
 	for _, nonceItem := range nonce {
 		nonceRule = append(nonceRule, nonceItem)
 	}
-	var weightRule []interface{}
-	for _, weightItem := range weight {
-		weightRule = append(weightRule, weightItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule, weightRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidatorWeightUpdate", validationIDRule, nonceRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1249,7 +1201,7 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidatorWeightUpdate(
 
 // ParseValidatorWeightUpdate is a log parse operation binding the contract event 0x07de5ff35a674a8005e661f3333c907ca6333462808762d19dc7b3abb1a8c1df.
 //
-// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 indexed weight, bytes32 setWeightMessageID)
+// Solidity: event ValidatorWeightUpdate(bytes32 indexed validationID, uint64 indexed nonce, uint64 weight, bytes32 setWeightMessageID)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseValidatorWeightUpdate(log types.Log) (*IValidatorManagerValidatorWeightUpdate, error) {
 	event := new(IValidatorManagerValidatorWeightUpdate)
 	if err := _IValidatorManager.contract.UnpackLog(event, "ValidatorWeightUpdate", log); err != nil {

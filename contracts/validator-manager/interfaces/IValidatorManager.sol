@@ -113,14 +113,12 @@ interface IValidatorManager {
     event ValidationPeriodCreated(
         bytes32 indexed validationID,
         bytes32 indexed registerValidationMessageID,
-        uint64 indexed weight,
+        uint64 weight,
         bytes nodeID,
         uint64 registrationExpiry
     );
 
-    event InitialValidatorCreated(
-        bytes32 indexed validationID, uint64 indexed weight, bytes nodeID
-    );
+    event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID);
 
     /**
      * @notice Emitted when the staking manager learns that the validation period has been successfully registered
@@ -130,7 +128,7 @@ interface IValidatorManager {
      * @param timestamp The time at which the validation period was registered with the contract.
      */
     event ValidationPeriodRegistered(
-        bytes32 indexed validationID, uint64 indexed weight, uint256 indexed timestamp
+        bytes32 indexed validationID, uint64 weight, uint256 timestamp
     );
 
     /**
@@ -145,7 +143,7 @@ interface IValidatorManager {
     event ValidatorRemovalInitialized(
         bytes32 indexed validationID,
         bytes32 indexed setWeightMessageID,
-        uint64 indexed weight,
+        uint64 weight,
         uint256 endTime
     );
 
@@ -167,7 +165,7 @@ interface IValidatorManager {
     event ValidatorWeightUpdate(
         bytes32 indexed validationID,
         uint64 indexed nonce,
-        uint64 indexed weight,
+        uint64 weight,
         bytes32 setWeightMessageID
     );
 

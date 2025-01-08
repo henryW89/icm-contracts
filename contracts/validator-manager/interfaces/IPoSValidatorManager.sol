@@ -98,7 +98,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param startTime The time at which the registration was completed
      */
     event DelegatorRegistered(
-        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime
+        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime
     );
 
     /**
@@ -116,10 +116,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param fees The portion of the delegator's rewards paid to the validator
      */
     event DelegationEnded(
-        bytes32 indexed delegationID,
-        bytes32 indexed validationID,
-        uint256 indexed rewards,
-        uint256 fees
+        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees
     );
 
     /**
@@ -127,7 +124,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param validationID The ID of the validation period
      * @param uptime The updated uptime of the validator
      */
-    event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime);
+    event UptimeUpdated(bytes32 indexed validationID, uint64 uptime);
 
     /**
      * @notice Updates the uptime of the validationID if the submitted proof is greated than the stored uptime.

@@ -55,8 +55,6 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         disableOwner: DEFAULT_P_CHAIN_OWNER
     });
 
-    event ValidationUptimeUpdated(bytes32 indexed validationID, uint64 uptime);
-
     event DelegatorAdded(
         bytes32 indexed delegationID,
         bytes32 indexed validationID,
@@ -68,19 +66,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
     );
 
     event DelegatorRegistered(
-        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 indexed startTime
+        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime
     );
 
     event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID);
 
     event DelegationEnded(
-        bytes32 indexed delegationID,
-        bytes32 indexed validationID,
-        uint256 indexed rewards,
-        uint256 fees
+        bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees
     );
 
-    event UptimeUpdated(bytes32 indexed validationID, uint64 indexed uptime);
+    event UptimeUpdated(bytes32 indexed validationID, uint64 uptime);
 
     function testDelegationFeeBipsTooLow() public {
         vm.expectRevert(
