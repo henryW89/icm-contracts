@@ -35,7 +35,7 @@ type SignatureAggregator struct {
 type SignatureAggregatorConfig struct {
 	PChainAPI       ApiConfig `json:"p-chain-api"`
 	InfoAPI         ApiConfig `json:"info-api"`
-	L1IDs           []string  `json:"tracked-l1s"`
+	SubnetIDs       []string  `json:"tracked-subnet-ids"`
 	ApiPort         int       `json:"api-port"`
 	AllowPrivateIPs bool      `json:"allow-private-ips"`
 }
@@ -62,12 +62,12 @@ func (s *SignatureAggregator) Shutdown() {
 }
 
 // Aggregator utils
-func NewSignatureAggregator(apiUri string, l1IDs []ids.ID) *SignatureAggregator {
+func NewSignatureAggregator(apiUri string, subnetIDs []ids.ID) *SignatureAggregator {
 	sigAggPath := os.Getenv("SIG_AGG_PATH")
 	Expect(sigAggPath).ShouldNot(BeEmpty())
-	l1IdStrings := make([]string, 0, len(l1IDs))
-	for _, l1Id := range l1IDs {
-		l1IdStrings = append(l1IdStrings, l1Id.String())
+	subnetIDStrings := make([]string, 0, len(subnetIDs))
+	for _, subnetID := range subnetIDs {
+		subnetIDStrings = append(subnetIDStrings, subnetID.String())
 	}
 	cfg := SignatureAggregatorConfig{
 		PChainAPI: ApiConfig{
@@ -76,7 +76,7 @@ func NewSignatureAggregator(apiUri string, l1IDs []ids.ID) *SignatureAggregator 
 		InfoAPI: ApiConfig{
 			BaseURL: apiUri,
 		},
-		L1IDs:           l1IdStrings,
+		SubnetIDs:       subnetIDStrings,
 		ApiPort:         DEFAULT_API_PORT,
 		AllowPrivateIPs: true,
 	}
