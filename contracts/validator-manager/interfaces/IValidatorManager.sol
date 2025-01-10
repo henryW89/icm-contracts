@@ -44,21 +44,6 @@ struct ValidatorRegistrationInput {
  * @notice Interface for Validator Manager contracts that implement Subnet-only Validator management.
  */
 interface IValidatorManager {
-
-    /**
-     * @notice Event emitted when validator weight is updated.
-     * @param validationID The ID of the validation period being updated
-     * @param nonce The message nonce used to update the validator weight
-     * @param weight The updated validator weight that is sent to the P-Chain
-     * @param setWeightMessageID The ID of the ICM message that updates the validator's weight on the P-Chain
-     */
-    event ValidatorWeightUpdate(
-        bytes32 indexed validationID,
-        uint64 indexed nonce,
-        uint64 weight,
-        bytes32 setWeightMessageID
-    );
-
     /**
      * @notice Resubmits a validator registration message to be sent to the P-Chain.
      * Only necessary if the original message can't be delivered due to validator churn.

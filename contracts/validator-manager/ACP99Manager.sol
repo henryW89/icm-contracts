@@ -65,6 +65,8 @@ struct Validator {
     uint64 endTime;
 }
 
+// solhint-disable ordering
+
 /*
  * @title ACP99Manager
  * @notice The ACP99Manager interface represents the functionality for sovereign L1
