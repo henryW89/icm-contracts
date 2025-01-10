@@ -28,7 +28,6 @@ import (
 	proxyadmin "github.com/ava-labs/icm-contracts/abi-bindings/go/ProxyAdmin"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/icm-contracts/tests/utils"
-	"github.com/ava-labs/icm-services/signature-aggregator/aggregator"
 	"github.com/ava-labs/subnet-evm/ethclient"
 	subnetEvmTestUtils "github.com/ava-labs/subnet-evm/tests/utils"
 
@@ -320,7 +319,7 @@ func (n *LocalNetwork) GetValidatorManager(subnetID ids.ID) common.Address {
 	return n.validatorManagers[subnetID]
 }
 
-func (n *LocalNetwork) GetSignatureAggregator() *aggregator.SignatureAggregator {
+func (n *LocalNetwork) GetSignatureAggregator() *utils.SignatureAggregator {
 	var subnetIDs []ids.ID
 	for _, l1 := range n.GetL1Infos() {
 		subnetIDs = append(subnetIDs, l1.SubnetID)
