@@ -112,15 +112,13 @@ interface IValidatorManager {
      */
     event ValidationPeriodCreated(
         bytes32 indexed validationID,
-        bytes indexed nodeID,
         bytes32 indexed registerValidationMessageID,
         uint64 weight,
+        bytes nodeID,
         uint64 registrationExpiry
     );
 
-    event InitialValidatorCreated(
-        bytes32 indexed validationID, bytes indexed nodeID, uint64 weight
-    );
+    event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID);
 
     /**
      * @notice Emitted when the staking manager learns that the validation period has been successfully registered

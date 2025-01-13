@@ -46,7 +46,7 @@ type InitialValidator struct {
 
 // IValidatorManagerMetaData contains all meta data concerning the IValidatorManager contract.
 var IValidatorManagerMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InitialValidatorCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"registerValidationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"ValidationPeriodCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"ValidationPeriodEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"ValidationPeriodRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"ValidatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorWeightUpdate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // IValidatorManagerABI is the input ABI used to generate the binding from.
@@ -370,47 +370,39 @@ func (it *IValidatorManagerInitialValidatorCreatedIterator) Close() error {
 // IValidatorManagerInitialValidatorCreated represents a InitialValidatorCreated event raised by the IValidatorManager contract.
 type IValidatorManagerInitialValidatorCreated struct {
 	ValidationID [32]byte
-	NodeID       common.Hash
 	Weight       uint64
+	NodeID       []byte
 	Raw          types.Log // Blockchain specific contextual infos
 }
 
-// FilterInitialValidatorCreated is a free log retrieval operation binding the contract event 0xfe3e5983f71c8253fb0b678f2bc587aa8574d8f1aab9cf82b983777f5998392c.
+// FilterInitialValidatorCreated is a free log retrieval operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, bytes indexed nodeID, uint64 weight)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte, nodeID [][]byte) (*IValidatorManagerInitialValidatorCreatedIterator, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterInitialValidatorCreated(opts *bind.FilterOpts, validationID [][32]byte) (*IValidatorManagerInitialValidatorCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var nodeIDRule []interface{}
-	for _, nodeIDItem := range nodeID {
-		nodeIDRule = append(nodeIDRule, nodeIDItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule, nodeIDRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
 	return &IValidatorManagerInitialValidatorCreatedIterator{contract: _IValidatorManager.contract, event: "InitialValidatorCreated", logs: logs, sub: sub}, nil
 }
 
-// WatchInitialValidatorCreated is a free log subscription operation binding the contract event 0xfe3e5983f71c8253fb0b678f2bc587aa8574d8f1aab9cf82b983777f5998392c.
+// WatchInitialValidatorCreated is a free log subscription operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, bytes indexed nodeID, uint64 weight)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerInitialValidatorCreated, validationID [][32]byte, nodeID [][]byte) (event.Subscription, error) {
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerInitialValidatorCreated, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
-	var nodeIDRule []interface{}
-	for _, nodeIDItem := range nodeID {
-		nodeIDRule = append(nodeIDRule, nodeIDItem)
-	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule, nodeIDRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "InitialValidatorCreated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -442,9 +434,9 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchInitialValidatorCreate
 	}), nil
 }
 
-// ParseInitialValidatorCreated is a log parse operation binding the contract event 0xfe3e5983f71c8253fb0b678f2bc587aa8574d8f1aab9cf82b983777f5998392c.
+// ParseInitialValidatorCreated is a log parse operation binding the contract event 0xd80a750132c7a4fb67e226bdfecab0d8609bbb4e48cdad62cee218f25b758fff.
 //
-// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, bytes indexed nodeID, uint64 weight)
+// Solidity: event InitialValidatorCreated(bytes32 indexed validationID, uint64 weight, bytes nodeID)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseInitialValidatorCreated(log types.Log) (*IValidatorManagerInitialValidatorCreated, error) {
 	event := new(IValidatorManagerInitialValidatorCreated)
 	if err := _IValidatorManager.contract.UnpackLog(event, "InitialValidatorCreated", log); err != nil {
@@ -524,57 +516,49 @@ func (it *IValidatorManagerValidationPeriodCreatedIterator) Close() error {
 // IValidatorManagerValidationPeriodCreated represents a ValidationPeriodCreated event raised by the IValidatorManager contract.
 type IValidatorManagerValidationPeriodCreated struct {
 	ValidationID                [32]byte
-	NodeID                      common.Hash
 	RegisterValidationMessageID [32]byte
 	Weight                      uint64
+	NodeID                      []byte
 	RegistrationExpiry          uint64
 	Raw                         types.Log // Blockchain specific contextual infos
 }
 
-// FilterValidationPeriodCreated is a free log retrieval operation binding the contract event 0xd8a184af94a03e121609cc5f803a446236793e920c7945abc6ba355c8a30cb49.
+// FilterValidationPeriodCreated is a free log retrieval operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes indexed nodeID, bytes32 indexed registerValidationMessageID, uint64 weight, uint64 registrationExpiry)
-func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, nodeID [][]byte, registerValidationMessageID [][32]byte) (*IValidatorManagerValidationPeriodCreatedIterator, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IValidatorManager *IValidatorManagerFilterer) FilterValidationPeriodCreated(opts *bind.FilterOpts, validationID [][32]byte, registerValidationMessageID [][32]byte) (*IValidatorManagerValidationPeriodCreatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-	var nodeIDRule []interface{}
-	for _, nodeIDItem := range nodeID {
-		nodeIDRule = append(nodeIDRule, nodeIDItem)
 	}
 	var registerValidationMessageIDRule []interface{}
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
 
-	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, nodeIDRule, registerValidationMessageIDRule)
+	logs, sub, err := _IValidatorManager.contract.FilterLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
 	return &IValidatorManagerValidationPeriodCreatedIterator{contract: _IValidatorManager.contract, event: "ValidationPeriodCreated", logs: logs, sub: sub}, nil
 }
 
-// WatchValidationPeriodCreated is a free log subscription operation binding the contract event 0xd8a184af94a03e121609cc5f803a446236793e920c7945abc6ba355c8a30cb49.
+// WatchValidationPeriodCreated is a free log subscription operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes indexed nodeID, bytes32 indexed registerValidationMessageID, uint64 weight, uint64 registrationExpiry)
-func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodCreated, validationID [][32]byte, nodeID [][]byte, registerValidationMessageID [][32]byte) (event.Subscription, error) {
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
+func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreated(opts *bind.WatchOpts, sink chan<- *IValidatorManagerValidationPeriodCreated, validationID [][32]byte, registerValidationMessageID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-	var nodeIDRule []interface{}
-	for _, nodeIDItem := range nodeID {
-		nodeIDRule = append(nodeIDRule, nodeIDItem)
 	}
 	var registerValidationMessageIDRule []interface{}
 	for _, registerValidationMessageIDItem := range registerValidationMessageID {
 		registerValidationMessageIDRule = append(registerValidationMessageIDRule, registerValidationMessageIDItem)
 	}
 
-	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, nodeIDRule, registerValidationMessageIDRule)
+	logs, sub, err := _IValidatorManager.contract.WatchLogs(opts, "ValidationPeriodCreated", validationIDRule, registerValidationMessageIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -606,9 +590,9 @@ func (_IValidatorManager *IValidatorManagerFilterer) WatchValidationPeriodCreate
 	}), nil
 }
 
-// ParseValidationPeriodCreated is a log parse operation binding the contract event 0xd8a184af94a03e121609cc5f803a446236793e920c7945abc6ba355c8a30cb49.
+// ParseValidationPeriodCreated is a log parse operation binding the contract event 0xe093cab27f3fc60439e008f3a2073310d3ac9ac9b7d59e53a06b2588f7498bd6.
 //
-// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes indexed nodeID, bytes32 indexed registerValidationMessageID, uint64 weight, uint64 registrationExpiry)
+// Solidity: event ValidationPeriodCreated(bytes32 indexed validationID, bytes32 indexed registerValidationMessageID, uint64 weight, bytes nodeID, uint64 registrationExpiry)
 func (_IValidatorManager *IValidatorManagerFilterer) ParseValidationPeriodCreated(log types.Log) (*IValidatorManagerValidationPeriodCreated, error) {
 	event := new(IValidatorManagerValidationPeriodCreated)
 	if err := _IValidatorManager.contract.UnpackLog(event, "ValidationPeriodCreated", log); err != nil {

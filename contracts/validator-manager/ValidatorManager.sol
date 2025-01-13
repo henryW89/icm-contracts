@@ -189,7 +189,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
             totalWeight += initialValidator.weight;
 
             emit InitialValidatorCreated(
-                validationID, initialValidator.nodeID, initialValidator.weight
+                validationID, initialValidator.weight, initialValidator.nodeID
             );
         }
         $._churnTracker.totalWeight = totalWeight;
@@ -300,7 +300,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         $._validationPeriods[validationID].endedAt = 0;
 
         emit ValidationPeriodCreated(
-            validationID, input.nodeID, messageID, weight, input.registrationExpiry
+            validationID, messageID, weight, input.nodeID, input.registrationExpiry
         );
 
         return validationID;

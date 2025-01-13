@@ -55,8 +55,6 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         disableOwner: DEFAULT_P_CHAIN_OWNER
     });
 
-    event ValidationUptimeUpdated(bytes32 indexed validationID, uint64 uptime);
-
     event DelegatorAdded(
         bytes32 indexed delegationID,
         bytes32 indexed validationID,
@@ -72,13 +70,6 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
     );
 
     event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID);
-
-    event ValidatorWeightUpdate(
-        bytes32 indexed validationID,
-        uint64 indexed nonce,
-        uint64 weight,
-        bytes32 setWeightMessageID
-    );
 
     event DelegationEnded(
         bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees
