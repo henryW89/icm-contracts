@@ -43,13 +43,6 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	_, fundedKey := network.GetFundedAccountInfo()
 	pChainInfo := utils.GetPChainInfo(cChainInfo)
 
-	signatureAggregator := utils.NewSignatureAggregator(
-		cChainInfo.NodeURIs[0],
-		[]ids.ID{
-			l1AInfo.SubnetID,
-		},
-	)
-
 	// Generate random address to be the owner address
 	ownerKey, err := crypto.GenerateKey()
 	Expect(err).Should(BeNil())
@@ -79,6 +72,14 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	proxyAddress := network.GetValidatorManager(l1AInfo.SubnetID)
 	poaValidatorManager, err := poavalidatormanager.NewPoAValidatorManager(proxyAddress, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
+
+	signatureAggregator := utils.NewSignatureAggregator(
+		cChainInfo.NodeURIs[0],
+		[]ids.ID{
+			l1AInfo.SubnetID,
+		},
+	)
+	defer signatureAggregator.Shutdown()
 
 	//
 	// Delist one initial validator

@@ -33,7 +33,6 @@ import (
 	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
 	ivalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
-	"github.com/ava-labs/icm-services/signature-aggregator/aggregator"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/core/types"
 	"github.com/ava-labs/subnet-evm/precompile/contracts/warp"
@@ -274,7 +273,7 @@ func InitializeValidatorSet(
 	pChainInfo interfaces.L1TestInfo,
 	validatorManagerAddress common.Address,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	nodes []Node,
 ) []ids.ID {
 	log.Println("Initializing validator set", "subnetID", l1Info.SubnetID)
@@ -326,11 +325,14 @@ func InitializeValidatorSet(
 	)
 	manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
+
+	// Check that the first initial validator was registered successfully
 	initialValidatorCreatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
 		manager.ParseRegisteredInitialValidator,
 	)
 	Expect(err).Should(BeNil())
+	Expect(initialValidatorCreatedEvent.NodeID).Should(Equal(nodes[0].NodeID.Bytes()))
 	var validationIDs []ids.ID
 	for i := range nodes {
 		validationIDs = append(validationIDs, l1Info.SubnetID.Append(uint32(i)))
@@ -403,6 +405,7 @@ func InitializeNativeValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -449,6 +452,7 @@ func InitializeERC20ValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -482,6 +486,7 @@ func InitializePoAValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
+	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -535,7 +540,7 @@ func CallWarpReceiver(
 
 func InitializeAndCompleteNativeValidatorRegistration(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
@@ -612,7 +617,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 
 func InitializeAndCompleteERC20ValidatorRegistration(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
@@ -692,7 +697,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 
 func InitializeAndCompletePoAValidatorRegistration(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
@@ -804,7 +809,7 @@ func ConstructUptimeProofMessage(
 	uptime uint64,
 	l1 interfaces.L1TestInfo,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 ) *avalancheWarp.Message {
 	uptimePayload, err := messages.NewValidatorUptime(validationID, uptime)
 	Expect(err).Should(BeNil())
@@ -830,7 +835,7 @@ func ConstructUptimeProofMessage(
 func ForceInitializeEndPoSValidationWithUptime(
 	ctx context.Context,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
 	stakingManagerAddress common.Address,
@@ -862,7 +867,7 @@ func ForceInitializeEndPoSValidationWithUptime(
 func InitializeEndPoSValidationWithUptime(
 	ctx context.Context,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
 	stakingManagerAddress common.Address,
@@ -1061,7 +1066,7 @@ func CompleteEndDelegation(
 
 func InitializeAndCompleteEndInitialPoSValidation(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
@@ -1140,7 +1145,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 
 func InitializeAndCompleteEndPoSValidation(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
@@ -1239,7 +1244,7 @@ func InitializeAndCompleteEndPoSValidation(
 
 func InitializeAndCompleteEndInitialPoAValidation(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
@@ -1319,7 +1324,7 @@ func InitializeAndCompleteEndInitialPoAValidation(
 
 func InitializeAndCompleteEndPoAValidation(
 	ctx context.Context,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
@@ -1397,7 +1402,7 @@ func ConstructL1ValidatorRegistrationMessageForInitialValidator(
 	l1 interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 ) *avalancheWarp.Message {
 	justification := platformvm.L1ValidatorRegistrationJustification{
 		Preimage: &platformvm.L1ValidatorRegistrationJustification_ConvertSubnetToL1TxData{
@@ -1440,7 +1445,7 @@ func ConstructL1ValidatorRegistrationMessage(
 	l1 interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 ) *avalancheWarp.Message {
 	msg, err := warpMessage.NewRegisterL1Validator(
 		l1.SubnetID,
@@ -1488,7 +1493,7 @@ func ConstructL1ValidatorWeightMessage(
 	weight uint64,
 	l1 interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 	networkID uint32,
 ) *avalancheWarp.Message {
 	payload, err := warpMessage.NewL1ValidatorWeight(validationID, nonce, weight)
@@ -1517,7 +1522,7 @@ func ConstructL1ConversionMessage(
 	l1 interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
 	networkID uint32,
-	signatureAggregator *aggregator.SignatureAggregator,
+	signatureAggregator *SignatureAggregator,
 ) *avalancheWarp.Message {
 	l1ConversionPayload, err := warpMessage.NewSubnetToL1Conversion(l1ConversionID)
 	Expect(err).Should(BeNil())

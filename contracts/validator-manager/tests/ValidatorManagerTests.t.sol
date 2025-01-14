@@ -85,6 +85,13 @@ abstract contract ValidatorManagerTest is Test {
 
     event CompletedValidatorWeightUpdate(bytes32 indexed validationID, uint64 nonce, uint64 weight);
 
+    event ValidatorWeightUpdate(
+        bytes32 indexed validationID,
+        uint64 indexed nonce,
+        uint64 weight,
+        bytes32 setWeightMessageID
+    );
+
     receive() external payable {}
     fallback() external payable {}
 
