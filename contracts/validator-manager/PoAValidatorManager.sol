@@ -74,7 +74,7 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
     }
 
     /**
-     * @notice See {IValidatorManager-completeEndValidation}.
+     * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
     function completeValidatorRemoval(uint32 messageIndex) virtual override public returns (bytes32) {
         (bytes32 validationID,) =  _completeEndValidation(messageIndex);

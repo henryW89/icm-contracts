@@ -387,7 +387,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
 
     function completeValidatorWeightUpdate(
         uint32 messageIndex
-    ) virtual override public returns (bytes32) {
+    ) virtual override public returns (bytes32, uint64) {
         WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
         (bytes32 validationID, uint64 nonce, uint64 weight) =
             ValidatorMessages.unpackL1ValidatorWeightMessage(warpMessage.payload);
@@ -404,7 +404,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         
         emit CompletedValidatorWeightUpdate(validationID, nonce, weight);
 
-        return validationID;
+        return (validationID, nonce);
     }
 
     /**

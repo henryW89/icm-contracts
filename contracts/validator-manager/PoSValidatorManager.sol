@@ -328,8 +328,10 @@ abstract contract PoSValidatorManager is
     ) internal returns (bool) {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        Validator memory validator = getValidator(validationID);
+        // TODONOW: Functions that modify Validator state invalid any references to the Validator object.
+        // How can we make this safer to use?
         _initiateValidatorRemoval(validationID);
+        Validator memory validator = getValidator(validationID);
 
         // Non-PoS validators are required to boostrap the network, but are not eligible for rewards.
         if (!_isPoSValidator(validationID)) {
@@ -609,12 +611,12 @@ abstract contract PoSValidatorManager is
         // If we've already received a weight update with a nonce greater than the delegation's starting nonce,
         // then there's no requirement to include an ICM message in this function call.
         if (validator.receivedNonce < delegator.startingNonce) {
-            bytes32 messageValidationID = completeValidatorWeightUpdate(messageIndex);
+            (bytes32 messageValidationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
             if (validationID != messageValidationID) {
                 revert InvalidValidationID(delegator.validationID);
             }
-            if (validator.receivedNonce < delegator.startingNonce) {
-                revert InvalidNonce(validator.receivedNonce);
+            if (nonce < delegator.startingNonce) {
+                revert InvalidNonce(nonce);
             }
         }
 
@@ -868,7 +870,7 @@ abstract contract PoSValidatorManager is
 
         // We only expect an ICM message if we haven't received a weight update with a nonce greater than the delegation's ending nonce
         if (getValidator(delegator.validationID).status != ValidatorStatus.Completed && validator.receivedNonce < delegator.endingNonce) {
-            bytes32 validationID = completeValidatorWeightUpdate(messageIndex);
+            (bytes32 validationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
                 revert InvalidValidationID(validationID);
             }
@@ -877,8 +879,8 @@ abstract contract PoSValidatorManager is
             // update using a higher nonce (which implicitly includes the delegation's weight update) to be used to
             // complete delisting for an earlier delegation. This is necessary because the P-Chain is only willing
             // to sign the latest weight update.
-            if (delegator.endingNonce > validator.receivedNonce) {
-                revert InvalidNonce(validator.receivedNonce);
+            if (delegator.endingNonce > nonce) {
+                revert InvalidNonce(nonce);
             }
         }
 
