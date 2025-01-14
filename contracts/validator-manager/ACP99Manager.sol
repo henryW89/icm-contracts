@@ -103,7 +103,7 @@ abstract contract ACP99Manager {
     event CompletedValidatorWeightUpdate(bytes32 indexed validationID, uint64 nonce, uint64 weight);
 
     /// @notice Returns the SubnetID of the L1 tied to this manager
-    function subnetID() public view virtual returns (bytes32 subnetID);
+    function subnetID() public view virtual returns (bytes32 id);
 
     /// @notice Returns the validator details for a given validation ID.
     function getValidator(bytes32 validationID)
