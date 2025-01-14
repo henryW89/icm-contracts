@@ -9,8 +9,7 @@ import {ValidatorMessages} from "./ValidatorMessages.sol";
 import {
     IValidatorManager,
     ValidatorChurnPeriod,
-    ValidatorManagerSettings,
-    ValidatorRegistrationInput
+    ValidatorManagerSettings
 } from "./interfaces/IValidatorManager.sol";
 import {
     ACP99Manager,
@@ -34,7 +33,12 @@ import {Initializable} from
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValidatorManager, ACP99Manager {
+abstract contract ValidatorManager is
+    Initializable,
+    ContextUpgradeable,
+    IValidatorManager,
+    ACP99Manager
+{
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
 
@@ -153,7 +157,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     function initializeValidatorSet(
         ConversionData calldata conversionData,
         uint32 messageIndex
-    ) virtual public override {
+    ) public virtual override {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         if ($._initializedValidatorSet) {
             revert InvalidInitializationStatus();
@@ -248,7 +252,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
-    ) virtual override internal initializedValidatorSet returns (bytes32) {
+    ) internal virtual override initializedValidatorSet returns (bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         if (
@@ -333,7 +337,12 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     /**
      * @notice See {ACP99Manager-completeValidatorRegistration}.
      */
-    function completeValidatorRegistration(uint32 messageIndex) virtual public override returns (bytes32) {
+    function completeValidatorRegistration(uint32 messageIndex)
+        public
+        virtual
+        override
+        returns (bytes32)
+    {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         (bytes32 validationID, bool validRegistration) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
@@ -353,7 +362,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         $._validationPeriods[validationID].status = ValidatorStatus.Active;
         $._validationPeriods[validationID].startTime = uint64(block.timestamp);
         emit CompletedValidatorRegistration(
-            validationID, $._validationPeriods[validationID].nodeID, $._validationPeriods[validationID].weight
+            validationID,
+            $._validationPeriods[validationID].nodeID,
+            $._validationPeriods[validationID].weight
         );
 
         return validationID;
@@ -372,26 +383,35 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * @notice Returns a validator registered to the given validationID
      * @param validationID ID of the validation period associated with the validator
      */
-    function getValidator(bytes32 validationID) virtual override public view returns (Validator memory) {
+    function getValidator(bytes32 validationID)
+        public
+        view
+        virtual
+        override
+        returns (Validator memory)
+    {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         return $._validationPeriods[validationID];
     }
 
-    function l1TotalWeight() virtual override public view returns (uint64) {
+    function l1TotalWeight() public view virtual override returns (uint64) {
         return _getValidatorManagerStorage()._churnTracker.totalWeight;
     }
 
-    function subnetID() virtual override public view returns (bytes32) {
+    function subnetID() public view virtual override returns (bytes32) {
         return _getValidatorManagerStorage()._subnetID;
     }
 
-    function completeValidatorWeightUpdate(
-        uint32 messageIndex
-    ) virtual override public returns (bytes32, uint64) {
+    function completeValidatorWeightUpdate(uint32 messageIndex)
+        public
+        virtual
+        override
+        returns (bytes32, uint64)
+    {
         WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
         (bytes32 validationID, uint64 nonce, uint64 weight) =
             ValidatorMessages.unpackL1ValidatorWeightMessage(warpMessage.payload);
-        
+
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // The received nonce should be no greater than the highest sent nonce to ensure
@@ -401,7 +421,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         }
 
         $._validationPeriods[validationID].receivedNonce = nonce;
-        
+
         emit CompletedValidatorWeightUpdate(validationID, nonce, weight);
 
         return (validationID, nonce);
@@ -413,11 +433,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
      * Any rewards for this validation period will stop accruing when this function is called.
      * @param validationID The ID of the validation period being ended.
      */
-    function _initiateValidatorRemoval(bytes32 validationID)
-        internal
-        virtual
-        override
-    {
+    function _initiateValidatorRemoval(bytes32 validationID) internal virtual override {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Ensure the validation period is active.
@@ -441,7 +457,9 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
         (, bytes32 messageID) = _initiateValidatorWeightUpdate(validationID, 0);
 
         // Emit the event to signal the start of the validator removal process.
-        emit InitiatedValidatorRemoval(validationID, messageID, validator.weight, uint64(block.timestamp));
+        emit InitiatedValidatorRemoval(
+            validationID, messageID, validator.weight, uint64(block.timestamp)
+        );
     }
 
     /**
@@ -540,7 +558,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, IValida
     function _initiateValidatorWeightUpdate(
         bytes32 validationID,
         uint64 newWeight
-    ) virtual override internal returns (uint64, bytes32) {
+    ) internal virtual override returns (uint64, bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         uint64 validatorWeight = $._validationPeriods[validationID].weight;
 

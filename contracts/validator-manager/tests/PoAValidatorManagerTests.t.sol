@@ -9,7 +9,6 @@ import {PoAValidatorManager} from "../PoAValidatorManager.sol";
 import {
     ValidatorManagerSettings,
     ValidatorRegistrationInput
-    
 } from "../interfaces/IValidatorManager.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -18,7 +17,6 @@ import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
 import {ACP99Manager} from "../ACP99Manager.sol";
-
 
 contract PoAValidatorManagerTest is ValidatorManagerTest {
     PoAValidatorManager public app;

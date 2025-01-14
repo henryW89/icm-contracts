@@ -1684,9 +1684,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
         // The invalid validationID has sent no weight updates, so its nonce should be 0
-        vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 1)
-        );
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 1));
 
         vm.warp(DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP);
         posValidatorManager.completeDelegatorRegistration(delegationID, 0);
@@ -1713,9 +1711,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             ValidatorMessages.packL1ValidatorWeightMessage(delegationID, 2, DEFAULT_WEIGHT);
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
-        vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 2)
-        );
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 2));
 
         posValidatorManager.completeEndDelegation(delegationID, 0);
     }
@@ -1986,7 +1982,9 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         _beforeSend(_weightToValue(weight), delegatorAddress);
 
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
-        emit InitiatedValidatorWeightUpdate(validationID, expectedNonce, bytes32(0), expectedValidatorWeight);
+        emit InitiatedValidatorWeightUpdate(
+            validationID, expectedNonce, bytes32(0), expectedValidatorWeight
+        );
 
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit DelegatorAdded({
@@ -2024,9 +2022,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             validationID, expectedNonce, expectedValidatorWeight
         );
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
-        emit CompletedValidatorWeightUpdate(
-            validationID, expectedNonce, expectedValidatorWeight
-        );
+        emit CompletedValidatorWeightUpdate(validationID, expectedNonce, expectedValidatorWeight);
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit DelegatorRegistered({
             delegationID: delegationID,
@@ -2352,9 +2348,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             validationID, expectedNonce, validatorWeight
         );
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
-        emit CompletedValidatorWeightUpdate(
-            validationID, expectedNonce, validatorWeight
-        );
+        emit CompletedValidatorWeightUpdate(validationID, expectedNonce, validatorWeight);
 
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit DelegationEnded(

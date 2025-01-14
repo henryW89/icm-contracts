@@ -13,7 +13,7 @@ import {
     WarpMessage,
     IWarpMessenger
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
-import {ACP99Manager, ConversionData, InitialValidator, ValidatorStatus, PChainOwner} from "../ACP99Manager.sol";
+import {ACP99Manager, ConversionData, InitialValidator, PChainOwner} from "../ACP99Manager.sol";
 
 // TODO: Remove this once all unit tests implemented
 // solhint-disable no-empty-blocks
@@ -58,9 +58,7 @@ abstract contract ValidatorManagerTest is Test {
     // Used to create unique validator IDs in {_newNodeID}
     uint64 public nodeIDCounter = 0;
 
-    event RegisteredInitialValidator(
-        bytes32 indexed validationID, bytes nodeID, uint64 weight
-    );
+    event RegisteredInitialValidator(bytes32 indexed validationID, bytes nodeID, uint64 weight);
 
     event InitiatedValidatorRegistration(
         bytes32 indexed validationID,
@@ -70,9 +68,7 @@ abstract contract ValidatorManagerTest is Test {
         uint64 weight
     );
 
-    event CompletedValidatorRegistration(
-        bytes32 indexed validationID, bytes nodeID, uint64 weight
-    );
+    event CompletedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, uint64 weight);
 
     event InitiatedValidatorRemoval(
         bytes32 indexed validationID,
@@ -81,20 +77,13 @@ abstract contract ValidatorManagerTest is Test {
         uint64 endTime
     );
 
-    event CompletedValidatorRemoval(
-        bytes32 indexed validationID
-    );
+    event CompletedValidatorRemoval(bytes32 indexed validationID);
 
     event InitiatedValidatorWeightUpdate(
-        bytes32 indexed validationID,
-        uint64 nonce,
-        bytes32 weightUpdateMessageID,
-        uint64 weight
+        bytes32 indexed validationID, uint64 nonce, bytes32 weightUpdateMessageID, uint64 weight
     );
 
-    event CompletedValidatorWeightUpdate(
-        bytes32 indexed validationID, uint64 nonce, uint64 weight
-    );
+    event CompletedValidatorWeightUpdate(bytes32 indexed validationID, uint64 nonce, uint64 weight);
 
     receive() external payable {}
     fallback() external payable {}
@@ -455,7 +444,9 @@ abstract contract ValidatorManagerTest is Test {
 
         _beforeSend(_weightToValue(weight), address(this));
         vm.expectEmit(true, true, true, true, address(validatorManager));
-        emit InitiatedValidatorRegistration(validationID, nodeID, bytes32(0), registrationExpiry, weight);
+        emit InitiatedValidatorRegistration(
+            validationID, nodeID, bytes32(0), registrationExpiry, weight
+        );
 
         _initializeValidatorRegistration(
             ValidatorRegistrationInput({

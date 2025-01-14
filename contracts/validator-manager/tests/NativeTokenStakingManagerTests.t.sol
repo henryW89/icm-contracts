@@ -18,7 +18,6 @@ import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
 import {ACP99Manager} from "../ACP99Manager.sol";
 
-
 contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
     NativeTokenStakingManager public app;
 

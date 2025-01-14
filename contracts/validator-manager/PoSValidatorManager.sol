@@ -14,13 +14,8 @@ import {
     PoSValidatorInfo,
     PoSValidatorManagerSettings
 } from "./interfaces/IPoSValidatorManager.sol";
-import {
-    ValidatorRegistrationInput
-} from "./interfaces/IValidatorManager.sol";
-import {
-    Validator,
-    ValidatorStatus
-} from "./ACP99Manager.sol";
+import {ValidatorRegistrationInput} from "./interfaces/IValidatorManager.sol";
+import {Validator, ValidatorStatus} from "./ACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {WarpMessage} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
@@ -380,7 +375,13 @@ abstract contract PoSValidatorManager is
     /**
      * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
-    function completeValidatorRemoval(uint32 messageIndex) virtual override public nonReentrant returns (bytes32) {
+    function completeValidatorRemoval(uint32 messageIndex)
+        public
+        virtual
+        override
+        nonReentrant
+        returns (bytes32)
+    {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
         (bytes32 validationID, Validator memory validator) = _completeEndValidation(messageIndex);
@@ -558,7 +559,8 @@ abstract contract PoSValidatorManager is
             revert MaxWeightExceeded(newValidatorWeight);
         }
 
-        (uint64 nonce, bytes32 messageID) = _initiateValidatorWeightUpdate(validationID, newValidatorWeight);
+        (uint64 nonce, bytes32 messageID) =
+            _initiateValidatorWeightUpdate(validationID, newValidatorWeight);
 
         bytes32 delegationID = keccak256(abi.encodePacked(validationID, nonce));
 
@@ -611,7 +613,8 @@ abstract contract PoSValidatorManager is
         // If we've already received a weight update with a nonce greater than the delegation's starting nonce,
         // then there's no requirement to include an ICM message in this function call.
         if (validator.receivedNonce < delegator.startingNonce) {
-            (bytes32 messageValidationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
+            (bytes32 messageValidationID, uint64 nonce) =
+                completeValidatorWeightUpdate(messageIndex);
             if (validationID != messageValidationID) {
                 revert InvalidValidationID(delegator.validationID);
             }
@@ -619,7 +622,6 @@ abstract contract PoSValidatorManager is
                 revert InvalidNonce(nonce);
             }
         }
-
 
         // Update the delegation status
         $._delegatorStakes[delegationID].status = DelegatorStatus.Active;
@@ -869,7 +871,10 @@ abstract contract PoSValidatorManager is
         Validator memory validator = getValidator(delegator.validationID);
 
         // We only expect an ICM message if we haven't received a weight update with a nonce greater than the delegation's ending nonce
-        if (getValidator(delegator.validationID).status != ValidatorStatus.Completed && validator.receivedNonce < delegator.endingNonce) {
+        if (
+            getValidator(delegator.validationID).status != ValidatorStatus.Completed
+                && validator.receivedNonce < delegator.endingNonce
+        ) {
             (bytes32 validationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
                 revert InvalidValidationID(validationID);

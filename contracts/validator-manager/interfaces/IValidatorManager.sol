@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorStatus, ConversionData, PChainOwner} from "../ACP99Manager.sol";
+import {PChainOwner} from "../ACP99Manager.sol";
 
 /**
  * @dev Describes the current churn period
