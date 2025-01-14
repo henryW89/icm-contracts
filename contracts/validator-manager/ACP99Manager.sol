@@ -25,7 +25,7 @@ struct InitialValidator {
     uint64 weight;
 }
 
-/// @notice L1 validator status
+/// @notice L1 validator status.
 enum ValidatorStatus {
     Unknown,
     PendingAdded,
@@ -45,14 +45,15 @@ struct PChainOwner {
 }
 
 /**
- * @notice Contains the active state of a Validator
- * @param status The validator status
- * @param nodeID The NodeID of the validator
- * @param startingWeight The weight of the validator at the time of registration
- * @param messageNonce The current weight update nonce
- * @param weight The current weight of the validator
- * @param startTime The start time of the validator
- * @param endTime The end time of the validator
+ * @notice Contains the active state of a Validator.
+ * @param status The validator status.
+ * @param nodeID The NodeID of the validator.
+ * @param startingWeight The weight of the validator at the time of registration.
+ * @param sentNonce The current weight update nonce sent by the manager.
+ * @param receivedNonce The highest nonce received from the P-Chain
+ * @param weight The current weight of the validator.
+ * @param startTime The start time of the validator.
+ * @param endTime The end time of the validator.
  */
 struct Validator {
     ValidatorStatus status;
@@ -70,7 +71,7 @@ struct Validator {
 /*
  * @title ACP99Manager
  * @notice The ACP99Manager interface represents the functionality for sovereign L1
- * validator management, as specified in ACP-77
+ * validator management, as specified in ACP-77.
  */
 abstract contract ACP99Manager {
     /// @notice Emitted when an initial validator is registered.

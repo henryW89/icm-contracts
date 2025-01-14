@@ -851,9 +851,6 @@ abstract contract PoSValidatorManager is
     /**
      * @notice See {IPoSValidatorManager-completeEndDelegation}.
      */
-     // TODONOW: Rather than ending on a delegation by delegation basis,
-     // Can we instead track the highest acknowledged nonce, delivered via completeValidatorWeightChange?
-     // We'd still have a delegation specific collectDelegationRewards or similar, but that would check against this nonce.
     function completeEndDelegation(
         bytes32 delegationID,
         uint32 messageIndex
@@ -876,7 +873,6 @@ abstract contract PoSValidatorManager is
                 revert InvalidValidationID(validationID);
             }
 
-            
             // The received nonce should be at least as high as the delegation's ending nonce. This allows a weight
             // update using a higher nonce (which implicitly includes the delegation's weight update) to be used to
             // complete delisting for an earlier delegation. This is necessary because the P-Chain is only willing
@@ -897,7 +893,6 @@ abstract contract PoSValidatorManager is
 
         // To prevent churn tracker abuse, check that one full churn period has passed,
         // so a delegator may not stake twice in the same churn period.
-        // TODONOW: Is it safe to move this to initializeEndDelegation?
         if (block.timestamp < delegator.startTime + _getChurnPeriodSeconds()) {
             revert MinStakeDurationNotPassed(uint64(block.timestamp));
         }
