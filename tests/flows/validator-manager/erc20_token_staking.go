@@ -142,7 +142,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		)
 		initRegistrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			erc20StakingManager.ParseDelegatorAdded,
+			erc20StakingManager.ParseInitiatedDelegatorRegistration,
 		)
 		Expect(err).Should(BeNil())
 		delegationID = initRegistrationEvent.DelegationID
@@ -185,7 +185,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		// Check that the validator is registered in the staking contract
 		registrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			erc20StakingManager.ParseDelegatorRegistered,
+			erc20StakingManager.ParseCompletedDelegatorRegistration,
 		)
 		Expect(err).Should(BeNil())
 		Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -207,7 +207,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		)
 		delegatorRemovalEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			erc20StakingManager.ParseDelegatorRemovalInitialized,
+			erc20StakingManager.ParseInitiatedDelegatorRemoval,
 		)
 		Expect(err).Should(BeNil())
 		Expect(delegatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -254,7 +254,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		// Check that the delegator has been delisted from the staking contract
 		registrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			erc20StakingManager.ParseDelegationEnded,
+			erc20StakingManager.ParseCompletedDelegatorRemoval,
 		)
 		Expect(err).Should(BeNil())
 		Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))

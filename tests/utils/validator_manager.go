@@ -385,13 +385,13 @@ func InitializeNativeValidatorRegistration(
 	Expect(err).Should(BeNil())
 	opts.Value = stakeAmount
 
-	tx, err := stakingManager.InitializeValidatorRegistration(
+	tx, err := stakingManager.InitiateValidatorRegistration(
 		opts,
-		nativetokenstakingmanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		nativetokenstakingmanager.PChainOwner{},
+		nativetokenstakingmanager.PChainOwner{},
 		DefaultMinDelegateFeeBips,
 		DefaultMinStakeDurationSeconds,
 	)
@@ -431,13 +431,13 @@ func InitializeERC20ValidatorRegistration(
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := stakingManager.InitializeValidatorRegistration(
+	tx, err := stakingManager.InitiateValidatorRegistration(
 		opts,
-		erc20tokenstakingmanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		erc20tokenstakingmanager.PChainOwner{},
+		erc20tokenstakingmanager.PChainOwner{},
 		DefaultMinDelegateFeeBips,
 		DefaultMinStakeDurationSeconds,
 		stakeAmount,
@@ -467,13 +467,13 @@ func InitializePoAValidatorRegistration(
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := validatorManager.InitializeValidatorRegistration(
+	tx, err := validatorManager.InitiateValidatorRegistration(
 		opts,
-		poavalidatormanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		poavalidatormanager.PChainOwner{},
+		poavalidatormanager.PChainOwner{},
 		node.Weight,
 	)
 	Expect(err).Should(BeNil())
@@ -774,11 +774,12 @@ func InitializeEndPoSValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.InitializeEndValidation0(
+	tx, err := stakingManager.InitiateValidatorRemoval0(
 		opts,
 		validationID,
 		false,
 		0,
+		common.Address{},
 	)
 	Expect(err).Should(BeNil())
 	return WaitForTransactionSuccess(ctx, l1, tx.Hash())
@@ -793,7 +794,7 @@ func ForceInitializeEndPoSValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.ForceInitializeEndValidation(
+	tx, err := stakingManager.ForceInitiateValidatorRemoval(
 		opts,
 		validationID,
 		false,
@@ -851,7 +852,7 @@ func ForceInitializeEndPoSValidationWithUptime(
 
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("forceInitializeEndValidation", validationID, true, uint32(0))
+	callData, err := abi.Pack("forceInitiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -883,7 +884,7 @@ func InitializeEndPoSValidationWithUptime(
 
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("initializeEndValidation", validationID, true, uint32(0))
+	callData, err := abi.Pack("initiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -904,7 +905,7 @@ func InitializeEndPoAValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := validatorManager.InitializeEndValidation(
+	tx, err := validatorManager.InitiateValidatorRemoval(
 		opts,
 		validationID,
 	)
@@ -955,7 +956,7 @@ func InitializeERC20DelegatorRegistration(
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := stakingManager.InitializeDelegatorRegistration(
+	tx, err := stakingManager.InitiateDelegatorRegistration(
 		opts,
 		validationID,
 		delegationAmount,
@@ -964,7 +965,7 @@ func InitializeERC20DelegatorRegistration(
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	_, err = GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseDelegatorAdded,
+		stakingManager.ParseInitiatedDelegatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	return receipt
@@ -983,7 +984,7 @@ func InitializeNativeDelegatorRegistration(
 	Expect(err).Should(BeNil())
 	opts.Value = delegationAmount
 
-	tx, err := stakingManager.InitializeDelegatorRegistration(
+	tx, err := stakingManager.InitiateDelegatorRegistration(
 		opts,
 		validationID,
 	)
@@ -991,7 +992,7 @@ func InitializeNativeDelegatorRegistration(
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	_, err = GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseDelegatorAdded,
+		stakingManager.ParseInitiatedDelegatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	return receipt
@@ -1031,7 +1032,7 @@ func InitializeEndDelegation(
 	WaitMinStakeDuration(ctx, l1, senderKey)
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.ForceInitializeEndDelegation(
+	tx, err := stakingManager.ForceInitiateDelegatorRemoval(
 		opts,
 		delegationID,
 		false,
