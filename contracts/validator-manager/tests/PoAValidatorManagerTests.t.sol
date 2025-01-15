@@ -6,10 +6,7 @@
 pragma solidity 0.8.25;
 
 import {PoAValidatorManager} from "../PoAValidatorManager.sol";
-import {
-    ValidatorManagerSettings,
-    ValidatorRegistrationInput
-} from "../interfaces/IValidatorManager.sol";
+import {ValidatorManagerSettings, ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {ValidatorManager} from "../ValidatorManager.sol";

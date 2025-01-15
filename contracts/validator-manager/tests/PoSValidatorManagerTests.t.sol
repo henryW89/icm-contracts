@@ -12,10 +12,7 @@ import {
     DelegatorStatus, PoSValidatorManagerSettings
 } from "../interfaces/IPoSValidatorManager.sol";
 import {ValidatorManager, ValidatorStatus} from "../ValidatorManager.sol";
-import {
-    ValidatorManagerSettings,
-    ValidatorRegistrationInput
-} from "../interfaces/IValidatorManager.sol";
+import {ValidatorManagerSettings, ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,

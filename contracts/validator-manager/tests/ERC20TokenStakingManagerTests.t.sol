@@ -9,7 +9,7 @@ import {PoSValidatorManagerTest} from "./PoSValidatorManagerTests.t.sol";
 import {ERC20TokenStakingManager} from "../ERC20TokenStakingManager.sol";
 import {PoSValidatorManager, PoSValidatorManagerSettings} from "../PoSValidatorManager.sol";
 import {ExampleRewardCalculator} from "../ExampleRewardCalculator.sol";
-import {ValidatorRegistrationInput} from "../interfaces/IValidatorManager.sol";
+import {ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {ICMInitializable} from "../../utilities/ICMInitializable.sol";
 import {ExampleERC20} from "@mocks/ExampleERC20.sol";
 import {IERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/IERC20.sol";

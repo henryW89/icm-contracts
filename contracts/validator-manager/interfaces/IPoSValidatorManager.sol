@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {IValidatorManager, ValidatorManagerSettings} from "./IValidatorManager.sol";
+import {ValidatorManagerSettings} from "../ValidatorManager.sol";
 import {IRewardCalculator} from "./IRewardCalculator.sol";
 
 /**
@@ -20,7 +20,7 @@ enum DelegatorStatus {
 
 /**
  * @notice PoS Validator Manager settings, used to initialize the PoS Validator Manager
- * @notice baseSettings specified the base settings for the Validator Manager. See {IValidatorManager-ValidatorManagerSettings}
+ * @notice baseSettings specified the base settings for the Validator Manager. See {ValidatorManager-ValidatorManagerSettings}
  * @notice minimumStakeAmount is the minimum amount of stake required to stake to a validator
  * @notice maximumStakeAmount is the maximum amount of stake that can be staked to a validator
  * @notice minimumStakeDuration is the minimum duration that validators must stake for
@@ -58,7 +58,7 @@ struct Delegator {
 }
 
 /**
- * @dev Describes the active state of a PoS Validator in addition the information in {IValidatorManager-Validator}
+ * @dev Describes the active state of a PoS Validator in addition the information in {ValidatorManager-Validator}
  */
 struct PoSValidatorInfo {
     address owner;
@@ -70,7 +70,7 @@ struct PoSValidatorInfo {
 /**
  * @notice Interface for Proof of Stake Validator Managers
  */
-interface IPoSValidatorManager is IValidatorManager {
+interface IPoSValidatorManager {
     /**
      * @notice Event emitted when a delegator registration is initiated
      * @param delegationID The ID of the delegation

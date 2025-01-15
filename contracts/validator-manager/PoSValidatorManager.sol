@@ -14,7 +14,7 @@ import {
     PoSValidatorInfo,
     PoSValidatorManagerSettings
 } from "./interfaces/IPoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "./interfaces/IValidatorManager.sol";
+import {ValidatorRegistrationInput} from "./ValidatorManager.sol";
 import {Validator, ValidatorStatus} from "./ACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {WarpMessage} from

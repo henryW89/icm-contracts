@@ -8,7 +8,7 @@ pragma solidity 0.8.25;
 import {Test} from "@forge-std/Test.sol";
 import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
-import {ValidatorRegistrationInput} from "../interfaces/IValidatorManager.sol";
+import {ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {
     WarpMessage,
     IWarpMessenger
