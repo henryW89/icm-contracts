@@ -323,8 +323,6 @@ abstract contract PoSValidatorManager is
     ) internal returns (bool) {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        // TODONOW: Functions that modify Validator state invalid any references to the Validator object.
-        // How can we make this safer to use?
         _initiateValidatorRemoval(validationID);
         Validator memory validator = getValidator(validationID);
 

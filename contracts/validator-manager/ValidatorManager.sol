@@ -29,7 +29,7 @@ import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
 
 /**
- * @dev Implementation of the {IValidatorManager} interface.
+ * @dev Implementation of the {ACP99Manager} abstract contract.
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
@@ -240,10 +240,8 @@ abstract contract ValidatorManager is
     }
 
     /**
-     * @notice Begins the validator registration process, and sets the initial weight for the validator.
-     * This is the only method related to validator registration and removal that needs the initializedValidatorSet
-     * modifier. All others are guarded by checking the validator status changes initialized in this function.
-     * @param weight The weight of the validator being registered.
+     * @notice See {ACP99Manager-_initiateValidatorRegistration}.
+     * @dev This function modifies the validator's state. Callers should ensure that any references are updated.
      */
     function _initiateValidatorRegistration(
         bytes memory nodeID,
@@ -380,8 +378,7 @@ abstract contract ValidatorManager is
     }
 
     /**
-     * @notice Returns a validator registered to the given validationID
-     * @param validationID ID of the validation period associated with the validator
+     * @notice See {ACP99Manager-getValidator}.
      */
     function getValidator(bytes32 validationID)
         public
@@ -394,14 +391,23 @@ abstract contract ValidatorManager is
         return $._validationPeriods[validationID];
     }
 
+    /**
+     * @notice See {ACP99Manager-l1TotalWeight}.
+     */
     function l1TotalWeight() public view virtual override returns (uint64) {
         return _getValidatorManagerStorage()._churnTracker.totalWeight;
     }
 
+    /**
+     * @notice See {ACP99Manager-subnetID}.
+     */
     function subnetID() public view virtual override returns (bytes32) {
         return _getValidatorManagerStorage()._subnetID;
     }
 
+    /**
+     * @notice See {ACP99Manager-completeValidatorWeightUpdate}.
+     */
     function completeValidatorWeightUpdate(uint32 messageIndex)
         public
         virtual
@@ -428,10 +434,8 @@ abstract contract ValidatorManager is
     }
 
     /**
-     * @notice Begins the process of ending an active validation period. The validation period must have been previously
-     * started by a successful call to {completeValidatorRegistration} with the given validationID.
-     * Any rewards for this validation period will stop accruing when this function is called.
-     * @param validationID The ID of the validation period being ended.
+     * @notice See {ACP99Manager-_initiateValidatorRemoval}.
+     * @dev This function modifies the validator's state. Callers should ensure that any references are updated.
      */
     function _initiateValidatorRemoval(bytes32 validationID) internal virtual override {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -555,6 +559,10 @@ abstract contract ValidatorManager is
         return warpMessage;
     }
 
+    /**
+     * @notice See {ACP99Manager-_initiateValidatorWeightUpdate}.
+     * @dev This function modifies the validator's state. Callers should ensure that any references are updated.
+     */
     function _initiateValidatorWeightUpdate(
         bytes32 validationID,
         uint64 newWeight
