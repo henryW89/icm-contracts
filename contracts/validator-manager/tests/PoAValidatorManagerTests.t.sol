@@ -98,7 +98,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         return app.initiateValidatorRemoval(validationID);
     }
 
-    function _forceinitiateValidatorRemoval(
+    function _forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool,
         address

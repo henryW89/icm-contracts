@@ -327,7 +327,7 @@ abstract contract ValidatorManagerTest is Test {
 
         bytes32 validationID = sha256(abi.encodePacked(DEFAULT_SUBNET_ID, uint32(0)));
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
-        _forceinitiateValidatorRemoval(validationID, false, address(0));
+        _forceInitiateValidatorRemoval(validationID, false, address(0));
     }
 
     function testCumulativeChurnRegistration() public {
@@ -505,7 +505,7 @@ abstract contract ValidatorManagerTest is Test {
 
         vm.warp(completionTimestamp);
         if (force) {
-            _forceinitiateValidatorRemoval(validationID, includeUptime, address(0));
+            _forceInitiateValidatorRemoval(validationID, includeUptime, address(0));
         } else {
             _initiateValidatorRemoval(validationID, includeUptime, address(0));
         }
@@ -527,7 +527,7 @@ abstract contract ValidatorManagerTest is Test {
 
         vm.warp(completionTimestamp);
         if (force) {
-            _forceinitiateValidatorRemoval(validationID, includeUptime, recipientAddress);
+            _forceInitiateValidatorRemoval(validationID, includeUptime, recipientAddress);
         } else {
             _initiateValidatorRemoval(validationID, includeUptime, recipientAddress);
         }
@@ -623,7 +623,7 @@ abstract contract ValidatorManagerTest is Test {
         address rewardRecipient
     ) internal virtual;
 
-    function _forceinitiateValidatorRemoval(
+    function _forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
         address rewardRecipient
