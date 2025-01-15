@@ -252,7 +252,7 @@ abstract contract ValidatorManager is
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
-    ) internal virtual override initializedValidatorSet returns (bytes32) {
+    ) internal virtual override initializedValidatorSet returns (bytes32, Validator memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         if (
@@ -302,19 +302,21 @@ abstract contract ValidatorManager is
 
         // Submit the message to the Warp precompile.
         bytes32 messageID = WARP_MESSENGER.sendWarpMessage(registerL1ValidatorMessage);
-        $._validationPeriods[validationID].status = ValidatorStatus.PendingAdded;
-        $._validationPeriods[validationID].nodeID = nodeID;
-        $._validationPeriods[validationID].startingWeight = weight;
-        $._validationPeriods[validationID].sentNonce = 0;
-        $._validationPeriods[validationID].weight = weight;
-        $._validationPeriods[validationID].startTime = 0; // The validation period only starts once the registration is acknowledged.
-        $._validationPeriods[validationID].endTime = 0;
+        Validator memory validator = $._validationPeriods[validationID];
+        validator.status = ValidatorStatus.PendingAdded;
+        validator.nodeID = nodeID;
+        validator.startingWeight = weight;
+        validator.sentNonce = 0;
+        validator.weight = weight;
+        validator.startTime = 0; // The validation period only starts once the registration is acknowledged.
+        validator.endTime = 0;
+        $._validationPeriods[validationID] = validator;
 
         emit InitiatedValidatorRegistration(
             validationID, nodeID, messageID, registrationExpiry, weight
         );
 
-        return validationID;
+        return (validationID, validator);
     }
 
     /**
@@ -433,7 +435,12 @@ abstract contract ValidatorManager is
      * Any rewards for this validation period will stop accruing when this function is called.
      * @param validationID The ID of the validation period being ended.
      */
-    function _initiateValidatorRemoval(bytes32 validationID) internal virtual override {
+    function _initiateValidatorRemoval(bytes32 validationID)
+        internal
+        virtual
+        override
+        returns (Validator memory)
+    {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Ensure the validation period is active.
@@ -451,15 +458,20 @@ abstract contract ValidatorManager is
         // on the P-Chain.
         validator.endTime = uint64(block.timestamp);
 
+        uint64 endingWeight = validator.weight;
+
         // Save the validator updates.
         $._validationPeriods[validationID] = validator;
 
-        (, bytes32 messageID) = _initiateValidatorWeightUpdate(validationID, 0);
+        bytes32 messageID;
+        (messageID, validator) = _initiateValidatorWeightUpdate(validationID, 0);
 
         // Emit the event to signal the start of the validator removal process.
         emit InitiatedValidatorRemoval(
-            validationID, messageID, validator.weight, uint64(block.timestamp)
+            validationID, messageID, endingWeight, uint64(block.timestamp)
         );
+
+        return validator;
     }
 
     /**
@@ -558,7 +570,7 @@ abstract contract ValidatorManager is
     function _initiateValidatorWeightUpdate(
         bytes32 validationID,
         uint64 newWeight
-    ) internal virtual override returns (uint64, bytes32) {
+    ) internal virtual override returns (bytes32, Validator memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         uint64 validatorWeight = $._validationPeriods[validationID].weight;
 
@@ -581,7 +593,7 @@ abstract contract ValidatorManager is
             weight: newWeight
         });
 
-        return (nonce, messageID);
+        return (messageID, $._validationPeriods[validationID]);
     }
 
     function _getChurnPeriodSeconds() internal view returns (uint64) {

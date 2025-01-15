@@ -55,7 +55,7 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
         ValidatorRegistrationInput calldata registrationInput,
         uint64 weight
     ) external onlyOwner returns (bytes32 validationID) {
-        return _initiateValidatorRegistration({
+        (validationID,) = _initiateValidatorRegistration({
             nodeID: registrationInput.nodeID,
             blsPublicKey: registrationInput.blsPublicKey,
             registrationExpiry: registrationInput.registrationExpiry,

@@ -143,6 +143,7 @@ abstract contract ACP99Manager {
      * @param disableOwner The disable owner of the validator.
      * @param weight The weight of the node on the L1.
      * @return validationID The ID of the registered validator.
+     * @return validator The registered validator.
      */
     function _initiateValidatorRegistration(
         bytes memory nodeID,
@@ -151,7 +152,7 @@ abstract contract ACP99Manager {
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
-    ) internal virtual returns (bytes32 validationID);
+    ) internal virtual returns (bytes32 validationID, Validator memory validator);
 
     /**
      * @notice Completes the validator registration process by returning an acknowledgement of the registration of a
@@ -174,8 +175,12 @@ abstract contract ACP99Manager {
      * Emits an {InitiatedValidatorRemoval} on success.
      *
      * @param validationID The ID of the validator to remove.
+     * @return validator The validator to remove.
      */
-    function _initiateValidatorRemoval(bytes32 validationID) internal virtual;
+    function _initiateValidatorRemoval(bytes32 validationID)
+        internal
+        virtual
+        returns (Validator memory validator);
 
     /**
      * @notice Completes validator removal by consuming an RegisterL1ValidatorMessage from the P-Chain acknowledging
@@ -198,13 +203,13 @@ abstract contract ACP99Manager {
      *
      * @param validationID The ID of the validator to modify.
      * @param weight The new weight of the validator.
-     * @return nonce The validator nonce associated with the weight change.
      * @return messageID The ID of the L1ValidatorWeightMessage used to update the validator's weight.
+     * @return validator The updated validator.
      */
     function _initiateValidatorWeightUpdate(
         bytes32 validationID,
         uint64 weight
-    ) internal virtual returns (uint64 nonce, bytes32 messageID);
+    ) internal virtual returns (bytes32 messageID, Validator memory validator);
 
     /**
      * @notice Completes the validator weight update process by consuming a L1ValidatorWeightMessage from the P-Chain
