@@ -9,7 +9,6 @@ import {PoSValidatorManagerTest} from "./PoSValidatorManagerTests.t.sol";
 import {ERC20TokenStakingManager} from "../ERC20TokenStakingManager.sol";
 import {PoSValidatorManager, PoSValidatorManagerSettings} from "../PoSValidatorManager.sol";
 import {ExampleRewardCalculator} from "../ExampleRewardCalculator.sol";
-import {ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {ICMInitializable} from "../../utilities/ICMInitializable.sol";
 import {ExampleERC20} from "@mocks/ExampleERC20.sol";
 import {IERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/IERC20.sol";
@@ -17,7 +16,7 @@ import {IERC20Mintable} from "../interfaces/IERC20Mintable.sol";
 import {SafeERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/utils/SafeERC20.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
-import {ACP99Manager} from "../ACP99Manager.sol";
+import {ACP99Manager, PChainOwner} from "../ACP99Manager.sol";
 
 contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
     using SafeERC20 for IERC20Mintable;
@@ -140,13 +139,6 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
     }
 
     function testInvalidValidatorMinStakeDuration() public {
-        ValidatorRegistrationInput memory input = ValidatorRegistrationInput({
-            nodeID: DEFAULT_NODE_ID,
-            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
-            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-            disableOwner: DEFAULT_P_CHAIN_OWNER
-        });
         uint256 stakeAmount = _weightToValue(DEFAULT_WEIGHT);
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -154,9 +146,16 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
                 DEFAULT_MINIMUM_STAKE_DURATION - 1
             )
         );
-        app.initiateValidatorRegistration(
-            input, DEFAULT_DELEGATION_FEE_BIPS, DEFAULT_MINIMUM_STAKE_DURATION - 1, stakeAmount
-        );
+        app.initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION - 1,
+            stakeAmount: stakeAmount
+        });
     }
 
     function testERC20TokenStakingManagerStorageSlot() public view {
@@ -167,26 +166,45 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
     }
 
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput memory registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual override returns (bytes32) {
-        return app.initiateValidatorRegistration(
-            registrationInput, delegationFeeBips, minStakeDuration, stakeAmount
-        );
+        return app.initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration,
+            stakeAmount: stakeAmount
+        });
     }
 
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput memory input,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initiateValidatorRegistration(
-            input,
-            DEFAULT_DELEGATION_FEE_BIPS,
-            DEFAULT_MINIMUM_STAKE_DURATION,
-            _weightToValue(weight)
-        );
+        return app.initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
+            stakeAmount: _weightToValue(weight)
+        });
     }
 
     function _initiateDelegatorRegistration(

@@ -47,17 +47,6 @@ struct ValidatorManagerSettings {
 }
 
 /**
- * @dev Specifies a validator to register.
- */
-struct ValidatorRegistrationInput {
-    bytes nodeID;
-    bytes blsPublicKey;
-    uint64 registrationExpiry;
-    PChainOwner remainingBalanceOwner;
-    PChainOwner disableOwner;
-}
-
-/**
  * @dev Implementation of the {ACP99Manager} abstract contract.
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md

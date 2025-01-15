@@ -7,8 +7,9 @@ pragma solidity 0.8.25;
 
 import {PoSValidatorManager} from "./PoSValidatorManager.sol";
 import {PoSValidatorManagerSettings} from "./interfaces/IPoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "./ValidatorManager.sol";
-import {INativeTokenStakingManager} from "./interfaces/INativeTokenStakingManager.sol";
+import {
+    INativeTokenStakingManager, PChainOwner
+} from "./interfaces/INativeTokenStakingManager.sol";
 import {INativeMinter} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/INativeMinter.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -62,13 +63,24 @@ contract NativeTokenStakingManager is
      * @notice See {INativeTokenStakingManager-initiateValidatorRegistration}.
      */
     function initiateValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration
     ) external payable nonReentrant returns (bytes32) {
-        return _initiateValidatorRegistration(
-            registrationInput, delegationFeeBips, minStakeDuration, msg.value
-        );
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration,
+            stakeAmount: msg.value
+        });
     }
 
     /**

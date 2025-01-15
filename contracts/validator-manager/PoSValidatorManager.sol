@@ -14,8 +14,7 @@ import {
     PoSValidatorInfo,
     PoSValidatorManagerSettings
 } from "./interfaces/IPoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "./ValidatorManager.sol";
-import {Validator, ValidatorStatus} from "./ACP99Manager.sol";
+import {Validator, ValidatorStatus, PChainOwner} from "./ACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {WarpMessage} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
@@ -455,7 +454,11 @@ abstract contract PoSValidatorManager is
     }
 
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
@@ -483,11 +486,11 @@ abstract contract PoSValidatorManager is
 
         uint64 weight = valueToWeight(lockedValue);
         bytes32 validationID = _initiateValidatorRegistration({
-            nodeID: registrationInput.nodeID,
-            blsPublicKey: registrationInput.blsPublicKey,
-            registrationExpiry: registrationInput.registrationExpiry,
-            remainingBalanceOwner: registrationInput.remainingBalanceOwner,
-            disableOwner: registrationInput.disableOwner,
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
             weight: weight
         });
 

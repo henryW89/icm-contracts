@@ -7,8 +7,7 @@ pragma solidity 0.8.25;
 
 import {PoSValidatorManager} from "./PoSValidatorManager.sol";
 import {PoSValidatorManagerSettings} from "./interfaces/IPoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "./ValidatorManager.sol";
-import {IERC20TokenStakingManager} from "./interfaces/IERC20TokenStakingManager.sol";
+import {IERC20TokenStakingManager, PChainOwner} from "./interfaces/IERC20TokenStakingManager.sol";
 import {IERC20Mintable} from "./interfaces/IERC20Mintable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {SafeERC20TransferFrom} from "@utilities/SafeERC20TransferFrom.sol";
@@ -99,14 +98,25 @@ contract ERC20TokenStakingManager is
      * @notice See {IERC20TokenStakingManager-initiateValidatorRegistration}
      */
     function initiateValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) external nonReentrant returns (bytes32 validationID) {
-        return _initiateValidatorRegistration(
-            registrationInput, delegationFeeBips, minStakeDuration, stakeAmount
-        );
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration,
+            stakeAmount: stakeAmount
+        });
     }
 
     /**

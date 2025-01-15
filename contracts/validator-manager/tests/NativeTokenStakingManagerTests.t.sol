@@ -9,14 +9,13 @@ import {Test} from "@forge-std/Test.sol";
 import {PoSValidatorManagerTest} from "./PoSValidatorManagerTests.t.sol";
 import {NativeTokenStakingManager} from "../NativeTokenStakingManager.sol";
 import {PoSValidatorManager, PoSValidatorManagerSettings} from "../PoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {ExampleRewardCalculator} from "../ExampleRewardCalculator.sol";
 import {ICMInitializable} from "../../utilities/ICMInitializable.sol";
 import {INativeMinter} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/INativeMinter.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
-import {ACP99Manager} from "../ACP99Manager.sol";
+import {ACP99Manager, PChainOwner} from "../ACP99Manager.sol";
 
 contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
     NativeTokenStakingManager public app;
@@ -128,23 +127,43 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
 
     // Helpers
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput memory registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual override returns (bytes32) {
-        return app.initiateValidatorRegistration{value: stakeAmount}(
-            registrationInput, delegationFeeBips, minStakeDuration
-        );
+        return app.initiateValidatorRegistration{value: stakeAmount}({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration
+        });
     }
 
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput memory input,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initiateValidatorRegistration{value: _weightToValue(weight)}(
-            input, DEFAULT_DELEGATION_FEE_BIPS, DEFAULT_MINIMUM_STAKE_DURATION
-        );
+        return app.initiateValidatorRegistration{value: _weightToValue(weight)}({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION
+        });
     }
 
     function _initiateDelegatorRegistration(

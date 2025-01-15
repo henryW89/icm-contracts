@@ -5,8 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorRegistrationInput} from "../ValidatorManager.sol";
 import {IPoSValidatorManager} from "./IPoSValidatorManager.sol";
+import {PChainOwner} from "../ACP99Manager.sol";
 
 /**
  * Proof of Stake Validator Manager that stakes the blockchain's native tokens.
@@ -14,12 +14,20 @@ import {IPoSValidatorManager} from "./IPoSValidatorManager.sol";
 interface INativeTokenStakingManager is IPoSValidatorManager {
     /**
      * @notice Begins the validator registration process. Locks the provided native asset in the contract as the stake.
-     * @param registrationInput The inputs for a validator registration.
+     * @param nodeID The ID of the node to add to the L1.
+     * @param blsPublicKey The BLS public key of the validator.
+     * @param registrationExpiry The time after which this message is invalid.
+     * @param remainingBalanceOwner The remaining balance owner of the validator.
+     * @param disableOwner The disable owner of the validator.
      * @param delegationFeeBips The fee that delegators must pay to delegate to this validator.
      * @param minStakeDuration The minimum amount of time this validator must be staked for in seconds.
      */
     function initiateValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration
     ) external payable returns (bytes32 validationID);

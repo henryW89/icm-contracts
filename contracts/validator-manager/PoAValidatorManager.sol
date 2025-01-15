@@ -5,9 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManager} from "./ValidatorManager.sol";
-import {ValidatorManagerSettings, ValidatorRegistrationInput} from "./ValidatorManager.sol";
-import {IPoAValidatorManager} from "./interfaces/IPoAValidatorManager.sol";
+import {ValidatorManager, ValidatorManagerSettings} from "./ValidatorManager.sol";
+import {IPoAValidatorManager, PChainOwner} from "./interfaces/IPoAValidatorManager.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
@@ -49,15 +48,19 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
      * @notice See {IPoAValidatorManager-initiateValidatorRegistration}.
      */
     function initiateValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) external onlyOwner returns (bytes32 validationID) {
         return _initiateValidatorRegistration({
-            nodeID: registrationInput.nodeID,
-            blsPublicKey: registrationInput.blsPublicKey,
-            registrationExpiry: registrationInput.registrationExpiry,
-            remainingBalanceOwner: registrationInput.remainingBalanceOwner,
-            disableOwner: registrationInput.disableOwner,
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
             weight: weight
         });
     }

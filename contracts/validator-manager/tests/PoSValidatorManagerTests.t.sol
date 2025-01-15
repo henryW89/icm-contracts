@@ -11,13 +11,15 @@ import {PoSValidatorManager} from "../PoSValidatorManager.sol";
 import {
     DelegatorStatus, PoSValidatorManagerSettings
 } from "../interfaces/IPoSValidatorManager.sol";
-import {ValidatorManager, ValidatorStatus} from "../ValidatorManager.sol";
-import {ValidatorManagerSettings, ValidatorRegistrationInput} from "../ValidatorManager.sol";
+import {
+    ValidatorManager, ValidatorStatus, ValidatorManagerSettings
+} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
     IWarpMessenger
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+import {PChainOwner} from "../ACP99Manager.sol";
 
 abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
     uint64 public constant DEFAULT_UPTIME = uint64(100);
@@ -42,14 +44,6 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
     PoSValidatorManager public posValidatorManager;
     IRewardCalculator public rewardCalculator;
-
-    ValidatorRegistrationInput public defaultRegistrationInput = ValidatorRegistrationInput({
-        nodeID: DEFAULT_NODE_ID,
-        blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-        registrationExpiry: DEFAULT_EXPIRY,
-        remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-        disableOwner: DEFAULT_P_CHAIN_OWNER
-    });
 
     event InitiatedDelegatorRegistration(
         bytes32 indexed delegationID,
@@ -80,12 +74,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
                 DEFAULT_MINIMUM_DELEGATION_FEE_BIPS - 1
             )
         );
-        _initiateValidatorRegistration(
-            defaultRegistrationInput,
-            DEFAULT_MINIMUM_DELEGATION_FEE_BIPS - 1,
-            DEFAULT_MINIMUM_STAKE_DURATION,
-            DEFAULT_MINIMUM_STAKE_AMOUNT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: DEFAULT_MINIMUM_DELEGATION_FEE_BIPS - 1,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
+            stakeAmount: DEFAULT_MINIMUM_STAKE_AMOUNT
+        });
     }
 
     function testDelegationFeeBipsTooHigh() public {
@@ -96,12 +94,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             )
         );
 
-        _initiateValidatorRegistration(
-            defaultRegistrationInput,
-            delegationFeeBips,
-            DEFAULT_MINIMUM_STAKE_DURATION,
-            DEFAULT_MINIMUM_STAKE_AMOUNT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
+            stakeAmount: DEFAULT_MINIMUM_STAKE_AMOUNT
+        });
     }
 
     function testInvalidMinStakeDuration() public {
@@ -111,12 +113,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
                 DEFAULT_MINIMUM_STAKE_DURATION - 1
             )
         );
-        _initiateValidatorRegistration(
-            defaultRegistrationInput,
-            DEFAULT_DELEGATION_FEE_BIPS,
-            DEFAULT_MINIMUM_STAKE_DURATION - 1,
-            DEFAULT_MINIMUM_STAKE_AMOUNT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION - 1,
+            stakeAmount: DEFAULT_MINIMUM_STAKE_AMOUNT
+        });
     }
 
     function testStakeAmountTooLow() public {
@@ -125,12 +131,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
                 PoSValidatorManager.InvalidStakeAmount.selector, DEFAULT_MINIMUM_STAKE_AMOUNT - 1
             )
         );
-        _initiateValidatorRegistration(
-            defaultRegistrationInput,
-            DEFAULT_DELEGATION_FEE_BIPS,
-            DEFAULT_MINIMUM_STAKE_DURATION,
-            DEFAULT_MINIMUM_STAKE_AMOUNT - 1
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
+            stakeAmount: DEFAULT_MINIMUM_STAKE_AMOUNT - 1
+        });
     }
 
     function testStakeAmountTooHigh() public {
@@ -139,12 +149,16 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
                 PoSValidatorManager.InvalidStakeAmount.selector, DEFAULT_MAXIMUM_STAKE_AMOUNT + 1
             )
         );
-        _initiateValidatorRegistration(
-            defaultRegistrationInput,
-            DEFAULT_DELEGATION_FEE_BIPS,
-            DEFAULT_MINIMUM_STAKE_DURATION,
-            DEFAULT_MAXIMUM_STAKE_AMOUNT + 1
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
+            stakeAmount: DEFAULT_MAXIMUM_STAKE_AMOUNT + 1
+        });
     }
 
     function testInvalidInitializeEndTime() public {
@@ -1925,7 +1939,11 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
     }
 
     function _initiateValidatorRegistration(
-        ValidatorRegistrationInput memory registrationInput,
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
