@@ -31,7 +31,6 @@ import (
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
 	poavalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/PoAValidatorManager"
 	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
-	ivalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/core/types"
@@ -74,13 +73,13 @@ func DeployValidatorManager(
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
 	managerType ValidatorManagerConcreteType,
-) (common.Address, *ivalidatormanager.IValidatorManager) {
+) (common.Address, *acp99manager.ACP99Manager) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 	var (
 		tx               *types.Transaction
 		address          common.Address
-		validatorManager *ivalidatormanager.IValidatorManager
+		validatorManager *acp99manager.ACP99Manager
 	)
 	switch managerType {
 	case PoAValidatorManager:
@@ -119,7 +118,7 @@ func DeployValidatorManager(
 		Expect(err).Should(BeNil())
 	}
 
-	validatorManager, err = ivalidatormanager.NewIValidatorManager(address, l1.RPCClient)
+	validatorManager, err = acp99manager.NewACP99Manager(address, l1.RPCClient)
 	Expect(err).Should(BeNil())
 
 	// Wait for the transaction to be mined
