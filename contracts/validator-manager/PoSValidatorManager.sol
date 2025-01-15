@@ -323,7 +323,10 @@ abstract contract PoSValidatorManager is
     ) internal returns (bool) {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        Validator memory validator = _initiateValidatorRemoval(validationID);
+        // TODONOW: Functions that modify Validator state invalid any references to the Validator object.
+        // How can we make this safer to use?
+        _initiateValidatorRemoval(validationID);
+        Validator memory validator = getValidator(validationID);
 
         // Non-PoS validators are required to boostrap the network, but are not eligible for rewards.
         if (!_isPoSValidator(validationID)) {
@@ -479,7 +482,7 @@ abstract contract PoSValidatorManager is
         uint256 lockedValue = _lock(stakeAmount);
 
         uint64 weight = valueToWeight(lockedValue);
-        (bytes32 validationID,) = _initiateValidatorRegistration({
+        bytes32 validationID = _initiateValidatorRegistration({
             nodeID: registrationInput.nodeID,
             blsPublicKey: registrationInput.blsPublicKey,
             registrationExpiry: registrationInput.registrationExpiry,
@@ -556,10 +559,10 @@ abstract contract PoSValidatorManager is
             revert MaxWeightExceeded(newValidatorWeight);
         }
 
-        bytes32 messageID;
-        (messageID, validator) = _initiateValidatorWeightUpdate(validationID, newValidatorWeight);
+        (uint64 nonce, bytes32 messageID) =
+            _initiateValidatorWeightUpdate(validationID, newValidatorWeight);
 
-        bytes32 delegationID = keccak256(abi.encodePacked(validationID, validator.sentNonce));
+        bytes32 delegationID = keccak256(abi.encodePacked(validationID, nonce));
 
         // Store the delegation information. Set the delegator status to pending added,
         // so that it can be properly started in the complete step, even if the delivered
@@ -569,14 +572,14 @@ abstract contract PoSValidatorManager is
         $._delegatorStakes[delegationID].validationID = validationID;
         $._delegatorStakes[delegationID].weight = weight;
         $._delegatorStakes[delegationID].startTime = 0;
-        $._delegatorStakes[delegationID].startingNonce = validator.sentNonce;
+        $._delegatorStakes[delegationID].startingNonce = nonce;
         $._delegatorStakes[delegationID].endingNonce = 0;
 
         emit DelegatorAdded({
             delegationID: delegationID,
             validationID: validationID,
             delegatorAddress: delegatorAddress,
-            nonce: validator.sentNonce,
+            nonce: nonce,
             validatorWeight: newValidatorWeight,
             delegatorWeight: weight,
             setWeightMessageID: messageID
@@ -751,9 +754,9 @@ abstract contract PoSValidatorManager is
             // initialize the removal.
             $._delegatorStakes[delegationID].status = DelegatorStatus.PendingRemoved;
 
-            (, validator) =
+            ($._delegatorStakes[delegationID].endingNonce,) =
                 _initiateValidatorWeightUpdate(validationID, validator.weight - delegator.weight);
-            $._delegatorStakes[delegationID].endingNonce = validator.sentNonce;
+
             uint256 reward =
                 _calculateAndSetDelegationReward(delegator, rewardRecipient, delegationID);
 
