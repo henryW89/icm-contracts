@@ -515,11 +515,11 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
      * @notice Completes the process of ending a validation period by receiving an acknowledgement from the P-Chain
      * that the validation ID is not active and will never be active in the future.
      * Note: that this function can be used for successful validation periods that have been explicitly
-     * ended by calling {initializeEndValidation} or for validation periods that never began on the P-Chain due to the
+     * ended by calling {_initiateValidatorRemoval} or for validation periods that never began on the P-Chain due to the
      * {registrationExpiry} being reached.
      * @return (Validation ID, Validator instance) representing the completed validation period.
      */
-    function _completeEndValidation(uint32 messageIndex)
+    function _completeValidatorRemoval(uint32 messageIndex)
         internal
         returns (bytes32, Validator memory)
     {
@@ -534,7 +534,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
 
         Validator memory validator = $._validationPeriods[validationID];
 
-        // The validation status is PendingRemoved if validator removal was initiated with a call to {initiateEndValidation}.
+        // The validation status is PendingRemoved if validator removal was initiated with a call to {initiateValidatorRemoval}.
         // The validation status is PendingAdded if the validator was never registered on the P-Chain.
         // The initial validator set must have been set already to have pending validation messages.
         if (

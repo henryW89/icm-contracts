@@ -154,7 +154,7 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
                 DEFAULT_MINIMUM_STAKE_DURATION - 1
             )
         );
-        app.initializeValidatorRegistration(
+        app.initiateValidatorRegistration(
             input, DEFAULT_DELEGATION_FEE_BIPS, DEFAULT_MINIMUM_STAKE_DURATION - 1, stakeAmount
         );
     }
@@ -166,22 +166,22 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
         );
     }
 
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput memory registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration(
+        return app.initiateValidatorRegistration(
             registrationInput, delegationFeeBips, minStakeDuration, stakeAmount
         );
     }
 
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput memory input,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration(
+        return app.initiateValidatorRegistration(
             input,
             DEFAULT_DELEGATION_FEE_BIPS,
             DEFAULT_MINIMUM_STAKE_DURATION,
@@ -189,14 +189,14 @@ contract ERC20TokenStakingManagerTest is PoSValidatorManagerTest {
         );
     }
 
-    function _initializeDelegatorRegistration(
+    function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
         uint64 weight
     ) internal virtual override returns (bytes32) {
         uint256 value = _weightToValue(weight);
         vm.startPrank(delegatorAddress);
-        bytes32 delegationID = app.initializeDelegatorRegistration(validationID, value);
+        bytes32 delegationID = app.initiateDelegatorRegistration(validationID, value);
         vm.stopPrank();
         return delegationID;
     }

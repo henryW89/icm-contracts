@@ -59,28 +59,28 @@ contract NativeTokenStakingManager is
     function __NativeTokenStakingManager_init_unchained() internal onlyInitializing {}
 
     /**
-     * @notice See {INativeTokenStakingManager-initializeValidatorRegistration}.
+     * @notice See {INativeTokenStakingManager-initiateValidatorRegistration}.
      */
-    function initializeValidatorRegistration(
+    function initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration
     ) external payable nonReentrant returns (bytes32) {
-        return _initializeValidatorRegistration(
+        return _initiateValidatorRegistration(
             registrationInput, delegationFeeBips, minStakeDuration, msg.value
         );
     }
 
     /**
-     * @notice See {INativeTokenStakingManager-initializeDelegatorRegistration}.
+     * @notice See {INativeTokenStakingManager-initiateDelegatorRegistration}.
      */
-    function initializeDelegatorRegistration(bytes32 validationID)
+    function initiateDelegatorRegistration(bytes32 validationID)
         external
         payable
         nonReentrant
         returns (bytes32)
     {
-        return _initializeDelegatorRegistration(validationID, _msgSender(), msg.value);
+        return _initiateDelegatorRegistration(validationID, _msgSender(), msg.value);
     }
 
     /**

@@ -16,7 +16,7 @@ interface IPoAValidatorManager {
      * @param registrationInput The inputs for a validator registration.
      * @param weight The weight of the validator being registered.
      */
-    function initializeValidatorRegistration(
+    function initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint64 weight
     ) external returns (bytes32 validationID);
@@ -26,5 +26,5 @@ interface IPoAValidatorManager {
      * started by a successful call to {completeValidatorRegistration} with the given validationID.
      * @param validationID The ID of the validation period being ended.
      */
-    function initializeEndValidation(bytes32 validationID) external;
+    function initiateValidatorRemoval(bytes32 validationID) external;
 }

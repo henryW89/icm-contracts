@@ -19,7 +19,7 @@ interface IERC20TokenStakingManager is IPoSValidatorManager {
      * @param minStakeDuration The minimum amount of time this validator must be staked for in seconds.
      * @param stakeAmount The amount of tokens to stake.
      */
-    function initializeValidatorRegistration(
+    function initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
@@ -31,7 +31,7 @@ interface IERC20TokenStakingManager is IPoSValidatorManager {
      * @param validationID The ID of the validator to stake to.
      * @param stakeAmount The amount of tokens to stake.
      */
-    function initializeDelegatorRegistration(
+    function initiateDelegatorRegistration(
         bytes32 validationID,
         uint256 stakeAmount
     ) external returns (bytes32);

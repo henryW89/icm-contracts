@@ -96,27 +96,27 @@ contract ERC20TokenStakingManager is
     }
 
     /**
-     * @notice See {IERC20TokenStakingManager-initializeValidatorRegistration}
+     * @notice See {IERC20TokenStakingManager-initiateValidatorRegistration}
      */
-    function initializeValidatorRegistration(
+    function initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) external nonReentrant returns (bytes32 validationID) {
-        return _initializeValidatorRegistration(
+        return _initiateValidatorRegistration(
             registrationInput, delegationFeeBips, minStakeDuration, stakeAmount
         );
     }
 
     /**
-     * @notice See {IERC20TokenStakingManager-initializeDelegatorRegistration}
+     * @notice See {IERC20TokenStakingManager-initiateDelegatorRegistration}
      */
-    function initializeDelegatorRegistration(
+    function initiateDelegatorRegistration(
         bytes32 validationID,
         uint256 delegationAmount
     ) external nonReentrant returns (bytes32) {
-        return _initializeDelegatorRegistration(validationID, _msgSender(), delegationAmount);
+        return _initiateDelegatorRegistration(validationID, _msgSender(), delegationAmount);
     }
 
     /**

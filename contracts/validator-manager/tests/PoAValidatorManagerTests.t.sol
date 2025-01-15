@@ -49,7 +49,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
                 OwnableUpgradeable.OwnableUnauthorizedAccount.selector, vm.addr(1)
             )
         );
-        _initializeValidatorRegistration(
+        _initiateValidatorRegistration(
             ValidatorRegistrationInput({
                 nodeID: DEFAULT_NODE_ID,
                 blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
@@ -71,7 +71,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
             abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, weight)
         );
 
-        _initializeValidatorRegistration(
+        _initiateValidatorRegistration(
             ValidatorRegistrationInput({
                 nodeID: nodeID,
                 blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
@@ -83,27 +83,27 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         );
     }
 
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput memory input,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration(input, weight);
+        return app.initiateValidatorRegistration(input, weight);
     }
 
-    function _initializeEndValidation(
+    function _initiateValidatorRemoval(
         bytes32 validationID,
         bool,
         address
     ) internal virtual override {
-        return app.initializeEndValidation(validationID);
+        return app.initiateValidatorRemoval(validationID);
     }
 
-    function _forceInitializeEndValidation(
+    function _forceinitiateValidatorRemoval(
         bytes32 validationID,
         bool,
         address
     ) internal virtual override {
-        return app.initializeEndValidation(validationID);
+        return app.initiateValidatorRemoval(validationID);
     }
 
     function _setUp() internal override returns (ACP99Manager) {

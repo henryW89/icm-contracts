@@ -127,27 +127,27 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
     }
 
     // Helpers
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput memory registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration{value: stakeAmount}(
+        return app.initiateValidatorRegistration{value: stakeAmount}(
             registrationInput, delegationFeeBips, minStakeDuration
         );
     }
 
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput memory input,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration{value: _weightToValue(weight)}(
+        return app.initiateValidatorRegistration{value: _weightToValue(weight)}(
             input, DEFAULT_DELEGATION_FEE_BIPS, DEFAULT_MINIMUM_STAKE_DURATION
         );
     }
 
-    function _initializeDelegatorRegistration(
+    function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
         uint64 weight
@@ -155,7 +155,7 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
         uint256 value = _weightToValue(weight);
         vm.prank(delegatorAddress);
         vm.deal(delegatorAddress, value);
-        return app.initializeDelegatorRegistration{value: value}(validationID);
+        return app.initiateDelegatorRegistration{value: value}(validationID);
     }
 
     // solhint-disable no-empty-blocks

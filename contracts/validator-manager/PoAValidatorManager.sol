@@ -46,9 +46,9 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
     // solhint-enable func-name-mixedcase
 
     /**
-     * @notice See {IPoAValidatorManager-initializeValidatorRegistration}.
+     * @notice See {IPoAValidatorManager-initiateValidatorRegistration}.
      */
-    function initializeValidatorRegistration(
+    function initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint64 weight
     ) external onlyOwner returns (bytes32 validationID) {
@@ -64,9 +64,9 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
 
     // solhint-enable ordering
     /**
-     * @notice See {IPoAValidatorManager-initializeEndValidation}.
+     * @notice See {IPoAValidatorManager-initiateValidatorRemoval}.
      */
-    function initializeEndValidation(bytes32 validationID) external override onlyOwner {
+    function initiateValidatorRemoval(bytes32 validationID) external override onlyOwner {
         _initiateValidatorRemoval(validationID);
     }
 
@@ -79,7 +79,7 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
         override
         returns (bytes32)
     {
-        (bytes32 validationID,) = _completeEndValidation(messageIndex);
+        (bytes32 validationID,) = _completeValidatorRemoval(messageIndex);
         return validationID;
     }
 }

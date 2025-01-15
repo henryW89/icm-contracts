@@ -145,17 +145,17 @@ interface IPoSValidatorManager {
      * the latest known uptime will be used.
      * @param messageIndex The index of the ICM message to be received providing the uptime proof.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndValidation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-initiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the validator.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -173,17 +173,17 @@ interface IPoSValidatorManager {
      * the latest known uptime will be used.
      * @param messageIndex The index of the ICM message to be received providing the uptime proof.
      */
-    function forceInitializeEndValidation(
+    function forceinitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndValidation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-forceinitiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress Address to receive the rewards.
      */
-    function forceInitializeEndValidation(
+    function forceinitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -193,7 +193,7 @@ interface IPoSValidatorManager {
     /**
      * @notice Completes the delegator registration process by submitting an acknowledgement of the registration of a
      * validationID from the P-Chain. After this function is called, the validator's weight is updated in the contract state.
-     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initialize registration of the
+     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate registration of the
      * delegator is valid, as long as that nonce has been sent by the contract. For the purposes of computing delegation rewards,
      * the delegation is considered active after this function is completed.
      * Note: Only the specified delegation will be marked as registered, even if the validator weight update
@@ -218,17 +218,17 @@ interface IPoSValidatorManager {
      * @param messageIndex If {includeUptimeProof} is true, the index of the ICM message to be received providing the
      * uptime proof.
      */
-    function initializeEndDelegation(
+    function initiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndDelegation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-initiateEndDelegation} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the delegator.
      */
-    function initializeEndDelegation(
+    function initiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -249,17 +249,17 @@ interface IPoSValidatorManager {
      * @param messageIndex If {includeUptimeProof} is true, the index of the ICM message to be received providing the
      * uptime proof.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndDelegation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-forceInitiateEndDelegation} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -276,7 +276,7 @@ interface IPoSValidatorManager {
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
      * After this function is called, the validator's weight is updated in the contract state.
-     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initialize the end of the
+     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate the end of the
      * delegator's delegation is valid, as long as that nonce has been sent by the contract. This is because the validator
      * weight change pertaining to the delegation ending is included in any subsequent validator weight update messages.
      * Note: Only the specified delegation will be marked as completed, even if the validator weight update

@@ -210,40 +210,40 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndValidation}.
+     * @notice See {IPoSValidatorManager-initiateValidatorRemoval}.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external {
-        _initializeEndValidationWithCheck(
+        _initiateValidatorRemovalWithCheck(
             validationID, includeUptimeProof, messageIndex, address(0)
         );
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndValidation}.
+     * @notice See {IPoSValidatorManager-initiateValidatorRemoval}.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) external {
-        _initializeEndValidationWithCheck(
+        _initiateValidatorRemovalWithCheck(
             validationID, includeUptimeProof, messageIndex, rewardRecipient
         );
     }
 
-    function _initializeEndValidationWithCheck(
+    function _initiateValidatorRemovalWithCheck(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) internal {
         if (
-            !_initializeEndPoSValidation(
+            !_initiatePoSValidatorRemoval(
                 validationID, includeUptimeProof, messageIndex, rewardRecipient
             )
         ) {
@@ -252,28 +252,30 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndValidation}.
+     * @notice See {IPoSValidatorManager-forceinitiateValidatorRemoval}.
      */
-    function forceInitializeEndValidation(
+    function forceinitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external {
         // Ignore the return value here to force end validation, regardless of possible missed rewards
-        _initializeEndPoSValidation(validationID, includeUptimeProof, messageIndex, address(0));
+        _initiatePoSValidatorRemoval(validationID, includeUptimeProof, messageIndex, address(0));
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndValidation}.
+     * @notice See {IPoSValidatorManager-forceinitiateValidatorRemoval}.
      */
-    function forceInitializeEndValidation(
+    function forceinitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) external {
         // Ignore the return value here to force end validation, regardless of possible missed rewards
-        _initializeEndPoSValidation(validationID, includeUptimeProof, messageIndex, rewardRecipient);
+        _initiatePoSValidatorRemoval(
+            validationID, includeUptimeProof, messageIndex, rewardRecipient
+        );
     }
 
     function changeValidatorRewardRecipient(
@@ -311,11 +313,11 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @dev Helper function that initializes the end of a PoS validation period.
+     * @dev Helper function that initiates the end of a PoS validation period.
      * Returns false if it is possible for the validator to claim rewards, but it is not eligible.
      * Returns true otherwise.
      */
-    function _initializeEndPoSValidation(
+    function _initiatePoSValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -382,7 +384,7 @@ abstract contract PoSValidatorManager is
     {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        (bytes32 validationID, Validator memory validator) = _completeEndValidation(messageIndex);
+        (bytes32 validationID, Validator memory validator) = _completeValidatorRemoval(messageIndex);
 
         // Return now if this was originally a PoA validator that was later migrated to this PoS manager,
         // or the validator was part of the initial validator set.
@@ -452,7 +454,7 @@ abstract contract PoSValidatorManager is
         return uptime;
     }
 
-    function _initializeValidatorRegistration(
+    function _initiateValidatorRegistration(
         ValidatorRegistrationInput calldata registrationInput,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
@@ -533,7 +535,7 @@ abstract contract PoSValidatorManager is
      */
     function _unlock(address to, uint256 value) internal virtual;
 
-    function _initializeDelegatorRegistration(
+    function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
         uint256 delegationAmount
@@ -564,7 +566,7 @@ abstract contract PoSValidatorManager is
 
         // Store the delegation information. Set the delegator status to pending added,
         // so that it can be properly started in the complete step, even if the delivered
-        // nonce is greater than the nonce used to initialize registration.
+        // nonce is greater than the nonce used to initiate registration.
         $._delegatorStakes[delegationID].status = DelegatorStatus.PendingAdded;
         $._delegatorStakes[delegationID].owner = delegatorAddress;
         $._delegatorStakes[delegationID].validationID = validationID;
@@ -596,7 +598,7 @@ abstract contract PoSValidatorManager is
         Validator memory validator = getValidator(validationID);
 
         // Ensure the delegator is pending added. Since anybody can call this function once
-        // delegator registration has been initialized, we need to make sure that this function is only
+        // delegator registration has been initiated, we need to make sure that this function is only
         // callable after that has been done.
         if (delegator.status != DelegatorStatus.PendingAdded) {
             revert InvalidDelegatorStatus(delegator.status);
@@ -633,78 +635,74 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndDelegation}.
+     * @notice See {IPoSValidatorManager-initiateEndDelegation}.
      */
-    function initializeEndDelegation(
+    function initiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external {
-        _initializeEndDelegationWithCheck(
-            delegationID, includeUptimeProof, messageIndex, address(0)
-        );
+        _initiateEndDelegationWithCheck(delegationID, includeUptimeProof, messageIndex, address(0));
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndDelegation}.
+     * @notice See {IPoSValidatorManager-initiateEndDelegation}.
      */
-    function initializeEndDelegation(
+    function initiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) external {
-        _initializeEndDelegationWithCheck(
+        _initiateEndDelegationWithCheck(
             delegationID, includeUptimeProof, messageIndex, rewardRecipient
         );
     }
 
-    function _initializeEndDelegationWithCheck(
+    function _initiateEndDelegationWithCheck(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) internal {
         if (
-            !_initializeEndDelegation(
-                delegationID, includeUptimeProof, messageIndex, rewardRecipient
-            )
+            !_initiateEndDelegation(delegationID, includeUptimeProof, messageIndex, rewardRecipient)
         ) {
             revert DelegatorIneligibleForRewards(delegationID);
         }
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndDelegation}.
+     * @notice See {IPoSValidatorManager-forceInitiateEndDelegation}.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external {
         // Ignore the return value here to force end delegation, regardless of possible missed rewards
-        _initializeEndDelegation(delegationID, includeUptimeProof, messageIndex, address(0));
+        _initiateEndDelegation(delegationID, includeUptimeProof, messageIndex, address(0));
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndDelegation}.
+     * @notice See {IPoSValidatorManager-forceInitiateEndDelegation}.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
         address rewardRecipient
     ) external {
         // Ignore the return value here to force end delegation, regardless of possible missed rewards
-        _initializeEndDelegation(delegationID, includeUptimeProof, messageIndex, rewardRecipient);
+        _initiateEndDelegation(delegationID, includeUptimeProof, messageIndex, rewardRecipient);
     }
 
     /**
-     * @dev Helper function that initializes the end of a PoS delegation period.
+     * @dev Helper function that initiates the end of a PoS delegation period.
      * Returns false if it is possible for the delegator to claim rewards, but it is not eligible.
      * Returns true otherwise.
      */
-    function _initializeEndDelegation(
+    function _initiateEndDelegation(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -749,7 +747,7 @@ abstract contract PoSValidatorManager is
 
             // Set the delegator status to pending removed, so that it can be properly removed in
             // the complete step, even if the delivered nonce is greater than the nonce used to
-            // initialize the removal.
+            // initiate the removal.
             $._delegatorStakes[delegationID].status = DelegatorStatus.PendingRemoved;
 
             ($._delegatorStakes[delegationID].endingNonce,) =
@@ -861,7 +859,7 @@ abstract contract PoSValidatorManager is
         Delegator memory delegator = $._delegatorStakes[delegationID];
 
         // Ensure the delegator is pending removed. Since anybody can call this function once
-        // end delegation has been initialized, we need to make sure that this function is only
+        // end delegation has been initiated, we need to make sure that this function is only
         // callable after that has been done.
         if (delegator.status != DelegatorStatus.PendingRemoved) {
             revert InvalidDelegatorStatus(delegator.status);
