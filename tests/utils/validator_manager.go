@@ -1052,7 +1052,7 @@ func CompleteEndDelegation(
 ) *types.Receipt {
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("completeEndDelegation", delegationID, uint32(0))
+	callData, err := abi.Pack("completeDelegatorRemoval", delegationID, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
