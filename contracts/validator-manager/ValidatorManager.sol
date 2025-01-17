@@ -555,7 +555,6 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
-        onlyAdmin
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();

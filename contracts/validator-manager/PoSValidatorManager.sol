@@ -405,15 +405,19 @@ abstract contract PoSValidatorManager is
     /**
      * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
-    function completeValidatorRemoval(uint32 messageIndex)
+    function completeValidatorRemoval(bytes32 validationID, uint32 messageIndex)
         public
         nonReentrant
         returns (bytes32)
     {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        bytes32 validationID = $._manager.completeValidatorRemoval(messageIndex);
         Validator memory validator = $._manager.getValidator(validationID);
+        // Check if the validator has been already been removed from the validator manager.
+        if (validator.status != ValidatorStatus.Completed && validator.status != ValidatorStatus.Invalidated) {
+            $._manager.completeValidatorRemoval(messageIndex);
+            validator = $._manager.getValidator(validationID);
+        }
 
         // Return now if this was originally a PoA validator that was later migrated to this PoS manager,
         // or the validator was part of the initial validator set.
