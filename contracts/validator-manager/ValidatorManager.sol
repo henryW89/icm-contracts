@@ -23,6 +23,8 @@ import {ContextUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/utils/ContextUpgradeable.sol";
 import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
+import {ICMInitializable} from "@utilities/ICMInitializable.sol";
+
 
 /**
  * @dev Describes the current churn period
@@ -41,6 +43,7 @@ struct ValidatorChurnPeriod {
  * @notice The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
  */
 struct ValidatorManagerSettings {
+    address admin;
     bytes32 subnetID;
     uint64 churnPeriodSeconds;
     uint8 maximumChurnPercentage;
@@ -51,11 +54,12 @@ struct ValidatorManagerSettings {
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
+contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
 
     struct ValidatorManagerStorage {
+        address _admin;
         /// @notice The subnetID associated with this validator manager.
         bytes32 _subnetID;
         /// @notice The number of seconds after which to reset the churn tracker.
@@ -129,6 +133,17 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     IWarpMessenger public constant WARP_MESSENGER =
         IWarpMessenger(0x0200000000000000000000000000000000000005);
 
+    constructor(ICMInitializable init) {
+        if (init == ICMInitializable.Disallowed) {
+            _disableInitializers();
+        }
+    }
+
+    function initialize(ValidatorManagerSettings calldata settings) external initializer {
+        __ValidatorManager_init(settings);
+    }
+    
+
     // solhint-disable-next-line func-name-mixedcase
     function __ValidatorManager_init(ValidatorManagerSettings calldata settings)
         internal
@@ -155,12 +170,18 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
 
         $._maximumChurnPercentage = settings.maximumChurnPercentage;
         $._churnPeriodSeconds = settings.churnPeriodSeconds;
+        $._admin = settings.admin;
     }
 
     modifier initializedValidatorSet() {
         if (!_getValidatorManagerStorage()._initializedValidatorSet) {
             revert InvalidInitializationStatus();
         }
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(msg.sender == _getValidatorManagerStorage()._admin, "ValidatorManager: unauthorized caller");
         _;
     }
 
@@ -250,6 +271,24 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
                 revert PChainOwnerAddressesNotSorted();
             }
         }
+    }
+
+    function initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
+        uint64 weight
+    ) public onlyAdmin returns (bytes32) {
+        return _initiateValidatorRegistration(
+            nodeID,
+            blsPublicKey,
+            registrationExpiry,
+            remainingBalanceOwner,
+            disableOwner,
+            weight
+        );
     }
 
     /**
@@ -448,6 +487,10 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         return (validationID, nonce);
     }
 
+    function initiateValidatorRemoval(bytes32 validationID) public onlyAdmin {
+        _initiateValidatorRemoval(validationID);
+    }
+
     /**
      * @notice See {ACP99Manager-_initiateValidatorRemoval}.
      * @dev This function modifies the validator's state. Callers should ensure that any references are updated.
@@ -508,9 +551,12 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
      * {registrationExpiry} being reached.
      * @return (Validation ID, Validator instance) representing the completed validation period.
      */
-    function _completeValidatorRemoval(uint32 messageIndex)
-        internal
-        returns (bytes32, Validator memory)
+    function completeValidatorRemoval(uint32 messageIndex)
+        public
+        virtual
+        override
+        onlyAdmin
+        returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
@@ -547,7 +593,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         // Emit event.
         emit CompletedValidatorRemoval(validationID);
 
-        return (validationID, validator);
+        return validationID;
     }
 
     function _incrementSentNonce(bytes32 validationID) internal returns (uint64) {
@@ -574,6 +620,13 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         }
 
         return warpMessage;
+    }
+
+    function initiateValidatorWeightUpdate(
+        bytes32 validationID,
+        uint64 newWeight
+    ) public onlyAdmin returns (uint64, bytes32) {
+        return _initiateValidatorWeightUpdate(validationID, newWeight);
     }
 
     /**
@@ -609,7 +662,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         return (nonce, messageID);
     }
 
-    function _getChurnPeriodSeconds() internal view returns (uint64) {
+    function getChurnPeriodSeconds() public view returns (uint64) {
         return _getValidatorManagerStorage()._churnPeriodSeconds;
     }
 
