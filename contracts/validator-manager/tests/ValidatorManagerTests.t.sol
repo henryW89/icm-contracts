@@ -6,7 +6,7 @@
 pragma solidity 0.8.25;
 
 import {Test} from "@forge-std/Test.sol";
-import {ValidatorManager} from "../ValidatorManager.sol";
+import {ValidatorManager, ValidatorManagerSettings} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
@@ -31,7 +31,7 @@ abstract contract ValidatorManagerTest is Test {
     bytes32 public constant DEFAULT_SOURCE_BLOCKCHAIN_ID =
         bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
     bytes32 public constant DEFAULT_SUBNET_CONVERSION_ID =
-        bytes32(hex"76a386628f079b7b00452f8cab0925740363fcd52b721a8cf91773e857327b36");
+        bytes32(hex"67e8531265d8e97bd5c23534a37f4ea42d41934ddf8fe2c77c27fac9ef89f973");
     address public constant WARP_PRECOMPILE_ADDRESS = 0x0200000000000000000000000000000000000005;
 
     uint64 public constant DEFAULT_WEIGHT = 1e6;
@@ -310,13 +310,11 @@ abstract contract ValidatorManagerTest is Test {
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
-        _mockGetPChainWarpMessage(
-            ValidatorMessages.packSubnetToL1ConversionMessage(
-                bytes32(hex"1d72565851401e05d6351ebf5443d9bdc04953f3233da1345af126e7e4be7464")
-            ),
-            true
-        );
-        manager.initializeValidatorSet(_defaultConversionDataTotalWeight5(), 0);
+
+        ConversionData memory conversion = _defaultConversionDataTotalWeight5();
+        bytes32 id = sha256(ValidatorMessages.packConversionData(conversion));
+        _mockGetPChainWarpMessage(ValidatorMessages.packSubnetToL1ConversionMessage(id), true);
+        manager.initializeValidatorSet(conversion, 0);
 
         bytes32 validationID = sha256(abi.encodePacked(DEFAULT_SUBNET_ID, uint32(0)));
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
@@ -595,9 +593,9 @@ abstract contract ValidatorManagerTest is Test {
         );
     }
 
-    function _mockInitializeValidatorSet() internal {
+    function _mockInitializeValidatorSet(bytes32 conversionID) internal {
         _mockGetPChainWarpMessage(
-            ValidatorMessages.packSubnetToL1ConversionMessage(DEFAULT_SUBNET_CONVERSION_ID), true
+            ValidatorMessages.packSubnetToL1ConversionMessage(conversionID), true
         );
     }
 
@@ -713,6 +711,19 @@ abstract contract ValidatorManagerTest is Test {
     // These are okay to use for PoA as well, because they're just used for conversions inside the tests.
     function _weightToValue(uint64 weight) internal pure returns (uint256) {
         return uint256(weight) * 1e12;
+    }
+
+    function _defaultSettings(address admin)
+        internal
+        pure
+        returns (ValidatorManagerSettings memory)
+    {
+        return ValidatorManagerSettings({
+            admin: admin,
+            subnetID: DEFAULT_SUBNET_ID,
+            churnPeriodSeconds: DEFAULT_CHURN_PERIOD,
+            maximumChurnPercentage: DEFAULT_MAXIMUM_CHURN_PERCENTAGE
+        });
     }
 
     function _erc7201StorageSlot(bytes memory storageName) internal pure returns (bytes32) {

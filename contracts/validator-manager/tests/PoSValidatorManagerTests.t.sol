@@ -11,9 +11,7 @@ import {PoSValidatorManager} from "../PoSValidatorManager.sol";
 import {
     DelegatorStatus, PoSValidatorManagerSettings
 } from "../interfaces/IPoSValidatorManager.sol";
-import {
-    ValidatorManager, ValidatorStatus, ValidatorManagerSettings
-} from "../ValidatorManager.sol";
+import {ValidatorManager, ValidatorStatus} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
@@ -1016,7 +1014,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         _endDefaultValidatorWithChecks(validationID, 2);
 
         // completeDelegatorRegistration should fall through to _completeDelegatorRemoval and refund the stake
-        vm.expectEmit(true, true, true, true, address(validatorManager));
+        vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit CompletedDelegatorRemoval(delegationID, validationID, 0, 0);
 
         uint256 balanceBefore = _getStakeAssetBalance(DEFAULT_DELEGATOR_ADDRESS);
@@ -1053,7 +1051,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         uint256 expectedDelegatorReward = expectedTotalReward - expectedValidatorFees;
 
         // completeDelegatorRegistration should fall through to _completeDelegatorRemoval and refund the stake
-        vm.expectEmit(true, true, true, true, address(validatorManager));
+        vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit CompletedDelegatorRemoval(
             delegationID, validationID, expectedDelegatorReward, expectedValidatorFees
         );
@@ -1498,7 +1496,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             ValidatorMessages.packValidationUptimeMessage(validationID, uptime1);
         _mockGetUptimeWarpMessage(uptimeMsg1, true);
 
-        vm.expectEmit(true, true, true, true, address(validatorManager));
+        vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit UptimeUpdated(validationID, uptime1);
         posValidatorManager.submitUptimeProof(validationID, 0);
 
@@ -1537,7 +1535,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             ValidatorMessages.packValidationUptimeMessage(validationID, uptime1);
         _mockGetUptimeWarpMessage(uptimeMsg1, true);
 
-        vm.expectEmit(true, true, true, true, address(validatorManager));
+        vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit UptimeUpdated(validationID, uptime1);
         posValidatorManager.submitUptimeProof(validationID, 0);
 
@@ -1634,7 +1632,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
-        posValidatorManager.completeValidatorRemoval(0);
+        posValidatorManager.completeValidatorRemoval(validationID, 0);
 
         assertEq(_getStakeAssetBalance(address(this)), balanceBefore);
     }
@@ -1994,7 +1992,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
         _beforeSend(_weightToValue(weight), delegatorAddress);
 
-        vm.expectEmit(true, true, true, true, address(posValidatorManager));
+        vm.expectEmit(true, true, true, true, address(validatorManager));
         emit InitiatedValidatorWeightUpdate(
             validationID, expectedNonce, bytes32(0), expectedValidatorWeight
         );
@@ -2034,7 +2032,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         bytes memory setValidatorWeightPayload = ValidatorMessages.packL1ValidatorWeightMessage(
             validationID, expectedNonce, expectedValidatorWeight
         );
-        vm.expectEmit(true, true, true, true, address(posValidatorManager));
+        vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorWeightUpdate(validationID, expectedNonce, expectedValidatorWeight);
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
         emit CompletedDelegatorRegistration({
@@ -2168,7 +2166,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         bytes memory uptimeMsg = ValidatorMessages.packValidationUptimeMessage(
             validationID, endDelegationTimestamp - startDelegationTimestamp
         );
-        vm.expectEmit(true, true, true, true, address(posValidatorManager));
+        vm.expectEmit(true, true, true, true, address(validatorManager));
         emit InitiatedValidatorWeightUpdate({
             validationID: validationID,
             nonce: expectedNonce,
@@ -2312,7 +2310,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         bytes memory l1ValidatorRegistrationMessage =
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
 
-        vm.expectEmit(true, true, true, true, address(posValidatorManager));
+        vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRemoval(validationID);
         uint256 balanceBefore = _getStakeAssetBalance(validatorOwner);
         uint256 rewardRecipientBalanceBefore = _getStakeAssetBalance(rewardRecipient);
@@ -2342,7 +2340,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
     function _completeEndValidation(bytes memory l1ValidatorRegistrationMessage) internal {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
-        posValidatorManager.completeValidatorRemoval(0);
+        posValidatorManager.completeValidatorRemoval(bytes32(0), 0);
     }
 
     function _completeDelegatorRemovalWithChecks(
@@ -2360,7 +2358,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         bytes memory weightUpdateMessage = ValidatorMessages.packL1ValidatorWeightMessage(
             validationID, expectedNonce, validatorWeight
         );
-        vm.expectEmit(true, true, true, true, address(posValidatorManager));
+        vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorWeightUpdate(validationID, expectedNonce, validatorWeight);
 
         vm.expectEmit(true, true, true, true, address(posValidatorManager));
@@ -2375,7 +2373,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
         _completeDelegatorRemoval(delegationID, weightUpdateMessage);
 
-        assertEq(posValidatorManager.getValidator(validationID).weight, expectedValidatorWeight);
+        assertEq(validatorManager.getValidator(validationID).weight, expectedValidatorWeight);
 
         if (rewardRecipient == delegator) {
             assertEq(
@@ -2462,11 +2460,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
     function _defaultPoSSettings() internal pure returns (PoSValidatorManagerSettings memory) {
         return PoSValidatorManagerSettings({
-            baseSettings: ValidatorManagerSettings({
-                subnetID: DEFAULT_SUBNET_ID,
-                churnPeriodSeconds: DEFAULT_CHURN_PERIOD,
-                maximumChurnPercentage: DEFAULT_MAXIMUM_CHURN_PERCENTAGE
-            }),
+            manager: ValidatorManager(address(0)),
             minimumStakeAmount: DEFAULT_MINIMUM_STAKE_AMOUNT,
             maximumStakeAmount: DEFAULT_MAXIMUM_STAKE_AMOUNT,
             minimumStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION,
