@@ -14,10 +14,12 @@ import {
     PoSValidatorInfo,
     PoSValidatorManagerSettings
 } from "./interfaces/IPoSValidatorManager.sol";
-import {ACP99Manager, Validator, ValidatorStatus, PChainOwner} from "./ACP99Manager.sol";
+import {Validator, ValidatorStatus, PChainOwner} from "./ACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
-import {IWarpMessenger, WarpMessage} from
-    "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+import {
+    IWarpMessenger,
+    WarpMessage
+} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
 import {ReentrancyGuardUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/utils/ReentrancyGuardUpgradeable.sol";
 import {ContextUpgradeable} from
@@ -212,7 +214,8 @@ abstract contract PoSValidatorManager is
         if (!_isPoSValidator(validationID)) {
             revert ValidatorNotPoS(validationID);
         }
-        ValidatorStatus status = _getPoSValidatorManagerStorage()._manager.getValidator(validationID).status;
+        ValidatorStatus status =
+            _getPoSValidatorManagerStorage()._manager.getValidator(validationID).status;
         if (status != ValidatorStatus.Active) {
             revert InvalidValidatorStatus(status);
         }
@@ -403,19 +406,28 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRemoval}.
+     * Completes validator removal by dispatching to the ValidatorManager to update the validator status,
+     * and unlocking stake. The ValidatorManager's completeValidatorRemoval function may be called directly,
+     * in which case this function requires the validationID to be passed as a parameter.
+     *
+     * @param validationID The ID of the validator to remove. Only required if the validator removal has already
+     * been completed directly through the ValidatorManager
+     * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
+     * This is forwarded to the ValidatorManager to be parsed.
      */
-    function completeValidatorRemoval(bytes32 validationID, uint32 messageIndex)
-        public
-        nonReentrant
-        returns (bytes32)
-    {
+    function completeValidatorRemoval(
+        bytes32 validationID,
+        uint32 messageIndex
+    ) public nonReentrant returns (bytes32) {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
         Validator memory validator = $._manager.getValidator(validationID);
         // Check if the validator has been already been removed from the validator manager.
-        if (validator.status != ValidatorStatus.Completed && validator.status != ValidatorStatus.Invalidated) {
-            $._manager.completeValidatorRemoval(messageIndex);
+        if (
+            validator.status != ValidatorStatus.Completed
+                && validator.status != ValidatorStatus.Invalidated
+        ) {
+            validationID = $._manager.completeValidatorRemoval(messageIndex);
             validator = $._manager.getValidator(validationID);
         }
 
@@ -791,8 +803,9 @@ abstract contract PoSValidatorManager is
             // initiate the removal.
             $._delegatorStakes[delegationID].status = DelegatorStatus.PendingRemoved;
 
-            ($._delegatorStakes[delegationID].endingNonce,) =
-                $._manager.initiateValidatorWeightUpdate(validationID, validator.weight - delegator.weight);
+            ($._delegatorStakes[delegationID].endingNonce,) = $
+                ._manager
+                .initiateValidatorWeightUpdate(validationID, validator.weight - delegator.weight);
 
             uint256 reward =
                 _calculateAndSetDelegationReward(delegator, rewardRecipient, delegationID);
@@ -909,7 +922,8 @@ abstract contract PoSValidatorManager is
             $._manager.getValidator(delegator.validationID).status != ValidatorStatus.Completed
                 && validator.receivedNonce < delegator.endingNonce
         ) {
-            (bytes32 validationID, uint64 nonce) = $._manager.completeValidatorWeightUpdate(messageIndex);
+            (bytes32 validationID, uint64 nonce) =
+                $._manager.completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
                 revert InvalidValidationID(validationID);
             }
@@ -1029,14 +1043,17 @@ abstract contract PoSValidatorManager is
         PChainOwner memory disableOwner,
         uint64 weight
     ) public returns (bytes32) {
-        return _getPoSValidatorManagerStorage()._manager.initiateValidatorRegistration(
-            nodeID, blsPublicKey, registrationExpiry, remainingBalanceOwner, disableOwner, weight
-        );
+        return _getPoSValidatorManagerStorage()._manager.initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            weight: weight
+        });
     }
 
-    function completeValidatorRegistration(uint32 messageIndex)
-        public
-        returns (bytes32) {
-            return _getPoSValidatorManagerStorage()._manager.completeValidatorRegistration(messageIndex);
+    function completeValidatorRegistration(uint32 messageIndex) public returns (bytes32) {
+        return _getPoSValidatorManagerStorage()._manager.completeValidatorRegistration(messageIndex);
     }
 }

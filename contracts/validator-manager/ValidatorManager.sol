@@ -25,7 +25,6 @@ import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 
-
 /**
  * @dev Describes the current churn period
  */
@@ -142,7 +141,6 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     function initialize(ValidatorManagerSettings calldata settings) external initializer {
         __ValidatorManager_init(settings);
     }
-    
 
     // solhint-disable-next-line func-name-mixedcase
     function __ValidatorManager_init(ValidatorManagerSettings calldata settings)
@@ -181,7 +179,10 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     }
 
     modifier onlyAdmin() {
-        require(msg.sender == _getValidatorManagerStorage()._admin, "ValidatorManager: unauthorized caller");
+        require(
+            msg.sender == _getValidatorManagerStorage()._admin,
+            "ValidatorManager: unauthorized caller"
+        );
         _;
     }
 
@@ -281,14 +282,14 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         PChainOwner memory disableOwner,
         uint64 weight
     ) public onlyAdmin returns (bytes32) {
-        return _initiateValidatorRegistration(
-            nodeID,
-            blsPublicKey,
-            registrationExpiry,
-            remainingBalanceOwner,
-            disableOwner,
-            weight
-        );
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            weight: weight
+        });
     }
 
     /**
@@ -544,12 +545,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice Completes the process of ending a validation period by receiving an acknowledgement from the P-Chain
-     * that the validation ID is not active and will never be active in the future.
-     * Note: that this function can be used for successful validation periods that have been explicitly
-     * ended by calling {_initiateValidatorRemoval} or for validation periods that never began on the P-Chain due to the
-     * {registrationExpiry} being reached.
-     * @return (Validation ID, Validator instance) representing the completed validation period.
+     * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
     function completeValidatorRemoval(uint32 messageIndex)
         public

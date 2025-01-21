@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManager, ValidatorManagerSettings} from "./ValidatorManager.sol";
+import {ValidatorManager} from "./ValidatorManager.sol";
 import {IPoAValidatorManager, PChainOwner} from "./interfaces/IPoAValidatorManager.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {OwnableUpgradeable} from
@@ -18,14 +18,17 @@ import {OwnableUpgradeable} from
  */
 contract PoAValidatorManager is IPoAValidatorManager, OwnableUpgradeable {
     // solhint-disable private-vars-leading-underscore
+    /// @custom:storage-location erc7201:avalanche-icm.storage.PoAValidatorManager
     struct PoAValidatorManagerStorage {
         ValidatorManager _manager;
     }
+    // solhint-enable private-vars-leading-underscore
 
     // keccak256(abi.encode(uint256(keccak256("avalanche-icm.storage.PoAValidatorManager")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 public constant POA_VALIDATOR_MANAGER_STORAGE_LOCATION =
         0x81773fca73a14ca21edf1cadc6ec0b26d6a44966f6e97607e90422658d423500;
 
+    // solhint-disable ordering
     function _getPoAValidatorManagerStorage()
         private
         pure
@@ -43,10 +46,7 @@ contract PoAValidatorManager is IPoAValidatorManager, OwnableUpgradeable {
         }
     }
 
-    function initialize(
-        ValidatorManager manager,
-        address initialOwner
-    ) external initializer {
+    function initialize(ValidatorManager manager, address initialOwner) external initializer {
         __PoAValidatorManager_init(manager, initialOwner);
     }
 
@@ -60,7 +60,10 @@ contract PoAValidatorManager is IPoAValidatorManager, OwnableUpgradeable {
     }
 
     // solhint-disable-next-line no-empty-blocks
-    function __PoAValidatorManager_init_unchained(ValidatorManager manager) internal onlyInitializing {
+    function __PoAValidatorManager_init_unchained(ValidatorManager manager)
+        internal
+        onlyInitializing
+    {
         PoAValidatorManagerStorage storage $ = _getPoAValidatorManagerStorage();
         $._manager = manager;
     }
@@ -97,12 +100,9 @@ contract PoAValidatorManager is IPoAValidatorManager, OwnableUpgradeable {
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRemoval}.
+     * @notice Completes validator removal by forwarding to the validator manager.
      */
-    function completeValidatorRemoval(uint32 messageIndex)
-        public
-        returns (bytes32)
-    {
+    function completeValidatorRemoval(uint32 messageIndex) public returns (bytes32) {
         return _getPoAValidatorManagerStorage()._manager.completeValidatorRemoval(messageIndex);
     }
 

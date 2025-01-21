@@ -7,7 +7,6 @@ pragma solidity 0.8.25;
 
 import {ValidatorManager} from "../ValidatorManager.sol";
 import {IRewardCalculator} from "./IRewardCalculator.sol";
-import {ACP99Manager} from "../ACP99Manager.sol";
 
 /**
  * @dev Delegator status
@@ -193,7 +192,7 @@ interface IPoSValidatorManager {
 
     /**
      * @notice Completes the delegator registration process by submitting an acknowledgement of the registration of a
-     * validationID from the P-Chain. After this function is called, the validator's weight is updated in the contract state.
+     * validationID from the P-Chain. This function may be called after {ACP99Manager-completeValidatorWeightUpdate}.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate registration of the
      * delegator is valid, as long as that nonce has been sent by the contract. For the purposes of computing delegation rewards,
      * the delegation is considered active after this function is completed.
@@ -276,7 +275,7 @@ interface IPoSValidatorManager {
 
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
-     * After this function is called, the validator's weight is updated in the contract state.
+     * This function may be called after {ACP99Manager-completeValidatorWeightUpdate}.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate the end of the
      * delegator's delegation is valid, as long as that nonce has been sent by the contract. This is because the validator
      * weight change pertaining to the delegation ending is included in any subsequent validator weight update messages.
