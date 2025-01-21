@@ -184,7 +184,7 @@ abstract contract PoSValidatorManager is
             revert InvalidStakeMultiplier(maximumStakeMultiplier);
         }
         // Minimum stake duration should be at least one churn period in order to prevent churn tracker abuse.
-        if (minimumStakeDuration < $._manager.getChurnPeriodSeconds()) {
+        if (minimumStakeDuration < manager.getChurnPeriodSeconds()) {
             revert InvalidMinStakeDuration(minimumStakeDuration);
         }
         if (weightToValueFactor == 0) {
