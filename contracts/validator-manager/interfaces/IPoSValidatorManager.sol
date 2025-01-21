@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManager, ValidatorManagerSettings} from "../ValidatorManager.sol";
+import {ValidatorManager} from "../ValidatorManager.sol";
 import {IRewardCalculator} from "./IRewardCalculator.sol";
 import {ACP99Manager} from "../ACP99Manager.sol";
 
@@ -35,7 +35,6 @@ enum DelegatorStatus {
  */
 struct PoSValidatorManagerSettings {
     ValidatorManager manager;
-    ValidatorManagerSettings baseSettings;
     uint256 minimumStakeAmount;
     uint256 maximumStakeAmount;
     uint64 minimumStakeDuration;
