@@ -3,6 +3,11 @@
 The contracts in this directory define the Validator Manager used to manage Avalanche L1 validators, as defined in [ACP-77](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets). They comply with [ACP-99](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/99-validatorsetmanager-contract), which specifies the standard minimal functionality that Validator Managers should implement. The contracts in this directory are are related as follows:
 
 ```mermaid
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
 classDiagram
 class ACP99Manager {
     +initializeValidatorSet()
@@ -16,14 +21,16 @@ class ACP99Manager {
 <<Abstract>> ACP99Manager
 
 class ValidatorManager 
-<<Abstract>> ValidatorManager
-note for ValidatorManager "Implements most of ACP99Manager"
 
 class PoSValidatorManager {
+    +completeValidatorRegistration()
     +initiateValidatorRemoval()
+    +completeValidatorRemoval()
     +completeDelegatorRegistration()
     +initiateDelegatorRemoval()
     +completeDelegatorRemoval()
+    -_initiateValidatorRegistration()
+    -_initiateDelegatorRegistration()
 }
 <<Abstract>> PoSValidatorManager
 class ERC20TokenStakingManager {
@@ -36,12 +43,14 @@ class NativeTokenStakingManager {
 }
 class PoAValidatorManager {
     +initiateValidatorRegistration()
+    +completeValidatorRegistration()
     +initiateValidatorRemoval()
+    +completeValidatorRemoval()
 }
 
 ACP99Manager <|-- ValidatorManager
-ValidatorManager <|-- PoSValidatorManager
-ValidatorManager <|-- PoAValidatorManager
+ValidatorManager --o  PoSValidatorManager
+ValidatorManager --o  PoAValidatorManager
 PoSValidatorManager <|-- ERC20TokenStakingManager
 PoSValidatorManager <|-- NativeTokenStakingManager
 ```
