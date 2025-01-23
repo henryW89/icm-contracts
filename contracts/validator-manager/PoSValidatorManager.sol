@@ -406,19 +406,12 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * Completes validator removal by dispatching to the ValidatorManager to update the validator status,
-     * and unlocking stake. The ValidatorManager's completeValidatorRemoval function may be called directly,
-     * in which case this function requires the validationID to be passed as a parameter.
-     *
-     * @param validationID The ID of the validator to remove. Only required if the validator removal has already
-     * been completed directly through the ValidatorManager
-     * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
-     * This is forwarded to the ValidatorManager to be parsed.
+     * @notice See {IPoSValidatorManager-completeValidatorRemoval}.
      */
     function completeValidatorRemoval(
         bytes32 validationID,
         uint32 messageIndex
-    ) public nonReentrant returns (bytes32) {
+    ) external nonReentrant returns (bytes32) {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
         Validator memory validator = $._manager.getValidator(validationID);
