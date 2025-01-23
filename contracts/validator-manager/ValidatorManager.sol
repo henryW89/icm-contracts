@@ -108,6 +108,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     error UnexpectedRegistrationStatus(bool validRegistration);
     error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
     error PChainOwnerAddressesNotSorted();
+    error UnauthorizedCaller(address caller);
 
     // solhint-disable ordering
     /**
@@ -179,10 +180,9 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     }
 
     modifier onlyAdmin() {
-        require(
-            msg.sender == _getValidatorManagerStorage()._admin,
-            "ValidatorManager: unauthorized caller"
-        );
+        if (_msgSender() != _getValidatorManagerStorage()._admin) {
+            revert UnauthorizedCaller(_msgSender());
+        }
         _;
     }
 
