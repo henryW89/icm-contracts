@@ -61,28 +61,28 @@ The contracts in this directory are only useful to L1s that have been converted 
 
 ## Deploying
 
-Three concrete `ValidatorManager` contracts are provided - `PoAValidatorManager`, `NativeTokenStakingManager`, and `ERC20TokenStakingManager`. `NativeTokenStakingManager`, and `ERC20TokenStakingManager` implement `PoSValidatorManager`, which itself implements `ValidatorManager`. These are implemented as [upgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/main/contracts/proxy/utils/Initializable.sol#L56) contracts. There are numerous [guides](https://blog.chain.link/upgradable-smart-contracts/) for deploying upgradeable smart contracts, but the general steps are as follows:
+The validator manager system consists of two concrete contracts: `ValidatorManager` and one of `PoAValidatorManager`, `NativeTokenStakingManager`, or `ERC20TokenStakingManager`. `NativeTokenStakingManager`, and `ERC20TokenStakingManager` implement `PoSValidatorManager`. All of these are implemented as [upgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/main/contracts/proxy/utils/Initializable.sol#L56) contracts. There are numerous [guides](https://blog.chain.link/upgradable-smart-contracts/) for deploying upgradeable smart contracts, but the general steps are as follows:
 
 1. Deploy the implementation contract
 2. Deploy the proxy contract
 3. Call the implementation contract's `initialize` function
 
-- Each flavor of `ValidatorManager` requires different settings. For example, `ValidatorManagerSettings` specifies the churn parameters, while `PoSValidatorManagerSettings` specifies the staking and rewards parameters.
+- Each deployed contract requires different settings. For example, `ValidatorManagerSettings` specifies the churn parameters, while `PoSValidatorManagerSettings` specifies the staking and rewards parameters.
 
-4. Initialize the validator set by calling `initializeValidatorSet`
+4. Initialize the validator set by calling `initializeValidatorSet` on `ValidatorManager`
 
-- When an L1 is first created on the P-Chain, it must be explicitly converted to an L1 via [`ConvertSubnetToL1Tx`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#convertsubnettol1tx). The resulting `SubnetToL1ConversionMessage` Warp [message](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#subnettol1conversionmessage) is provided in the call to `initializeValidatorSet` to specify the starting validator set in the `ValidatorManager`. Regardless of the implementation, these initial validators are treated as PoA and are not eligible for staking rewards.
+- When an L1 is first created on the P-Chain, it must be explicitly converted to an L1 via [`ConvertSubnetToL1Tx`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#convertsubnettol1tx). The resulting `SubnetToL1ConversionMessage` Warp [message](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#subnettol1conversionmessage) is provided in the call to `initializeValidatorSet` to specify the starting validator set in the `ValidatorManager`. Regardless of the setup of the overall validator manager system, these initial validators are treated as PoA and are not eligible for staking rewards.
 
 ### PoAValidatorManager
 
-Proof-of-Authority validator management is provided via `PoAValidatorManager`, which restricts modification of the validator set to a specified owner address. After deploying `PoAValidatorManager.sol` and a proxy, the `initialize` function takes the owner address, in addition to standard `ValidatorManagerSettings`.
+Proof-of-Authority validator management is provided via `PoAValidatorManager`, which restricts modification of the validator set to a specified owner address. After deploying `PoAValidatorManager` and a proxy, call the `initialize` function, which takes the owner address and the `ValidatorManager` address.
 
 ### PoSValidatorManager
 
-Proof-of-Stake validator management is provided by the abstract contract `PoSValidatorManager`, which has two concrete implementations: `NativeTokenStakingManager` and `ERC20TokenStakingManager`. In addition to basic validator management provided in `ValidatorManager`, `PoSValidatorManager` supports uptime-based validation rewards, as well as delegation to a chosen validator. The `uptimeBlockchainID` used to initialize the `PoSValidatorManager` **must** be validated by the L1 validator set that the contract manages. **There is no way to verify this from within the contract, so take care when setting this value.** This [state transition diagram](./StateTransition.md) illustrates the relationship between validators and delegators.
+Proof-of-Stake validator management is provided by the abstract contract `PoSValidatorManager`, which has two concrete implementations: `NativeTokenStakingManager` and `ERC20TokenStakingManager`. `PoSValidatorManager` supports uptime-based validation rewards, as well as delegation to a chosen validator. The `uptimeBlockchainID` used to initialize the `PoSValidatorManager` **must** be validated by the L1 validator set that the contract manages. **There is no way to verify this from within the contract, so take care when setting this value.** This [state transition diagram](./StateTransition.md) illustrates the relationship between validators and delegators. After deploying `PoSValidatorManager` and a proxy, call the `initialize` function, which takes a `PoSValidatorManagerSettings` as well as any implementation-specific arguments.
 
 > [!NOTE]
-> The `weightToValueFactor` fields of the `PoSValidatorManagerSettings` passed to `PoSValidatorManager`'s `initialize` function sets the factor used to convert between the weight that the validator is registered with on the P-Chain, and the value transferred to the contract as stake. This involves integer division, which may result in loss of precision. When selecting `weightToValueFactor`, it's important to make the following considerations:
+> The `weightToValueFactor` fields of `PoSValidatorManagerSettings` sets the factor used to convert between the weight that the validator is registered with on the P-Chain, and the value transferred to the contract as stake. This involves integer division, which may result in loss of precision. When selecting `weightToValueFactor`, it's important to make the following considerations:
 >
 > 1. If `weightToValueFactor` is near the denomination of the asset, then staking amounts on the order of 1 unit of the asset may cause the converted weight to round down to 0. This may impose a larger-than-expected minimum stake amount.
 >    - Ex: If USDC (denomination of 6) is used as the staking token and `weightToValueFactor` is 1e9, then any amount less than 1,000 USDC will round down to 0 and therefore be invalid.
@@ -125,9 +125,11 @@ A `PoAValidatorManager` can later be converted to a `PoSValidatorManager` by upg
 
 ## Usage
 
+In general, it is recommended that validator set management be done through `PoSValidatorManager`/`PoAValidatorManager` function calls. These will in turn call `ValidatorManager` to update the validator set on chain and issue the corresponding ICM message. It is valid to call the equivalent `ValidatorManager` function directly, but side effects such as unlocking stake or issuing validation rewards will not take effect until the `PoSValidatorManager`/`PoAValidatorManager` is called.
+
 ### Register a Validator
 
-Validator registration is initiated with a call to `initiateValidatorRegistration`. The sender of this transaction is registered as the validator owner. Churn limitations are checked - only a certain (configurable) percentage of the total weight is allowed to be added or removed in a (configurable) period of time. The `ValidatorManager` then constructs a [`RegisterL1ValidatorMessage`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#registerl1validatormessage) Warp message to be sent to the P-Chain. Each validator registration request includes all of the information needed to identify the validator and its stake weight, as well as an `expiry` timestamp before which the `RegisterL1ValidatorMessage` must be delivered to the P-Chain. If the validator is not registered on the P-Chain before the `expiry`, then the validator may be removed from the contract state by calling `completeEndValidation`.
+Validator registration is initiated with a call to `initiateValidatorRegistration` on the `PoSValidatorManager` or `PoAValidatorManager`. The sender of this transaction is registered as the validator owner. Churn limitations are checked - only a certain (configurable) percentage of the total weight is allowed to be added or removed in a (configurable) period of time. The `ValidatorManager` then constructs a [`RegisterL1ValidatorMessage`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#registerl1validatormessage) Warp message to be sent to the P-Chain. Each validator registration request includes all of the information needed to identify the validator and its stake weight, as well as an `expiry` timestamp before which the `RegisterL1ValidatorMessage` must be delivered to the P-Chain. If the validator is not registered on the P-Chain before the `expiry`, then the validator may be removed from the contract state by calling `completeEndValidation`.
 
 The `RegisterL1ValidatorMessage` is delivered to the P-Chain as the Warp message payload of a `RegisterL1ValidatorTx`. Please see the transaction [specification](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#registerl1validatortx) for validity requirements. The P-Chain then signs a [`L1ValidatorRegistrationMessage`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#l1validatorregistrationmessage) Warp message indicating that the specified validator was successfully registered on the P-Chain.
 
@@ -135,7 +137,7 @@ The `L1ValidatorRegistrationMessage` is delivered to the `ValidatorManager` via 
 
 ### Remove a Validator
 
-Validator exit is initiated with a call to `initiateValidatorRemoval` on the `ValidatorManager`. Only the validator owner may initiate exit. For `PoSValidatorManagers` a [`ValidationUptimeMessage`](./UptimeMessageSpec.md) Warp message may optionally be provided in order to calculate the staking rewards; otherwise the latest received uptime will be used (see [(PoS only) Submit and Uptime Proof](#pos-only-submit-an-uptime-proof)). This proof may be requested directly from the L1 validators, which will provide it in a `ValidationUptimeMessage` Warp message. If the uptime is not sufficient to earn validation rewards, the call to `initiateValidatorRemoval` will fail. `forceInitiateValidatorRemoval` acts the same as `initiateValidatorRemoval`, but bypasses the uptime-based rewards check. Once `initiateValidatorRemoval` or `forceInitiateValidatorRemoval` is called, staking rewards cease accruing for `PoSValidatorManagers`.
+Validator exit is initiated with a call to `initiateValidatorRemoval` on the `PoSValidatorManager` or `PoAValidatorManager`. Only the validator owner may initiate exit. For `PoSValidatorManagers` a [`ValidationUptimeMessage`](./UptimeMessageSpec.md) Warp message may optionally be provided in order to calculate the staking rewards; otherwise the latest received uptime will be used (see [(PoS only) Submit and Uptime Proof](#pos-only-submit-an-uptime-proof)). This proof may be requested directly from the L1 validators, which will provide it in a `ValidationUptimeMessage` Warp message. If the uptime is not sufficient to earn validation rewards, the call to `initiateValidatorRemoval` will fail. `forceInitiateValidatorRemoval` acts the same as `initiateValidatorRemoval`, but bypasses the uptime-based rewards check. Once `initiateValidatorRemoval` or `forceInitiateValidatorRemoval` is called, staking rewards cease accruing for `PoSValidatorManagers`.
 
 The `ValidatorManager` contructs an [`L1ValidatorWeightMessage`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#l1validatorweightmessage) Warp message with the weight set to `0`. This is delivered to the P-Chain as the payload of a [`SetL1ValidatorWeightTx`](https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/77-reinventing-subnets#setl1validatorweighttx). The P-Chain acknowledges the validator exit by signing an `L1ValidatorRegistrationMessage` with `valid=0`, which is delivered to the `ValidatorManager` by calling `completeEndValidation`. The validation is removed from the contract's state, and for `PoSValidatorManagers`, staking rewards are disbursed and stake is returned.
 
@@ -154,7 +156,7 @@ Disabled L1 validators can re-activate at any time by increasing their balance w
 
 ### (PoS only) Remove a Delegator
 
-Delegators removal may be initiated by calling `initiateDelegatorRemoval`, as long as churn restrictions are not violated. Similar to `initiateValidatorRemoval`, an uptime proof may be provided to be used to determine delegator rewards eligibility. If no proof is provided, the latest known uptime will be used (see [(PoS only) Submit and Uptime Proof](#pos-only-submit-an-uptime-proof)). The validator's weight is updated on the P-Chain by the same mechanism used to register a delegator. The `L1ValidatorWeightMessage` from the P-Chain is delivered to the `PoSValidatorManager` in the call to `completeDelegatorRemoval`.
+Delegator removal may be initiated by calling `initiateDelegatorRemoval`, as long as churn restrictions are not violated. Similar to `initiateValidatorRemoval`, an uptime proof may be provided to be used to determine delegator rewards eligibility. If no proof is provided, the latest known uptime will be used (see [(PoS only) Submit and Uptime Proof](#pos-only-submit-an-uptime-proof)). The validator's weight is updated on the P-Chain by the same mechanism used to register a delegator. The `L1ValidatorWeightMessage` from the P-Chain is delivered to the `PoSValidatorManager` in the call to `completeDelegatorRemoval`.
 
 Either the delegator owner or the validator owner may initiate removing a delegator. This is to prevent the validator from being unable to remove itself due to churn limitations if it is has too high a proportion of the Subnet's total weight due to delegator additions. The validator owner may only remove Delegators after the minimum stake duration has elapsed.
 
@@ -166,12 +168,12 @@ The [rewards calculator](./interfaces/IRewardCalculator.sol) is a function of up
 
 #### Validation Rewards
 
-Validation rewards are distributed in the call to `completeEndValidation`.
+Validation rewards are distributed in the call to `completeEndValidation` on the `PoSValidatorManager`.
 
 #### Delegation Rewards
 
-Delegation rewards are distributed in the call to `completeDelegatorRemoval`.
+Delegation rewards are distributed in the call to `completeDelegatorRemoval` on the `PoSValidatorManager`.
 
 #### Delegation Fees
 
-Delegation fees owed to validators are _not_ distributed when the validation ends as to bound the amount of gas consumed in the call to `completeEndValidation`. Instead, `claimDelegationFees` may be called after the validation is completed.
+Delegation fees owed to validators are _not_ distributed when the validation ends as to bound the amount of gas consumed in the call to `completeEndValidation`. Instead, `claimDelegationFees` on the `PoSValidatorManager` may be called after the validation is completed.
