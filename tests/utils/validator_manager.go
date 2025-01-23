@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	goLog "log"
 	"math/big"
 	"reflect"
 	"time"
@@ -30,6 +31,7 @@ import (
 	examplerewardcalculator "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ExampleRewardCalculator"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
 	poavalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/PoAValidatorManager"
+	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
 	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -72,106 +74,136 @@ func DeployValidatorManager(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	managerType ValidatorManagerConcreteType,
-) (common.Address, *acp99manager.ACP99Manager) {
+	proxy bool,
+) (common.Address, *proxyadmin.ProxyAdmin) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
+
+	// Reset the global binary data for better test isolation
+	validatormanager.ValidatorManagerBin = validatormanager.ValidatorManagerMetaData.Bin
+
+	address, tx, _, err := validatormanager.DeployValidatorManager(
+		opts,
+		l1.RPCClient,
+		0, // ICMInitializable.Allowed
+	)
+	Expect(err).Should(BeNil())
+
+	WaitForTransactionSuccess(ctx, l1, tx.Hash())
+
+	var proxyAdmin *proxyadmin.ProxyAdmin
+	if proxy {
+		// Overwrite the manager address with the proxy address
+		address, proxyAdmin = DeployTransparentUpgradeableProxy(
+			ctx,
+			l1,
+			senderKey,
+			address,
+		)
+	}
+
+	return address, proxyAdmin
+}
+
+func InitializeValidatorManager(
+	ctx context.Context,
+	senderKey *ecdsa.PrivateKey,
+	l1 interfaces.L1TestInfo,
+	validatorManager *validatormanager.ValidatorManager,
+	adminAddress common.Address,
+) {
+	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
+	Expect(err).Should(BeNil())
+	tx, err := validatorManager.Initialize(
+		opts,
+		validatormanager.ValidatorManagerSettings{
+			Admin:                  adminAddress,
+			SubnetID:               l1.SubnetID,
+			ChurnPeriodSeconds:     uint64(0),
+			MaximumChurnPercentage: uint8(20),
+		},
+	)
+	Expect(err).Should(BeNil())
+	WaitForTransactionSuccess(ctx, l1, tx.Hash())
+}
+
+func DeployAndInitializeValidatorManagerSpecialization(
+	ctx context.Context,
+	senderKey *ecdsa.PrivateKey,
+	l1 interfaces.L1TestInfo,
+	validatorManagerAddress common.Address,
+	managerType ValidatorManagerConcreteType,
+	proxy bool,
+) (common.Address, *proxyadmin.ProxyAdmin) {
+	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
+	Expect(err).Should(BeNil())
+
 	var (
-		tx               *types.Transaction
-		address          common.Address
-		validatorManager *acp99manager.ACP99Manager
+		tx         *types.Transaction
+		address    common.Address
+		proxyAdmin *proxyadmin.ProxyAdmin
 	)
 	switch managerType {
 	case PoAValidatorManager:
 		// Reset the global binary data for better test isolation
 		poavalidatormanager.PoAValidatorManagerBin = poavalidatormanager.PoAValidatorManagerMetaData.Bin
 
-		address, tx, _, err = poavalidatormanager.DeployPoAValidatorManager(
+		var manager *poavalidatormanager.PoAValidatorManager
+		address, tx, manager, err = poavalidatormanager.DeployPoAValidatorManager(
 			opts,
 			l1.RPCClient,
 			0, // ICMInitializable.Allowed
 		)
 		Expect(err).Should(BeNil())
-	case ERC20TokenStakingManager:
-		// Reset the global binary data for better test isolation
-		erc20tokenstakingmanager.ERC20TokenStakingManagerBin =
-			erc20tokenstakingmanager.ERC20TokenStakingManagerMetaData.Bin
 
-		address, tx, _, err = erc20tokenstakingmanager.DeployERC20TokenStakingManager(
+		// Wait for the transaction to be mined
+		WaitForTransactionSuccess(ctx, l1, tx.Hash())
+
+		if proxy {
+			// Overwrite the manager address with the proxy address
+			address, proxyAdmin = DeployTransparentUpgradeableProxy(
+				ctx,
+				l1,
+				senderKey,
+				address,
+			)
+			manager, err = poavalidatormanager.NewPoAValidatorManager(address, l1.RPCClient)
+			Expect(err).Should(BeNil())
+		}
+		goLog.Println("Initializing PoA manager with admin", PrivateKeyToAddress(senderKey).Hex())
+		goLog.Println("PoAManagerAddress", address.Hex())
+		tx, err = manager.Initialize(
 			opts,
-			l1.RPCClient,
-			0, // ICMInitializable.Allowed
-		)
-		Expect(err).Should(BeNil())
-	case NativeTokenStakingManager:
-		// Reset the global binary data for better test isolation
-		nativetokenstakingmanager.NativeTokenStakingManagerBin =
-			nativetokenstakingmanager.NativeTokenStakingManagerMetaData.Bin
-
-		opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
-		Expect(err).Should(BeNil())
-		address, tx, _, err = nativetokenstakingmanager.DeployNativeTokenStakingManager(
-			opts,
-			l1.RPCClient,
-			0, // ICMInitializable.Allowed
-		)
-		Expect(err).Should(BeNil())
-	}
-
-	validatorManager, err = acp99manager.NewACP99Manager(address, l1.RPCClient)
-	Expect(err).Should(BeNil())
-
-	// Wait for the transaction to be mined
-	WaitForTransactionSuccess(ctx, l1, tx.Hash())
-	return address, validatorManager
-}
-
-// The senderKey is used as the owner of proxy and PoAValidatorManager contracts
-func DeployAndInitializeValidatorManager(
-	ctx context.Context,
-	senderKey *ecdsa.PrivateKey,
-	l1 interfaces.L1TestInfo,
-	managerType ValidatorManagerConcreteType,
-	proxy bool,
-) (common.Address, *proxyadmin.ProxyAdmin) {
-	validatorManagerAddress, _ := DeployValidatorManager(
-		ctx,
-		senderKey,
-		l1,
-		managerType,
-	)
-	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
-	Expect(err).Should(BeNil())
-
-	var (
-		tx         *types.Transaction
-		proxyAdmin *proxyadmin.ProxyAdmin
-	)
-	if proxy {
-		// Overwrite the manager address with the proxy address
-		validatorManagerAddress, proxyAdmin = DeployTransparentUpgradeableProxy(
-			ctx,
-			l1,
-			senderKey,
 			validatorManagerAddress,
-		)
-	}
-
-	switch managerType {
-	case PoAValidatorManager:
-		poaValidatorManager, err := poavalidatormanager.NewPoAValidatorManager(validatorManagerAddress, l1.RPCClient)
-		Expect(err).Should(BeNil())
-		tx, err = poaValidatorManager.Initialize(
-			opts,
-			poavalidatormanager.ValidatorManagerSettings{
-				SubnetID:               l1.SubnetID,
-				ChurnPeriodSeconds:     uint64(0),
-				MaximumChurnPercentage: uint8(20),
-			},
 			PrivateKeyToAddress(senderKey),
 		)
 		Expect(err).Should(BeNil())
+		WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	case ERC20TokenStakingManager:
+		// Reset the global binary data for better test isolation
+		erc20tokenstakingmanager.ERC20TokenStakingManagerBin = erc20tokenstakingmanager.ERC20TokenStakingManagerMetaData.Bin
+
+		var manager *erc20tokenstakingmanager.ERC20TokenStakingManager
+		address, tx, manager, err = erc20tokenstakingmanager.DeployERC20TokenStakingManager(
+			opts,
+			l1.RPCClient,
+			0, // ICMInitializable.Allowed
+		)
+		Expect(err).Should(BeNil())
+		WaitForTransactionSuccess(ctx, l1, tx.Hash())
+
+		if proxy {
+			// Overwrite the manager address with the proxy address
+			address, proxyAdmin = DeployTransparentUpgradeableProxy(
+				ctx,
+				l1,
+				senderKey,
+				address,
+			)
+			manager, err = erc20tokenstakingmanager.NewERC20TokenStakingManager(address, l1.RPCClient)
+			Expect(err).Should(BeNil())
+		}
+
 		erc20Address, _ := DeployExampleERC20(ctx, senderKey, l1)
 		rewardCalculatorAddress, _ := DeployExampleRewardCalculator(
 			ctx,
@@ -179,19 +211,11 @@ func DeployAndInitializeValidatorManager(
 			l1,
 			uint64(10),
 		)
-		erc20StakingManager, err := erc20tokenstakingmanager.NewERC20TokenStakingManager(
-			validatorManagerAddress,
-			l1.RPCClient,
-		)
-		Expect(err).Should(BeNil())
-		tx, err = erc20StakingManager.Initialize(
+
+		tx, err = manager.Initialize(
 			opts,
 			erc20tokenstakingmanager.PoSValidatorManagerSettings{
-				BaseSettings: erc20tokenstakingmanager.ValidatorManagerSettings{
-					SubnetID:               l1.SubnetID,
-					ChurnPeriodSeconds:     DefaultChurnPeriodSeconds,
-					MaximumChurnPercentage: DefaultMaxChurnPercentage,
-				},
+				Manager:                  validatorManagerAddress,
 				MinimumStakeAmount:       big.NewInt(0).SetUint64(DefaultMinStakeAmount),
 				MaximumStakeAmount:       big.NewInt(0).SetUint64(DefaultMaxStakeAmount),
 				MinimumStakeDuration:     DefaultMinStakeDurationSeconds,
@@ -204,26 +228,45 @@ func DeployAndInitializeValidatorManager(
 			erc20Address,
 		)
 		Expect(err).Should(BeNil())
+		WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	case NativeTokenStakingManager:
+		// Reset the global binary data for better test isolation
+		nativetokenstakingmanager.NativeTokenStakingManagerBin =
+			nativetokenstakingmanager.NativeTokenStakingManagerMetaData.Bin
+
+		var manager *nativetokenstakingmanager.NativeTokenStakingManager
+		address, tx, manager, err = nativetokenstakingmanager.DeployNativeTokenStakingManager(
+			opts,
+			l1.RPCClient,
+			0, // ICMInitializable.Allowed
+		)
+		Expect(err).Should(BeNil())
+		WaitForTransactionSuccess(ctx, l1, tx.Hash())
+
+		if proxy {
+			// Overwrite the manager address with the proxy address
+			address, proxyAdmin = DeployTransparentUpgradeableProxy(
+				ctx,
+				l1,
+				senderKey,
+				address,
+			)
+			manager, err = nativetokenstakingmanager.NewNativeTokenStakingManager(address, l1.RPCClient)
+			Expect(err).Should(BeNil())
+		}
+
 		rewardCalculatorAddress, _ := DeployExampleRewardCalculator(
 			ctx,
 			senderKey,
 			l1,
 			uint64(10),
 		)
-		nativeStakingManager, err := nativetokenstakingmanager.NewNativeTokenStakingManager(
-			validatorManagerAddress,
-			l1.RPCClient,
-		)
+
 		Expect(err).Should(BeNil())
-		tx, err = nativeStakingManager.Initialize(
+		tx, err = manager.Initialize(
 			opts,
 			nativetokenstakingmanager.PoSValidatorManagerSettings{
-				BaseSettings: nativetokenstakingmanager.ValidatorManagerSettings{
-					SubnetID:               l1.SubnetID,
-					ChurnPeriodSeconds:     DefaultChurnPeriodSeconds,
-					MaximumChurnPercentage: DefaultMaxChurnPercentage,
-				},
+				Manager:                  validatorManagerAddress,
 				MinimumStakeAmount:       big.NewInt(0).SetUint64(DefaultMinStakeAmount),
 				MaximumStakeAmount:       big.NewInt(0).SetUint64(DefaultMaxStakeAmount),
 				MinimumStakeDuration:     DefaultMinStakeDurationSeconds,
@@ -236,8 +279,7 @@ func DeployAndInitializeValidatorManager(
 		)
 		Expect(err).Should(BeNil())
 	}
-	WaitForTransactionSuccess(ctx, l1, tx.Hash())
-	return validatorManagerAddress, proxyAdmin
+	return address, proxyAdmin
 }
 
 func DeployExampleRewardCalculator(
@@ -379,7 +421,7 @@ func InitializeNativeValidatorRegistration(
 	node Node,
 	expiry uint64,
 	stakingManager *nativetokenstakingmanager.NativeTokenStakingManager,
-	stakingManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 ) (*types.Receipt, ids.ID) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
@@ -397,7 +439,7 @@ func InitializeNativeValidatorRegistration(
 	)
 	Expect(err).Should(BeNil())
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1.RPCClient)
 	Expect(err).Should(BeNil())
 	registrationInitiatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -418,6 +460,7 @@ func InitializeERC20ValidatorRegistration(
 	node Node,
 	expiry uint64,
 	stakingManager *erc20tokenstakingmanager.ERC20TokenStakingManager,
+	validatorManagerAddress common.Address,
 ) (*types.Receipt, ids.ID) {
 	ERC20Approve(
 		ctx,
@@ -444,7 +487,7 @@ func InitializeERC20ValidatorRegistration(
 	)
 	Expect(err).Should(BeNil())
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1.RPCClient)
 	Expect(err).Should(BeNil())
 	registrationInitiatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -461,13 +504,13 @@ func InitializePoAValidatorRegistration(
 	l1 interfaces.L1TestInfo,
 	node Node,
 	expiry uint64,
-	validatorManager *poavalidatormanager.PoAValidatorManager,
+	poaManager *poavalidatormanager.PoAValidatorManager,
 	validatorManagerAddress common.Address,
 ) (*types.Receipt, ids.ID) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := validatorManager.InitiateValidatorRegistration(
+	tx, err := poaManager.InitiateValidatorRegistration(
 		opts,
 		node.NodeID[:],
 		node.NodePoP.PublicKey[:],
@@ -493,7 +536,7 @@ func CompleteValidatorRegistration(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	stakingManagerContractAddress common.Address,
+	stakingManagerAddress common.Address,
 	registrationSignedMessage *avalancheWarp.Message,
 ) *types.Receipt {
 	abi, err := acp99manager.ACP99ManagerMetaData.GetAbi()
@@ -505,7 +548,7 @@ func CompleteValidatorRegistration(
 		callData,
 		senderKey,
 		l1,
-		stakingManagerContractAddress,
+		stakingManagerAddress,
 		registrationSignedMessage.Bytes(),
 	)
 }
@@ -545,6 +588,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 	pChainInfo interfaces.L1TestInfo,
 	stakingManager *nativetokenstakingmanager.NativeTokenStakingManager,
 	stakingManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 	expiry uint64,
 	node Node,
 	pchainWallet pwallet.Wallet,
@@ -564,7 +608,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 		node,
 		expiry,
 		stakingManager,
-		stakingManagerAddress,
+		validatorManagerAddress,
 	)
 
 	// Gather subnet-evm Warp signatures for the RegisterL1ValidatorMessage & relay to the P-Chain
@@ -602,7 +646,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -622,6 +666,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 	pChainInfo interfaces.L1TestInfo,
 	stakingManager *erc20tokenstakingmanager.ERC20TokenStakingManager,
 	stakingManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 	erc20 *exampleerc20.ExampleERC20,
 	expiry uint64,
 	node Node,
@@ -646,6 +691,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 		node,
 		expiry,
 		stakingManager,
+		validatorManagerAddress,
 	)
 
 	// Gather subnet-evm Warp signatures for the RegisterL1ValidatorMessage & relay to the P-Chain
@@ -682,7 +728,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -701,7 +747,8 @@ func InitializeAndCompletePoAValidatorRegistration(
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	validatorManager *poavalidatormanager.PoAValidatorManager,
+	poaManager *poavalidatormanager.PoAValidatorManager,
+	poaManagerAddress common.Address,
 	validatorManagerAddress common.Address,
 	expiry uint64,
 	node Node,
@@ -715,7 +762,7 @@ func InitializeAndCompletePoAValidatorRegistration(
 		l1Info,
 		node,
 		expiry,
-		validatorManager,
+		poaManager,
 		validatorManagerAddress,
 	)
 
@@ -749,7 +796,7 @@ func InitializeAndCompletePoAValidatorRegistration(
 		ctx,
 		fundedKey,
 		l1Info,
-		validatorManagerAddress,
+		poaManagerAddress,
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
@@ -900,12 +947,12 @@ func InitializeEndPoAValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	validatorManager *poavalidatormanager.PoAValidatorManager,
+	poaManager *poavalidatormanager.PoAValidatorManager,
 	validationID ids.ID,
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := validatorManager.InitiateValidatorRemoval(
+	tx, err := poaManager.InitiateValidatorRemoval(
 		opts,
 		validationID,
 	)
@@ -913,14 +960,14 @@ func InitializeEndPoAValidation(
 	return WaitForTransactionSuccess(ctx, l1, tx.Hash())
 }
 
-func CompleteEndValidation(
+func CompleteEndPoAValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	stakingManagerContractAddress common.Address,
+	poaAddress common.Address,
 	registrationSignedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := acp99manager.ACP99ManagerMetaData.GetAbi()
+	abi, err := poavalidatormanager.PoAValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("completeValidatorRemoval", uint32(0))
 	Expect(err).Should(BeNil())
@@ -929,7 +976,28 @@ func CompleteEndValidation(
 		callData,
 		senderKey,
 		l1,
-		stakingManagerContractAddress,
+		poaAddress,
+		registrationSignedMessage.Bytes(),
+	)
+}
+
+func CompleteEndPoSValidation(
+	ctx context.Context,
+	senderKey *ecdsa.PrivateKey,
+	l1 interfaces.L1TestInfo,
+	posAddress common.Address,
+	registrationSignedMessage *avalancheWarp.Message,
+) *types.Receipt {
+	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	Expect(err).Should(BeNil())
+	callData, err := abi.Pack("completeValidatorRemoval", common.Hash{}, uint32(0))
+	Expect(err).Should(BeNil())
+	return CallWarpReceiver(
+		ctx,
+		callData,
+		senderKey,
+		l1,
+		posAddress,
 		registrationSignedMessage.Bytes(),
 	)
 }
@@ -977,7 +1045,6 @@ func InitializeNativeDelegatorRegistration(
 	l1 interfaces.L1TestInfo,
 	validationID ids.ID,
 	delegationAmount *big.Int,
-	stakingManagerAddress common.Address,
 	stakingManager *nativetokenstakingmanager.NativeTokenStakingManager,
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
@@ -1003,7 +1070,7 @@ func CompleteDelegatorRegistration(
 	senderKey *ecdsa.PrivateKey,
 	delegationID ids.ID,
 	l1 interfaces.L1TestInfo,
-	stakingManagerContractAddress common.Address,
+	stakingManagerAddress common.Address,
 	signedMessage *avalancheWarp.Message,
 ) *types.Receipt {
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
@@ -1015,7 +1082,7 @@ func CompleteDelegatorRegistration(
 		callData,
 		senderKey,
 		l1,
-		stakingManagerContractAddress,
+		stakingManagerAddress,
 		signedMessage.Bytes(),
 	)
 }
@@ -1047,7 +1114,7 @@ func CompleteEndDelegation(
 	senderKey *ecdsa.PrivateKey,
 	delegationID ids.ID,
 	l1 interfaces.L1TestInfo,
-	stakingManagerContractAddress common.Address,
+	stakingManagerAddress common.Address,
 	signedMessage *avalancheWarp.Message,
 ) *types.Receipt {
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
@@ -1059,7 +1126,7 @@ func CompleteEndDelegation(
 		callData,
 		senderKey,
 		l1,
-		stakingManagerContractAddress,
+		stakingManagerAddress,
 		signedMessage.Bytes(),
 	)
 }
@@ -1072,6 +1139,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 	pChainInfo interfaces.L1TestInfo,
 	stakingManager *iposvalidatormanager.IPoSValidatorManager,
 	stakingManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 	validationID ids.ID,
 	index uint32,
 	weight uint64,
@@ -1087,7 +1155,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 		stakingManager,
 		validationID,
 	)
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -1126,7 +1194,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 	)
 
 	// Deliver the Warp message to the L1
-	receipt = CompleteEndValidation(
+	receipt = CompleteEndPoSValidation(
 		ctx,
 		fundedKey,
 		l1Info,
@@ -1151,6 +1219,7 @@ func InitializeAndCompleteEndPoSValidation(
 	pChainInfo interfaces.L1TestInfo,
 	stakingManager *iposvalidatormanager.IPoSValidatorManager,
 	stakingManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 	validationID ids.ID,
 	expiry uint64,
 	node Node,
@@ -1186,7 +1255,7 @@ func InitializeAndCompleteEndPoSValidation(
 		)
 	}
 
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -1225,7 +1294,7 @@ func InitializeAndCompleteEndPoSValidation(
 	)
 
 	// Deliver the Warp message to the L1
-	receipt = CompleteEndValidation(
+	receipt = CompleteEndPoSValidation(
 		ctx,
 		fundedKey,
 		l1Info,
@@ -1249,8 +1318,9 @@ func InitializeAndCompleteEndInitialPoAValidation(
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	stakingManager *poavalidatormanager.PoAValidatorManager,
-	stakingManagerAddress common.Address,
+	poaManager *poavalidatormanager.PoAValidatorManager,
+	poaManagerAddress common.Address,
+	validatorManagerAddress common.Address,
 	validationID ids.ID,
 	index uint32,
 	weight uint64,
@@ -1263,10 +1333,10 @@ func InitializeAndCompleteEndInitialPoAValidation(
 		ctx,
 		ownerKey,
 		l1Info,
-		stakingManager,
+		poaManager,
 		validationID,
 	)
-	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
@@ -1305,11 +1375,11 @@ func InitializeAndCompleteEndInitialPoAValidation(
 	)
 
 	// Deliver the Warp message to the L1
-	receipt = CompleteEndValidation(
+	receipt = CompleteEndPoAValidation(
 		ctx,
 		fundedKey,
 		l1Info,
-		stakingManagerAddress,
+		poaManagerAddress,
 		registrationSignedMessage,
 	)
 
@@ -1329,7 +1399,8 @@ func InitializeAndCompleteEndPoAValidation(
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	validatorManager *poavalidatormanager.PoAValidatorManager,
+	poaManager *poavalidatormanager.PoAValidatorManager,
+	poaManagerAddress common.Address,
 	validatorManagerAddress common.Address,
 	validationID ids.ID,
 	weight uint64,
@@ -1340,7 +1411,7 @@ func InitializeAndCompleteEndPoAValidation(
 		ctx,
 		ownerKey,
 		l1Info,
-		validatorManager,
+		poaManager,
 		validationID,
 	)
 	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
@@ -1374,11 +1445,11 @@ func InitializeAndCompleteEndPoAValidation(
 	)
 
 	// Deliver the Warp message to the L1
-	receipt = CompleteEndValidation(
+	receipt = CompleteEndPoAValidation(
 		ctx,
 		ownerKey,
 		l1Info,
-		validatorManagerAddress,
+		poaManagerAddress,
 		registrationSignedMessage,
 	)
 

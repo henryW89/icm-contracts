@@ -82,8 +82,8 @@ func ValidatorChurn(network *localnetwork.LocalNetwork, teleporter utils.Telepor
 	addValidatorsCtx, cancel := context.WithTimeout(ctx, (90+sleepPeriodSeconds)*newNodeCount*time.Second)
 	defer cancel()
 	newNodes := network.GetExtraNodes(newNodeCount)
-	validatorManagerAddress := network.GetValidatorManager(l1AInfo.SubnetID)
-	validatorManager, err := poavalidatormanager.NewPoAValidatorManager(validatorManagerAddress, l1AInfo.RPCClient)
+	validatorManagerProxy, poaManagerProxy := network.GetValidatorManager(l1AInfo.SubnetID)
+	poaManager, err := poavalidatormanager.NewPoAValidatorManager(poaManagerProxy.Address, l1AInfo.RPCClient)
 	pChainInfo := utils.GetPChainInfo(network.GetPrimaryNetworkInfo())
 	Expect(err).Should(BeNil())
 
@@ -105,8 +105,9 @@ func ValidatorChurn(network *localnetwork.LocalNetwork, teleporter utils.Telepor
 			fundedKey,
 			l1AInfo,
 			pChainInfo,
-			validatorManager,
-			validatorManagerAddress,
+			poaManager,
+			poaManagerProxy.Address,
+			validatorManagerProxy.Address,
 			expiry,
 			node,
 			network.GetPChainWallet(),
