@@ -230,7 +230,9 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP);
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.InvalidValidationID.selector, validationID)
+            abi.encodeWithSelector(
+                ValidatorManager.UnexpectedValidationID.selector, bytes32(0), validationID
+            )
         );
         posValidatorManager.initiateValidatorRemoval(validationID, true, 0);
     }

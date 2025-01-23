@@ -96,6 +96,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     error InvalidNodeID(bytes nodeID);
     error InvalidConversionID(bytes32 encodedConversionID, bytes32 expectedConversionID);
     error InvalidTotalWeight(uint64 weight);
+    error UnexpectedValidationID(bytes32 validationID, bytes32 expectedValidationID);
     error InvalidValidationID(bytes32 validationID);
     error InvalidValidatorStatus(ValidatorStatus status);
     error InvalidNonce(uint64 nonce);

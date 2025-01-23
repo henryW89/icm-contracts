@@ -325,6 +325,9 @@ abstract contract PoSValidatorManager is
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
         _initiateValidatorRemoval(validationID);
+
+        // The validator must be fetched after the removal has been initiated, since the above call modifies
+        // the validator's state.
         Validator memory validator = getValidator(validationID);
 
         // Non-PoS validators are required to boostrap the network, but are not eligible for rewards.
@@ -440,7 +443,7 @@ abstract contract PoSValidatorManager is
         (bytes32 uptimeValidationID, uint64 uptime) =
             ValidatorMessages.unpackValidationUptimeMessage(warpMessage.payload);
         if (validationID != uptimeValidationID) {
-            revert InvalidValidationID(validationID);
+            revert UnexpectedValidationID(uptimeValidationID, validationID);
         }
 
         if (uptime > $._posValidatorInfo[validationID].uptimeSeconds) {
@@ -618,8 +621,9 @@ abstract contract PoSValidatorManager is
         if (validator.receivedNonce < delegator.startingNonce) {
             (bytes32 messageValidationID, uint64 nonce) =
                 completeValidatorWeightUpdate(messageIndex);
+
             if (validationID != messageValidationID) {
-                revert InvalidValidationID(delegator.validationID);
+                revert UnexpectedValidationID(messageValidationID, validationID);
             }
             if (nonce < delegator.startingNonce) {
                 revert InvalidNonce(nonce);
@@ -877,7 +881,7 @@ abstract contract PoSValidatorManager is
         ) {
             (bytes32 validationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
-                revert InvalidValidationID(validationID);
+                revert UnexpectedValidationID(validationID, delegator.validationID);
             }
 
             // The received nonce should be at least as high as the delegation's ending nonce. This allows a weight
