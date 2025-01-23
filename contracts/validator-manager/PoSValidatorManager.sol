@@ -104,26 +104,12 @@ abstract contract PoSValidatorManager is
     error ZeroWeightToValueFactor();
     error InvalidUptimeBlockchainID(bytes32 uptimeBlockchainID);
 
-    error InvalidValidatorManagerAddress(address validatorManagerAddress);
     error InvalidWarpOriginSenderAddress(address senderAddress);
-    error InvalidValidatorManagerBlockchainID(bytes32 blockchainID);
     error InvalidWarpSourceChainID(bytes32 sourceChainID);
-    error InvalidRegistrationExpiry(uint64 registrationExpiry);
-    error InvalidInitializationStatus();
-    error InvalidMaximumChurnPercentage(uint8 maximumChurnPercentage);
-    error InvalidBLSKeyLength(uint256 length);
-    error InvalidNodeID(bytes nodeID);
-    error InvalidConversionID(bytes32 encodedConversionID, bytes32 expectedConversionID);
-    error InvalidTotalWeight(uint64 weight);
-    error InvalidValidationID(bytes32 validationID);
+    error UnexpectedValidationID(bytes32 validationID, bytes32 expectedValidationID);
     error InvalidValidatorStatus(ValidatorStatus status);
     error InvalidNonce(uint64 nonce);
     error InvalidWarpMessage();
-    error MaxChurnRateExceeded(uint64 churnAmount);
-    error NodeAlreadyRegistered(bytes nodeID);
-    error UnexpectedRegistrationStatus(bool validRegistration);
-    error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
-    error PChainOwnerAddressesNotSorted();
 
     // solhint-disable ordering
     /**
@@ -359,6 +345,9 @@ abstract contract PoSValidatorManager is
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
         $._manager.initiateValidatorRemoval(validationID);
+
+        // The validator must be fetched after the removal has been initiated, since the above call modifies
+        // the validator's state.
         Validator memory validator = $._manager.getValidator(validationID);
 
         // Non-PoS validators are required to boostrap the network, but are not eligible for rewards.
@@ -479,7 +468,7 @@ abstract contract PoSValidatorManager is
         (bytes32 uptimeValidationID, uint64 uptime) =
             ValidatorMessages.unpackValidationUptimeMessage(warpMessage.payload);
         if (validationID != uptimeValidationID) {
-            revert InvalidValidationID(validationID);
+            revert UnexpectedValidationID(uptimeValidationID, validationID);
         }
 
         if (uptime > $._posValidatorInfo[validationID].uptimeSeconds) {
@@ -657,8 +646,9 @@ abstract contract PoSValidatorManager is
         if (validator.receivedNonce < delegator.startingNonce) {
             (bytes32 messageValidationID, uint64 nonce) =
                 $._manager.completeValidatorWeightUpdate(messageIndex);
+
             if (validationID != messageValidationID) {
-                revert InvalidValidationID(delegator.validationID);
+                revert UnexpectedValidationID(messageValidationID, validationID);
             }
             if (nonce < delegator.startingNonce) {
                 revert InvalidNonce(nonce);
@@ -918,7 +908,7 @@ abstract contract PoSValidatorManager is
             (bytes32 validationID, uint64 nonce) =
                 $._manager.completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
-                revert InvalidValidationID(validationID);
+                revert UnexpectedValidationID(validationID, delegator.validationID);
             }
 
             // The received nonce should be at least as high as the delegation's ending nonce. This allows a weight
