@@ -50,7 +50,7 @@ struct PChainOwner {
  * @param nodeID The NodeID of the validator.
  * @param startingWeight The weight of the validator at the time of registration.
  * @param sentNonce The current weight update nonce sent by the manager.
- * @param receivedNonce The highest nonce received from the P-Chain
+ * @param receivedNonce The highest nonce received from the P-Chain.
  * @param weight The current weight of the validator.
  * @param startTime The start time of the validator.
  * @param endTime The end time of the validator.
@@ -191,7 +191,7 @@ abstract contract ACP99Manager {
         returns (bytes32 validationID);
 
     /**
-     * @notice Initiates validator weight update by issuing a L1ValidatorWeightMessage with a nonzero weight.
+     * @notice Initiates a validator weight update by issuing an L1ValidatorWeightMessage with a nonzero weight.
      * The validator weight change should not have any effect until completeValidatorWeightUpdate is successfully called.
      *
      * Emits an {InitiatedValidatorWeightUpdate} event on success.
@@ -207,7 +207,7 @@ abstract contract ACP99Manager {
     ) internal virtual returns (uint64 nonce, bytes32 messageID);
 
     /**
-     * @notice Completes the validator weight update process by consuming a L1ValidatorWeightMessage from the P-Chain
+     * @notice Completes the validator weight update process by consuming an L1ValidatorWeightMessage from the P-Chain
      * acknowledging the weight update. The validator weight change should not have any effect until this method is successfully called.
      *
      * Emits a {CompletedValidatorWeightUpdate} event on success.
