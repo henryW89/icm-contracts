@@ -331,7 +331,7 @@ func InitializeValidatorSet(
 		manager.ParseRegisteredInitialValidator,
 	)
 	Expect(err).Should(BeNil())
-	Expect(initialValidatorCreatedEvent.NodeID).Should(Equal(nodes[0].NodeID.Bytes()))
+	Expect(ids.NodeID(initialValidatorCreatedEvent.NodeID)).Should(Equal(nodes[0].NodeID))
 	var validationIDs []ids.ID
 	for i := range nodes {
 		validationIDs = append(validationIDs, l1Info.SubnetID.Append(uint32(i)))
@@ -404,7 +404,7 @@ func InitializeNativeValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -451,7 +451,7 @@ func InitializeERC20ValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -485,7 +485,7 @@ func InitializePoAValidatorRegistration(
 		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 

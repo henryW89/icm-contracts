@@ -58,7 +58,7 @@ type Validator struct {
 
 // ACP99ManagerMetaData contains all meta data concerning the ACP99Manager contract.
 var ACP99ManagerMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"CompletedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"registrationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"validatorWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"weightUpdateMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"RegisteredInitialValidator\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRemoval\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorWeightUpdate\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"getValidator\",\"outputs\":[{\"components\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"startingWeight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"sentNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"receivedNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"startTime\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"internalType\":\"structValidator\",\"name\":\"validator\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"l1TotalWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"subnetID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"CompletedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"registrationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"validatorWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"weightUpdateMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"RegisteredInitialValidator\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRemoval\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorWeightUpdate\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"getValidator\",\"outputs\":[{\"components\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"startingWeight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"sentNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"receivedNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"startTime\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"internalType\":\"structValidator\",\"name\":\"validator\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messsageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"l1TotalWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"subnetID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // ACP99ManagerABI is the input ABI used to generate the binding from.
@@ -454,14 +454,13 @@ func (it *ACP99ManagerCompletedValidatorRegistrationIterator) Close() error {
 // ACP99ManagerCompletedValidatorRegistration represents a CompletedValidatorRegistration event raised by the ACP99Manager contract.
 type ACP99ManagerCompletedValidatorRegistration struct {
 	ValidationID [32]byte
-	NodeID       []byte
 	Weight       uint64
 	Raw          types.Log // Blockchain specific contextual infos
 }
 
-// FilterCompletedValidatorRegistration is a free log retrieval operation binding the contract event 0x77db78281b26839241ace5413ded40b79d347f4862aadef5b975516b9111db62.
+// FilterCompletedValidatorRegistration is a free log retrieval operation binding the contract event 0x967ae87813a3b5f201dd9bcba778d457176eafe6f41facee1c718091d3952d06.
 //
-// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, uint64 weight)
+// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, uint64 weight)
 func (_ACP99Manager *ACP99ManagerFilterer) FilterCompletedValidatorRegistration(opts *bind.FilterOpts, validationID [][32]byte) (*ACP99ManagerCompletedValidatorRegistrationIterator, error) {
 
 	var validationIDRule []interface{}
@@ -476,9 +475,9 @@ func (_ACP99Manager *ACP99ManagerFilterer) FilterCompletedValidatorRegistration(
 	return &ACP99ManagerCompletedValidatorRegistrationIterator{contract: _ACP99Manager.contract, event: "CompletedValidatorRegistration", logs: logs, sub: sub}, nil
 }
 
-// WatchCompletedValidatorRegistration is a free log subscription operation binding the contract event 0x77db78281b26839241ace5413ded40b79d347f4862aadef5b975516b9111db62.
+// WatchCompletedValidatorRegistration is a free log subscription operation binding the contract event 0x967ae87813a3b5f201dd9bcba778d457176eafe6f41facee1c718091d3952d06.
 //
-// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, uint64 weight)
+// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, uint64 weight)
 func (_ACP99Manager *ACP99ManagerFilterer) WatchCompletedValidatorRegistration(opts *bind.WatchOpts, sink chan<- *ACP99ManagerCompletedValidatorRegistration, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
@@ -518,9 +517,9 @@ func (_ACP99Manager *ACP99ManagerFilterer) WatchCompletedValidatorRegistration(o
 	}), nil
 }
 
-// ParseCompletedValidatorRegistration is a log parse operation binding the contract event 0x77db78281b26839241ace5413ded40b79d347f4862aadef5b975516b9111db62.
+// ParseCompletedValidatorRegistration is a log parse operation binding the contract event 0x967ae87813a3b5f201dd9bcba778d457176eafe6f41facee1c718091d3952d06.
 //
-// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, uint64 weight)
+// Solidity: event CompletedValidatorRegistration(bytes32 indexed validationID, uint64 weight)
 func (_ACP99Manager *ACP99ManagerFilterer) ParseCompletedValidatorRegistration(log types.Log) (*ACP99ManagerCompletedValidatorRegistration, error) {
 	event := new(ACP99ManagerCompletedValidatorRegistration)
 	if err := _ACP99Manager.contract.UnpackLog(event, "CompletedValidatorRegistration", log); err != nil {
@@ -890,41 +889,49 @@ func (it *ACP99ManagerInitiatedValidatorRegistrationIterator) Close() error {
 // ACP99ManagerInitiatedValidatorRegistration represents a InitiatedValidatorRegistration event raised by the ACP99Manager contract.
 type ACP99ManagerInitiatedValidatorRegistration struct {
 	ValidationID          [32]byte
-	NodeID                []byte
+	NodeID                [20]byte
 	RegistrationMessageID [32]byte
 	RegistrationExpiry    uint64
 	Weight                uint64
 	Raw                   types.Log // Blockchain specific contextual infos
 }
 
-// FilterInitiatedValidatorRegistration is a free log retrieval operation binding the contract event 0x6444121f9363bfb7959b7aeb4e0770f929069e868013c3d1d807647d6ab9adaf.
+// FilterInitiatedValidatorRegistration is a free log retrieval operation binding the contract event 0x5881be437bdcb008bfa5f20e32d3e335ccf8ab90ef2818852a251625260af35d.
 //
-// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
-func (_ACP99Manager *ACP99ManagerFilterer) FilterInitiatedValidatorRegistration(opts *bind.FilterOpts, validationID [][32]byte) (*ACP99ManagerInitiatedValidatorRegistrationIterator, error) {
+// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes20 indexed nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
+func (_ACP99Manager *ACP99ManagerFilterer) FilterInitiatedValidatorRegistration(opts *bind.FilterOpts, validationID [][32]byte, nodeID [][20]byte) (*ACP99ManagerInitiatedValidatorRegistrationIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
+	var nodeIDRule []interface{}
+	for _, nodeIDItem := range nodeID {
+		nodeIDRule = append(nodeIDRule, nodeIDItem)
+	}
 
-	logs, sub, err := _ACP99Manager.contract.FilterLogs(opts, "InitiatedValidatorRegistration", validationIDRule)
+	logs, sub, err := _ACP99Manager.contract.FilterLogs(opts, "InitiatedValidatorRegistration", validationIDRule, nodeIDRule)
 	if err != nil {
 		return nil, err
 	}
 	return &ACP99ManagerInitiatedValidatorRegistrationIterator{contract: _ACP99Manager.contract, event: "InitiatedValidatorRegistration", logs: logs, sub: sub}, nil
 }
 
-// WatchInitiatedValidatorRegistration is a free log subscription operation binding the contract event 0x6444121f9363bfb7959b7aeb4e0770f929069e868013c3d1d807647d6ab9adaf.
+// WatchInitiatedValidatorRegistration is a free log subscription operation binding the contract event 0x5881be437bdcb008bfa5f20e32d3e335ccf8ab90ef2818852a251625260af35d.
 //
-// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
-func (_ACP99Manager *ACP99ManagerFilterer) WatchInitiatedValidatorRegistration(opts *bind.WatchOpts, sink chan<- *ACP99ManagerInitiatedValidatorRegistration, validationID [][32]byte) (event.Subscription, error) {
+// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes20 indexed nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
+func (_ACP99Manager *ACP99ManagerFilterer) WatchInitiatedValidatorRegistration(opts *bind.WatchOpts, sink chan<- *ACP99ManagerInitiatedValidatorRegistration, validationID [][32]byte, nodeID [][20]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
+	var nodeIDRule []interface{}
+	for _, nodeIDItem := range nodeID {
+		nodeIDRule = append(nodeIDRule, nodeIDItem)
+	}
 
-	logs, sub, err := _ACP99Manager.contract.WatchLogs(opts, "InitiatedValidatorRegistration", validationIDRule)
+	logs, sub, err := _ACP99Manager.contract.WatchLogs(opts, "InitiatedValidatorRegistration", validationIDRule, nodeIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -956,9 +963,9 @@ func (_ACP99Manager *ACP99ManagerFilterer) WatchInitiatedValidatorRegistration(o
 	}), nil
 }
 
-// ParseInitiatedValidatorRegistration is a log parse operation binding the contract event 0x6444121f9363bfb7959b7aeb4e0770f929069e868013c3d1d807647d6ab9adaf.
+// ParseInitiatedValidatorRegistration is a log parse operation binding the contract event 0x5881be437bdcb008bfa5f20e32d3e335ccf8ab90ef2818852a251625260af35d.
 //
-// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
+// Solidity: event InitiatedValidatorRegistration(bytes32 indexed validationID, bytes20 indexed nodeID, bytes32 registrationMessageID, uint64 registrationExpiry, uint64 weight)
 func (_ACP99Manager *ACP99ManagerFilterer) ParseInitiatedValidatorRegistration(log types.Log) (*ACP99ManagerInitiatedValidatorRegistration, error) {
 	event := new(ACP99ManagerInitiatedValidatorRegistration)
 	if err := _ACP99Manager.contract.UnpackLog(event, "InitiatedValidatorRegistration", log); err != nil {
@@ -1332,39 +1339,47 @@ func (it *ACP99ManagerRegisteredInitialValidatorIterator) Close() error {
 // ACP99ManagerRegisteredInitialValidator represents a RegisteredInitialValidator event raised by the ACP99Manager contract.
 type ACP99ManagerRegisteredInitialValidator struct {
 	ValidationID [32]byte
-	NodeID       []byte
+	NodeID       [20]byte
 	Weight       uint64
 	Raw          types.Log // Blockchain specific contextual infos
 }
 
-// FilterRegisteredInitialValidator is a free log retrieval operation binding the contract event 0xbfde2b10dd8e49db1d84164b7468fa64c5c67a02b148fee0473a9b71b9b981f2.
+// FilterRegisteredInitialValidator is a free log retrieval operation binding the contract event 0x9d9c026e2cadfec89cccc2cd72705360eca1beba24774f3363f4bb33faabc7d7.
 //
-// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes nodeID, uint64 weight)
-func (_ACP99Manager *ACP99ManagerFilterer) FilterRegisteredInitialValidator(opts *bind.FilterOpts, validationID [][32]byte) (*ACP99ManagerRegisteredInitialValidatorIterator, error) {
+// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight)
+func (_ACP99Manager *ACP99ManagerFilterer) FilterRegisteredInitialValidator(opts *bind.FilterOpts, validationID [][32]byte, nodeID [][20]byte) (*ACP99ManagerRegisteredInitialValidatorIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
+	var nodeIDRule []interface{}
+	for _, nodeIDItem := range nodeID {
+		nodeIDRule = append(nodeIDRule, nodeIDItem)
+	}
 
-	logs, sub, err := _ACP99Manager.contract.FilterLogs(opts, "RegisteredInitialValidator", validationIDRule)
+	logs, sub, err := _ACP99Manager.contract.FilterLogs(opts, "RegisteredInitialValidator", validationIDRule, nodeIDRule)
 	if err != nil {
 		return nil, err
 	}
 	return &ACP99ManagerRegisteredInitialValidatorIterator{contract: _ACP99Manager.contract, event: "RegisteredInitialValidator", logs: logs, sub: sub}, nil
 }
 
-// WatchRegisteredInitialValidator is a free log subscription operation binding the contract event 0xbfde2b10dd8e49db1d84164b7468fa64c5c67a02b148fee0473a9b71b9b981f2.
+// WatchRegisteredInitialValidator is a free log subscription operation binding the contract event 0x9d9c026e2cadfec89cccc2cd72705360eca1beba24774f3363f4bb33faabc7d7.
 //
-// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes nodeID, uint64 weight)
-func (_ACP99Manager *ACP99ManagerFilterer) WatchRegisteredInitialValidator(opts *bind.WatchOpts, sink chan<- *ACP99ManagerRegisteredInitialValidator, validationID [][32]byte) (event.Subscription, error) {
+// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight)
+func (_ACP99Manager *ACP99ManagerFilterer) WatchRegisteredInitialValidator(opts *bind.WatchOpts, sink chan<- *ACP99ManagerRegisteredInitialValidator, validationID [][32]byte, nodeID [][20]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
+	var nodeIDRule []interface{}
+	for _, nodeIDItem := range nodeID {
+		nodeIDRule = append(nodeIDRule, nodeIDItem)
+	}
 
-	logs, sub, err := _ACP99Manager.contract.WatchLogs(opts, "RegisteredInitialValidator", validationIDRule)
+	logs, sub, err := _ACP99Manager.contract.WatchLogs(opts, "RegisteredInitialValidator", validationIDRule, nodeIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1396,9 +1411,9 @@ func (_ACP99Manager *ACP99ManagerFilterer) WatchRegisteredInitialValidator(opts 
 	}), nil
 }
 
-// ParseRegisteredInitialValidator is a log parse operation binding the contract event 0xbfde2b10dd8e49db1d84164b7468fa64c5c67a02b148fee0473a9b71b9b981f2.
+// ParseRegisteredInitialValidator is a log parse operation binding the contract event 0x9d9c026e2cadfec89cccc2cd72705360eca1beba24774f3363f4bb33faabc7d7.
 //
-// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes nodeID, uint64 weight)
+// Solidity: event RegisteredInitialValidator(bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight)
 func (_ACP99Manager *ACP99ManagerFilterer) ParseRegisteredInitialValidator(log types.Log) (*ACP99ManagerRegisteredInitialValidator, error) {
 	event := new(ACP99ManagerRegisteredInitialValidator)
 	if err := _ACP99Manager.contract.UnpackLog(event, "RegisteredInitialValidator", log); err != nil {
