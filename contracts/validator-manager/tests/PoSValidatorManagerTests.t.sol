@@ -490,7 +490,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         posValidatorManager.initiateDelegatorRemoval(delegationID, false, 0);
     }
 
-    function testforceInitiateDelegatorRemoval() public {
+    function testForceInitiateDelegatorRemoval() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -508,7 +508,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testforceInitiateDelegatorRemovalInsufficientUptime() public {
+    function testForceInitiateDelegatorRemovalInsufficientUptime() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -1634,7 +1634,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
-        posValidatorManager.completeValidatorRemoval(validationID, 0);
+        posValidatorManager.completeValidatorRemoval(0);
 
         assertEq(_getStakeAssetBalance(address(this)), balanceBefore);
     }
@@ -1854,7 +1854,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         posValidatorManager.resendUpdateDelegator(delegationID);
     }
 
-    function testforceInitiateValidatorRemoval() public {
+    function testForceInitiateValidatorRemoval() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1871,7 +1871,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testforceInitiateValidatorRemovalInsufficientUptime() public {
+    function testForceInitiateValidatorRemovalInsufficientUptime() public {
         bytes32 validationID = _registerDefaultValidator();
         uint64 uptimePercentage = 79;
 
@@ -1949,6 +1949,15 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         uint256 stakeAmount
     ) internal virtual returns (bytes32);
 
+    function _completeValidatorRegistration(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return posValidatorManager.completeValidatorRegistration(messageIndex);
+    }
+
     function _initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
@@ -1967,6 +1976,15 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
         posValidatorManager.forceInitiateValidatorRemoval(
             validationID, includeUptime, 0, recipientAddress
         );
+    }
+
+    function _completeValidatorRemoval(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return posValidatorManager.completeValidatorRemoval(messageIndex);
     }
 
     function _initiateDelegatorRegistration(
@@ -2342,7 +2360,7 @@ abstract contract PoSValidatorManagerTest is ValidatorManagerTest {
 
     function _completeEndValidation(bytes memory l1ValidatorRegistrationMessage) internal {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
-        posValidatorManager.completeValidatorRemoval(bytes32(0), 0);
+        posValidatorManager.completeValidatorRemoval(0);
     }
 
     function _completeDelegatorRemovalWithChecks(

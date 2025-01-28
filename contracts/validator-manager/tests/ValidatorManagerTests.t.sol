@@ -273,7 +273,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRemoval(validationID);
 
-        validatorManager.completeValidatorRemoval(0);
+        _completeValidatorRemoval(0);
     }
 
     function testCompleteInvalidatedValidation() public {
@@ -292,7 +292,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRemoval(validationID);
 
-        validatorManager.completeValidatorRemoval(0);
+        _completeValidatorRemoval(0);
     }
 
     function testInitialWeightsTooLow() public {
@@ -393,6 +393,55 @@ abstract contract ValidatorManagerTest is Test {
         _initiateValidatorRemoval(validationID, false, address(0));
     }
 
+    function testInitiateValidatorRegistrationInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
+    function testCompleteValidatorRegistrationInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.completeValidatorRegistration(0);
+    }
+
+    function testInitiateValidatorWeightUpdateInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
+    }
+
+    function testCompleteValidatorWeightUpdateInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.completeValidatorWeightUpdate(0);
+    }
+
+    function testInitiateValidatorRemovalInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.initiateValidatorRemoval(bytes32(0));
+    }
+
+    function testCompleteValidatorRemovalInvalidAdmin() public {
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+        );
+        validatorManager.completeValidatorRemoval(0);
+    }
+
     function testValidatorManagerStorageSlot() public view {
         assertEq(
             _erc7201StorageSlot("ValidatorManager"),
@@ -474,7 +523,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRegistration(validationID, nodeID, weight);
 
-        validatorManager.completeValidatorRegistration(0);
+        _completeValidatorRegistration(0);
     }
 
     function _initiateValidatorRemoval(
@@ -608,6 +657,11 @@ abstract contract ValidatorManagerTest is Test {
         uint64 weight
     ) internal virtual returns (bytes32);
 
+    function _completeValidatorRegistration(uint32 messageIndex)
+        internal
+        virtual
+        returns (bytes32);
+
     function _initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
@@ -619,6 +673,8 @@ abstract contract ValidatorManagerTest is Test {
         bool includeUptime,
         address rewardRecipient
     ) internal virtual;
+
+    function _completeValidatorRemoval(uint32 messageIndex) internal virtual returns (bytes32);
 
     function _setUp() internal virtual returns (ACP99Manager);
 

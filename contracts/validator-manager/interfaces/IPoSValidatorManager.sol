@@ -135,6 +135,16 @@ interface IPoSValidatorManager {
     function submitUptimeProof(bytes32 validationID, uint32 messageIndex) external;
 
     /**
+     * Completes validator registration by dispatching to the ValidatorManager to update the validator status,
+     * and locking stake.
+     *
+     * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
+     * This is forwarded to the ValidatorManager to be parsed.
+     * @return The ID of the validator that was registered.
+     */
+    function completeValidatorRegistration(uint32 messageIndex) external returns (bytes32);
+
+    /**
      * @notice Begins the process of ending an active validation period, and reverts if the validation period is not eligible
      * for uptime-based rewards. This function is used to exit the validator set when rewards are expected.
      * The validation period must have been previously started by a successful call to {completeValidatorRegistration} with the given validationID.
@@ -192,22 +202,17 @@ interface IPoSValidatorManager {
 
     /**
      * Completes validator removal by dispatching to the ValidatorManager to update the validator status,
-     * and unlocking stake. The ValidatorManager's completeValidatorRemoval function may be called directly,
-     * in which case this function requires the validationID to be passed as a parameter.
+     * and unlocking stake.
      *
-     * @param validationID The ID of the validator to remove. Only required if the validator removal has already
-     * been completed directly through the ValidatorManager
      * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
      * This is forwarded to the ValidatorManager to be parsed.
+     * @return The ID of the validator that was removed.
      */
-    function completeValidatorRemoval(
-        bytes32 validationID,
-        uint32 messageIndex
-    ) external returns (bytes32);
+    function completeValidatorRemoval(uint32 messageIndex) external returns (bytes32);
 
     /**
      * @notice Completes the delegator registration process by submitting an acknowledgement of the registration of a
-     * validationID from the P-Chain. This function may be called after {ACP99Manager-completeValidatorWeightUpdate}.
+     * validationID from the P-Chain.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate registration of the
      * delegator is valid, as long as that nonce has been sent by the contract. For the purposes of computing delegation rewards,
      * the delegation is considered active after this function is completed.
@@ -290,7 +295,6 @@ interface IPoSValidatorManager {
 
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
-     * This function may be called after {ACP99Manager-completeValidatorWeightUpdate}.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate the end of the
      * delegator's delegation is valid, as long as that nonce has been sent by the contract. This is because the validator
      * weight change pertaining to the delegation ending is included in any subsequent validator weight update messages.

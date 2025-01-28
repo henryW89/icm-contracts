@@ -94,6 +94,15 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         });
     }
 
+    function _completeValidatorRegistration(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return app.completeValidatorRegistration(messageIndex);
+    }
+
     function _initiateValidatorRemoval(
         bytes32 validationID,
         bool,
@@ -108,6 +117,15 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         address
     ) internal virtual override {
         return app.initiateValidatorRemoval(validationID);
+    }
+
+    function _completeValidatorRemoval(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return app.completeValidatorRemoval(messageIndex);
     }
 
     function _setUp() internal override returns (ACP99Manager) {

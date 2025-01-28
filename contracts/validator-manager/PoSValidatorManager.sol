@@ -297,6 +297,9 @@ abstract contract PoSValidatorManager is
         );
     }
 
+    /**
+     * @notice See {IPoSValidatorManager-changeValidatorRewardRecipient}.
+     */
     function changeValidatorRewardRecipient(
         bytes32 validationID,
         address rewardRecipient
@@ -314,6 +317,9 @@ abstract contract PoSValidatorManager is
         $._rewardRecipients[validationID] = rewardRecipient;
     }
 
+    /**
+     * @notice See {IPoSValidatorManager-changeDelegatorRewardRecipient}.
+     */
     function changeDelegatorRewardRecipient(
         bytes32 delegationID,
         address rewardRecipient
@@ -397,21 +403,16 @@ abstract contract PoSValidatorManager is
     /**
      * @notice See {IPoSValidatorManager-completeValidatorRemoval}.
      */
-    function completeValidatorRemoval(
-        bytes32 validationID,
-        uint32 messageIndex
-    ) external nonReentrant returns (bytes32) {
+    function completeValidatorRemoval(uint32 messageIndex)
+        external
+        nonReentrant
+        returns (bytes32)
+    {
         PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
 
-        Validator memory validator = $._manager.getValidator(validationID);
         // Check if the validator has been already been removed from the validator manager.
-        if (
-            validator.status != ValidatorStatus.Completed
-                && validator.status != ValidatorStatus.Invalidated
-        ) {
-            validationID = $._manager.completeValidatorRemoval(messageIndex);
-            validator = $._manager.getValidator(validationID);
-        }
+        bytes32 validationID = $._manager.completeValidatorRemoval(messageIndex);
+        Validator memory validator = $._manager.getValidator(validationID);
 
         // Return now if this was originally a PoA validator that was later migrated to this PoS manager,
         // or the validator was part of the initial validator set.
@@ -481,6 +482,14 @@ abstract contract PoSValidatorManager is
         return uptime;
     }
 
+    /**
+     * @notice Initiates validator registration. Extends the functionality of {ACP99Manager-_initiateValidatorRegistration}
+     * by locking stake and setting staking and delegation parameters.
+     *
+     * @param delegationFeeBips The delegation fee in basis points.
+     * @param minStakeDuration The minimum stake duration in seconds.
+     * @param stakeAmount The amount of stake to lock.
+     */
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
@@ -534,6 +543,13 @@ abstract contract PoSValidatorManager is
     }
 
     /**
+     * @notice See {IPoSValidatorManager-completeValidatorRegistration}.
+     */
+    function completeValidatorRegistration(uint32 messageIndex) external returns (bytes32) {
+        return _getPoSValidatorManagerStorage()._manager.completeValidatorRegistration(messageIndex);
+    }
+
+    /**
      * @notice Converts a token value to a weight.
      * @param value Token value to convert.
      */
@@ -566,6 +582,12 @@ abstract contract PoSValidatorManager is
      */
     function _unlock(address to, uint256 value) internal virtual;
 
+    /**
+     * @notice Initiates delegator registration by updating the validator's weight and storing the delegation information.
+     * @param validationID The ID of the validator to delegate to.
+     * @param delegatorAddress The address of the delegator.
+     * @param delegationAmount The amount of stake to delegate.
+     */
     function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
@@ -806,8 +828,10 @@ abstract contract PoSValidatorManager is
         }
     }
 
-    /// @dev Calculates the reward owed to the delegator based on the state of the delegator and its corresponding validator.
-    /// then set the reward and reward recipient in the storage.
+    /**
+     * @dev Calculates the reward owed to the delegator based on the state of the delegator and its corresponding validator.
+     * then set the reward and reward recipient in the storage.
+     */
     function _calculateAndSetDelegationReward(
         Delegator memory delegator,
         address rewardRecipient,
@@ -1003,40 +1027,5 @@ abstract contract PoSValidatorManager is
         }
 
         return (delegationRewards, validatorFees);
-    }
-
-    function initiateValidatorWeightUpdate(
-        bytes32 validationID,
-        uint64 newWeight
-    ) public returns (uint64, bytes32) {
-        return _getPoSValidatorManagerStorage()._manager.initiateValidatorWeightUpdate(
-            validationID, newWeight
-        );
-    }
-
-    function initiateValidatorRemoval(bytes32 validationID) public {
-        _getPoSValidatorManagerStorage()._manager.initiateValidatorRemoval(validationID);
-    }
-
-    function initiateValidatorRegistration(
-        bytes memory nodeID,
-        bytes memory blsPublicKey,
-        uint64 registrationExpiry,
-        PChainOwner memory remainingBalanceOwner,
-        PChainOwner memory disableOwner,
-        uint64 weight
-    ) public returns (bytes32) {
-        return _getPoSValidatorManagerStorage()._manager.initiateValidatorRegistration({
-            nodeID: nodeID,
-            blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
-            remainingBalanceOwner: remainingBalanceOwner,
-            disableOwner: disableOwner,
-            weight: weight
-        });
-    }
-
-    function completeValidatorRegistration(uint32 messageIndex) public returns (bytes32) {
-        return _getPoSValidatorManagerStorage()._manager.completeValidatorRegistration(messageIndex);
     }
 }

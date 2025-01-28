@@ -394,6 +394,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
+        onlyAdmin
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -446,6 +447,10 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         return $._validationPeriods[validationID];
     }
 
+    function getAdmin() public view returns (address) {
+        return _getValidatorManagerStorage()._admin;
+    }
+
     /**
      * @notice See {ACP99Manager-l1TotalWeight}.
      */
@@ -467,6 +472,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
+        onlyAdmin
         returns (bytes32, uint64)
     {
         WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
@@ -551,6 +557,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
+        onlyAdmin
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();

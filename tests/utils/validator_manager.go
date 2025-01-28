@@ -990,7 +990,7 @@ func CompleteEndPoSValidation(
 ) *types.Receipt {
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("completeValidatorRemoval", common.Hash{}, uint32(0))
+	callData, err := abi.Pack("completeValidatorRemoval", uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,

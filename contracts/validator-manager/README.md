@@ -20,7 +20,15 @@ class ACP99Manager {
 }
 <<Abstract>> ACP99Manager
 
-class ValidatorManager 
+class ValidatorManager {
+    +initializeValidatorSet()
+    +completeValidatorRegistration() onlyAdmin
+    +completeValidatorRemoval() onlyAdmin
+    +completeValidatorWeightUpdate() onlyAdmin
+    +initiateValidatorRegistration() onlyAdmin
+    +initiateValidatorRemoval() onlyAdmin
+    +initiateValidatorWeightUpdate() onlyAdmin
+}
 
 class PoSValidatorManager {
     +completeValidatorRegistration()
@@ -49,8 +57,8 @@ class PoAValidatorManager {
 }
 
 ACP99Manager <|-- ValidatorManager
-ValidatorManager --o  PoSValidatorManager
-ValidatorManager --o  PoAValidatorManager
+ValidatorManager --o  PoSValidatorManager : admin
+ValidatorManager --o  PoAValidatorManager : admin
 PoSValidatorManager <|-- ERC20TokenStakingManager
 PoSValidatorManager <|-- NativeTokenStakingManager
 ```
@@ -125,7 +133,6 @@ A `PoAValidatorManager` can later be converted to a `PoSValidatorManager` by upg
 
 ## Usage
 
-In general, it is recommended that validator set management be done through `PoSValidatorManager`/`PoAValidatorManager` function calls. These will in turn call `ValidatorManager` to update the validator set on chain and issue the corresponding ICM message. It is valid to call the equivalent `ValidatorManager` function directly, but side effects such as unlocking stake or issuing validation rewards will not take effect until the `PoSValidatorManager`/`PoAValidatorManager` is called.
 
 ### Register a Validator
 
