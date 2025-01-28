@@ -15,14 +15,10 @@ import (
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/ava-labs/avalanchego/proto/pb/platformvm"
 	"github.com/ava-labs/avalanchego/utils/crypto/bls"
-	"github.com/ava-labs/avalanchego/utils/formatting/address"
 	"github.com/ava-labs/avalanchego/utils/units"
-	"github.com/ava-labs/avalanchego/vms/components/avax"
-	"github.com/ava-labs/avalanchego/vms/platformvm/stakeable"
 	avalancheWarp "github.com/ava-labs/avalanchego/vms/platformvm/warp"
 	warpMessage "github.com/ava-labs/avalanchego/vms/platformvm/warp/message"
 	warpPayload "github.com/ava-labs/avalanchego/vms/platformvm/warp/payload"
-	"github.com/ava-labs/avalanchego/vms/secp256k1fx"
 	pwallet "github.com/ava-labs/avalanchego/wallet/chain/p/wallet"
 	proxyadmin "github.com/ava-labs/icm-contracts/abi-bindings/go/ProxyAdmin"
 	exampleerc20 "github.com/ava-labs/icm-contracts/abi-bindings/go/mocks/ExampleERC20"
@@ -1814,58 +1810,8 @@ func PackInitialValidator(iv interface{}) ([]byte, error) {
 func PChainProposerVMWorkaround(
 	pchainWallet pwallet.Wallet,
 ) {
-	// Workaround current block map rules
-	destAddr, err := address.ParseToID(DefaultPChainAddress)
-	Expect(err).Should(BeNil())
 	log.Println("Waiting for P-Chain...")
 	time.Sleep(30 * time.Second)
-
-	pBuilder := pchainWallet.Builder()
-	pContext := pBuilder.Context()
-	avaxAssetID := pContext.AVAXAssetID
-	locktime := uint64(time.Date(2030, 1, 1, 0, 0, 0, 0, time.UTC).Unix())
-	amount := 500 * units.MilliAvax
-	_, err = pchainWallet.IssueBaseTx([]*avax.TransferableOutput{
-		{
-			Asset: avax.Asset{
-				ID: avaxAssetID,
-			},
-			Out: &stakeable.LockOut{
-				Locktime: locktime,
-				TransferableOut: &secp256k1fx.TransferOutput{
-					Amt: amount,
-					OutputOwners: secp256k1fx.OutputOwners{
-						Threshold: 1,
-						Addrs: []ids.ShortID{
-							destAddr,
-						},
-					},
-				},
-			},
-		},
-	})
-	Expect(err).Should(BeNil())
-	_, err = pchainWallet.IssueBaseTx([]*avax.TransferableOutput{
-		{
-			Asset: avax.Asset{
-				ID: avaxAssetID,
-			},
-			Out: &stakeable.LockOut{
-				Locktime: locktime,
-				TransferableOut: &secp256k1fx.TransferOutput{
-					Amt: amount,
-					OutputOwners: secp256k1fx.OutputOwners{
-						Threshold: 1,
-						Addrs: []ids.ShortID{
-							destAddr,
-						},
-					},
-				},
-			},
-		},
-	})
-	Expect(err).Should(BeNil())
-	// End workaround
 }
 
 func AdvanceProposerVM(
