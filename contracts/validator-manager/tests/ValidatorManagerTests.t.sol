@@ -13,6 +13,8 @@ import {
     IWarpMessenger
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
 import {ACP99Manager, ConversionData, InitialValidator, PChainOwner} from "../ACP99Manager.sol";
+import {OwnableUpgradeable} from
+    "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 
 // TODO: Remove this once all unit tests implemented
 // solhint-disable no-empty-blocks
@@ -395,8 +397,11 @@ abstract contract ValidatorManagerTest is Test {
 
     function testInitiateValidatorRegistrationInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
@@ -409,36 +414,51 @@ abstract contract ValidatorManagerTest is Test {
 
     function testCompleteValidatorRegistrationInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.completeValidatorRegistration(0);
     }
 
     function testInitiateValidatorWeightUpdateInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
     }
 
     function testCompleteValidatorWeightUpdateInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.completeValidatorWeightUpdate(0);
     }
 
     function testInitiateValidatorRemovalInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.initiateValidatorRemoval(bytes32(0));
     }
 
     function testCompleteValidatorRemovalInvalidAdmin() public {
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.UnauthorizedCaller.selector, address(this))
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+            )
         );
+        vm.prank(address(123));
         validatorManager.completeValidatorRemoval(0);
     }
 

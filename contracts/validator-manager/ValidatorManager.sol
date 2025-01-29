@@ -19,8 +19,8 @@ import {
     IWarpMessenger,
     WarpMessage
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
-import {ContextUpgradeable} from
-    "@openzeppelin/contracts-upgradeable@5.0.2/utils/ContextUpgradeable.sol";
+import {OwnableUpgradeable} from
+    "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -53,12 +53,11 @@ struct ValidatorManagerSettings {
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
+contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
 
     struct ValidatorManagerStorage {
-        address _admin;
         /// @notice The subnetID associated with this validator manager.
         bytes32 _subnetID;
         /// @notice The number of seconds after which to reset the churn tracker.
@@ -148,7 +147,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         internal
         onlyInitializing
     {
-        __Context_init();
+        __Ownable_init(settings.admin);
         __ValidatorManager_init_unchained(settings);
     }
 
@@ -169,19 +168,11 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
 
         $._maximumChurnPercentage = settings.maximumChurnPercentage;
         $._churnPeriodSeconds = settings.churnPeriodSeconds;
-        $._admin = settings.admin;
     }
 
     modifier initializedValidatorSet() {
         if (!_getValidatorManagerStorage()._initializedValidatorSet) {
             revert InvalidInitializationStatus();
-        }
-        _;
-    }
-
-    modifier onlyAdmin() {
-        if (_msgSender() != _getValidatorManagerStorage()._admin) {
-            revert UnauthorizedCaller(_msgSender());
         }
         _;
     }
@@ -281,7 +272,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
-    ) public onlyAdmin returns (bytes32) {
+    ) public onlyOwner returns (bytes32) {
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
@@ -394,7 +385,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
-        onlyAdmin
+        onlyOwner
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -447,10 +438,6 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         return $._validationPeriods[validationID];
     }
 
-    function getAdmin() public view returns (address) {
-        return _getValidatorManagerStorage()._admin;
-    }
-
     /**
      * @notice See {ACP99Manager-l1TotalWeight}.
      */
@@ -472,7 +459,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
-        onlyAdmin
+        onlyOwner
         returns (bytes32, uint64)
     {
         WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
@@ -494,7 +481,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         return (validationID, nonce);
     }
 
-    function initiateValidatorRemoval(bytes32 validationID) public onlyAdmin {
+    function initiateValidatorRemoval(bytes32 validationID) public onlyOwner {
         _initiateValidatorRemoval(validationID);
     }
 
@@ -557,7 +544,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
         public
         virtual
         override
-        onlyAdmin
+        onlyOwner
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -627,7 +614,7 @@ contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     function initiateValidatorWeightUpdate(
         bytes32 validationID,
         uint64 newWeight
-    ) public onlyAdmin returns (uint64, bytes32) {
+    ) public onlyOwner returns (uint64, bytes32) {
         return _initiateValidatorWeightUpdate(validationID, newWeight);
     }
 

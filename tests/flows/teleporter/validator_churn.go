@@ -7,7 +7,7 @@ import (
 
 	"github.com/ava-labs/avalanchego/utils/units"
 	teleportermessenger "github.com/ava-labs/icm-contracts/abi-bindings/go/teleporter/TeleporterMessenger"
-	poavalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/PoAValidatorManager"
+	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -82,8 +82,8 @@ func ValidatorChurn(network *localnetwork.LocalNetwork, teleporter utils.Telepor
 	addValidatorsCtx, cancel := context.WithTimeout(ctx, (90+sleepPeriodSeconds)*newNodeCount*time.Second)
 	defer cancel()
 	newNodes := network.GetExtraNodes(newNodeCount)
-	validatorManagerProxy, poaManagerProxy := network.GetValidatorManager(l1AInfo.SubnetID)
-	poaManager, err := poavalidatormanager.NewPoAValidatorManager(poaManagerProxy.Address, l1AInfo.RPCClient)
+	validatorManagerProxy, _ := network.GetValidatorManager(l1AInfo.SubnetID)
+	validatorManager, err := validatormanager.NewValidatorManager(validatorManagerProxy.Address, l1AInfo.RPCClient)
 	pChainInfo := utils.GetPChainInfo(network.GetPrimaryNetworkInfo())
 	Expect(err).Should(BeNil())
 
@@ -102,11 +102,9 @@ func ValidatorChurn(network *localnetwork.LocalNetwork, teleporter utils.Telepor
 			addValidatorsCtx,
 			aggregator,
 			fundedKey,
-			fundedKey,
 			l1AInfo,
 			pChainInfo,
-			poaManager,
-			poaManagerProxy.Address,
+			validatorManager,
 			validatorManagerProxy.Address,
 			expiry,
 			node,
