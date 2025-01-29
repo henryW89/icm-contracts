@@ -363,10 +363,7 @@ abstract contract ValidatorManager is
         delete $._pendingRegisterValidationMessages[validationID];
         $._validationPeriods[validationID].status = ValidatorStatus.Active;
         $._validationPeriods[validationID].startTime = uint64(block.timestamp);
-        emit CompletedValidatorRegistration(
-            validationID,
-            $._validationPeriods[validationID].weight
-        );
+        emit CompletedValidatorRegistration(validationID, $._validationPeriods[validationID].weight);
 
         return validationID;
     }

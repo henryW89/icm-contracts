@@ -20,8 +20,7 @@ import {ACP99Manager, ConversionData, InitialValidator, PChainOwner} from "../AC
 abstract contract ValidatorManagerTest is Test {
     bytes32 public constant DEFAULT_SUBNET_ID =
         bytes32(hex"1234567812345678123456781234567812345678123456781234567812345678");
-    bytes public constant DEFAULT_NODE_ID =
-        bytes(hex"1234123412341234123412341234123412341234");
+    bytes public constant DEFAULT_NODE_ID = bytes(hex"1234123412341234123412341234123412341234");
     bytes public constant DEFAULT_INITIAL_VALIDATOR_NODE_ID_1 =
         bytes(hex"2341234123412341234123412341234123412341");
     bytes public constant DEFAULT_INITIAL_VALIDATOR_NODE_ID_2 =
@@ -58,7 +57,9 @@ abstract contract ValidatorManagerTest is Test {
     // Used to create unique validator IDs in {_newNodeID}
     uint64 public nodeIDCounter = 0;
 
-    event RegisteredInitialValidator(bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight);
+    event RegisteredInitialValidator(
+        bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight
+    );
 
     event InitiatedValidatorRegistration(
         bytes32 indexed validationID,

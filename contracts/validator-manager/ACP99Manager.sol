@@ -75,7 +75,9 @@ struct Validator {
  */
 abstract contract ACP99Manager {
     /// @notice Emitted when an initial validator is registered.
-    event RegisteredInitialValidator(bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight);
+    event RegisteredInitialValidator(
+        bytes32 indexed validationID, bytes20 indexed nodeID, uint64 weight
+    );
     /// @notice Emitted when a validator registration to the L1 is initiated.
     event InitiatedValidatorRegistration(
         bytes32 indexed validationID,
