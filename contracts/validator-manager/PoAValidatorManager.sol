@@ -64,6 +64,9 @@ contract PoAValidatorManager is IPoAValidatorManager, OwnableUpgradeable {
         internal
         onlyInitializing
     {
+        // Ensure the manager is valid by calling it
+        manager.getChurnPeriodSeconds();
+
         PoAValidatorManagerStorage storage $ = _getPoAValidatorManagerStorage();
         $._manager = manager;
     }
