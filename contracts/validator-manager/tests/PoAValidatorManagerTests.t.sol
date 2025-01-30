@@ -56,7 +56,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     }
 
     // This test applies to all ValidatorManagers, but we test it here to avoid
-    // having to source UINT64MAX funds for PoSValidatorManagers.
+    // having to source UINT64MAX funds for StakingManagers.
     function testTotalWeightOverflow() public {
         uint64 weight = type(uint64).max;
 

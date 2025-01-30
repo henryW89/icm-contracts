@@ -10,7 +10,7 @@ import (
 	"github.com/ava-labs/avalanchego/utils/units"
 	exampleerc20 "github.com/ava-labs/icm-contracts/abi-bindings/go/mocks/ExampleERC20"
 	erc20tokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ERC20TokenStakingManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -72,7 +72,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
 	utils.InitializeAndCompleteEndInitialPoSValidation(
 		ctx,

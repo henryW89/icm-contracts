@@ -32,7 +32,7 @@ enum DelegatorStatus {
  * @notice uptimeBlockchainID is the ID of the blockchain that submits uptime proofs.
  * This must be a blockchain validated by the subnetID that this contract manages.
  */
-struct PoSValidatorManagerSettings {
+struct StakingManagerSettings {
     ValidatorManager manager;
     uint256 minimumStakeAmount;
     uint256 maximumStakeAmount;
@@ -70,7 +70,7 @@ struct PoSValidatorInfo {
 /**
  * @notice Interface for Proof of Stake Validator Managers
  */
-interface IPoSValidatorManager {
+interface IStakingManager {
     /**
      * @notice Event emitted when a delegator registration is initiated
      * @param delegationID The ID of the delegation
@@ -162,7 +162,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initiateValidatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-initiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the validator.
      */
     function initiateValidatorRemoval(
@@ -190,7 +190,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateValidatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-forceInitiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress Address to receive the rewards.
      */
     function forceInitiateValidatorRemoval(
@@ -245,7 +245,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initiateDelegatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-initiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the delegator.
      */
     function initiateDelegatorRemoval(
@@ -276,7 +276,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateDelegatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-forceInitiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards.
      */
     function forceInitiateDelegatorRemoval(

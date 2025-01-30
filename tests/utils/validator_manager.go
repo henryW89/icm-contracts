@@ -26,7 +26,7 @@ import (
 	examplerewardcalculator "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ExampleRewardCalculator"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
 	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/core/types"
@@ -173,7 +173,7 @@ func DeployAndInitializeValidatorManagerSpecialization(
 
 		tx, err = manager.Initialize(
 			opts,
-			erc20tokenstakingmanager.PoSValidatorManagerSettings{
+			erc20tokenstakingmanager.StakingManagerSettings{
 				Manager:                  validatorManagerAddress,
 				MinimumStakeAmount:       big.NewInt(0).SetUint64(DefaultMinStakeAmount),
 				MaximumStakeAmount:       big.NewInt(0).SetUint64(DefaultMaxStakeAmount),
@@ -224,7 +224,7 @@ func DeployAndInitializeValidatorManagerSpecialization(
 		Expect(err).Should(BeNil())
 		tx, err = manager.Initialize(
 			opts,
-			nativetokenstakingmanager.PoSValidatorManagerSettings{
+			nativetokenstakingmanager.StakingManagerSettings{
 				Manager:                  validatorManagerAddress,
 				MinimumStakeAmount:       big.NewInt(0).SetUint64(DefaultMinStakeAmount),
 				MaximumStakeAmount:       big.NewInt(0).SetUint64(DefaultMaxStakeAmount),
@@ -773,7 +773,7 @@ func InitializeEndPoSValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	stakingManager *iposvalidatormanager.IPoSValidatorManager,
+	stakingManager *istakingmanager.IStakingManager,
 	validationID ids.ID,
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
@@ -793,7 +793,7 @@ func ForceInitializeEndPoSValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
-	stakingManager *iposvalidatormanager.IPoSValidatorManager,
+	stakingManager *istakingmanager.IStakingManager,
 	validationID ids.ID,
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
@@ -854,7 +854,7 @@ func ForceInitializeEndPoSValidationWithUptime(
 		signatureAggregator,
 	)
 
-	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	abi, err := istakingmanager.IStakingManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("forceInitiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
@@ -886,7 +886,7 @@ func InitializeEndPoSValidationWithUptime(
 		signatureAggregator,
 	)
 
-	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	abi, err := istakingmanager.IStakingManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("initiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
@@ -945,7 +945,7 @@ func CompleteEndPoSValidation(
 	posAddress common.Address,
 	registrationSignedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	abi, err := istakingmanager.IStakingManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("completeValidatorRemoval", uint32(0))
 	Expect(err).Should(BeNil())
@@ -1030,7 +1030,7 @@ func CompleteDelegatorRegistration(
 	stakingManagerAddress common.Address,
 	signedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	abi, err := istakingmanager.IStakingManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("completeDelegatorRegistration", delegationID, uint32(0))
 	Expect(err).Should(BeNil())
@@ -1051,7 +1051,7 @@ func InitializeEndDelegation(
 	stakingManagerAddress common.Address,
 	delegationID ids.ID,
 ) *types.Receipt {
-	stakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerAddress, l1.RPCClient)
+	stakingManager, err := istakingmanager.NewIStakingManager(stakingManagerAddress, l1.RPCClient)
 	Expect(err).Should(BeNil())
 	WaitMinStakeDuration(ctx, l1, senderKey)
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
@@ -1074,7 +1074,7 @@ func CompleteEndDelegation(
 	stakingManagerAddress common.Address,
 	signedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
+	abi, err := istakingmanager.IStakingManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("completeDelegatorRemoval", delegationID, uint32(0))
 	Expect(err).Should(BeNil())
@@ -1094,7 +1094,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	stakingManager *iposvalidatormanager.IPoSValidatorManager,
+	stakingManager *istakingmanager.IStakingManager,
 	stakingManagerAddress common.Address,
 	validatorManagerAddress common.Address,
 	validationID ids.ID,
@@ -1174,7 +1174,7 @@ func InitializeAndCompleteEndPoSValidation(
 	fundedKey *ecdsa.PrivateKey,
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
-	stakingManager *iposvalidatormanager.IPoSValidatorManager,
+	stakingManager *istakingmanager.IStakingManager,
 	stakingManagerAddress common.Address,
 	validatorManagerAddress common.Address,
 	validationID ids.ID,

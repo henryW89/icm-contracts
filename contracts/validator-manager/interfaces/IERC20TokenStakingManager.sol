@@ -5,13 +5,13 @@
 
 pragma solidity 0.8.25;
 
-import {IPoSValidatorManager} from "./IPoSValidatorManager.sol";
+import {IStakingManager} from "./IStakingManager.sol";
 import {PChainOwner} from "../ACP99Manager.sol";
 
 /**
  * Proof of Stake Validator Manager that stakes ERC20 tokens.
  */
-interface IERC20TokenStakingManager is IPoSValidatorManager {
+interface IERC20TokenStakingManager is IStakingManager {
     /**
      * @notice Begins the validator registration process. Locks the specified ERC20 tokens in the contract as the stake.
      * @param nodeID The ID of the node to add to the L1.

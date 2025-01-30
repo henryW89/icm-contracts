@@ -10,7 +10,7 @@ import (
 	ownableupgradeable "github.com/ava-labs/icm-contracts/abi-bindings/go/OwnableUpgradeable"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
 	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -29,9 +29,9 @@ import (
  * - Initialize and complete PoA validator registration
  *
  * Migrates the proxy to a PoS validator manager. The steps are as follows:
- * - Deploy the PoSValidatorManager contract
- * - Upgrade the TransparentUpgradeableProxy to point to the PoSValidatorManager
- * - Call initialize on the PoSValidatorManager through the proxy
+ * - Deploy the StakingManager contract
+ * - Upgrade the TransparentUpgradeableProxy to point to the StakingManager
+ * - Call initialize on the StakingManager through the proxy
  * - Check that previous validator is still active
  * - Initialize and complete PoS validator registration
  * - Attempt to delist previous PoA validator with wrong owner and check that it fails
@@ -139,11 +139,11 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 
 	/*
 	 ******************
-	 * Migrate PoAValidatorManager to PoSValidatorManager
+	 * Migrate PoAValidatorManager to StakingManager
 	 ******************
 	 */
 
-	// Deploy PoSValidatorManager contract
+	// Deploy StakingManager contract
 	stakingManagerAddress, _ := utils.DeployAndInitializeValidatorManagerSpecialization(
 		ctx,
 		ownerKey,
@@ -179,7 +179,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	//
 	// Remove the PoA validator and re-register as a PoS validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerAddress, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerAddress, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
 	utils.InitializeAndCompleteEndPoSValidation(
 		ctx,

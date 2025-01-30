@@ -9,7 +9,7 @@ import (
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/ava-labs/avalanchego/utils/units"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -68,7 +68,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
 	utils.InitializeAndCompleteEndInitialPoSValidation(
 		ctx,
