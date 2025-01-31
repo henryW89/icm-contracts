@@ -7,8 +7,9 @@ pragma solidity 0.8.25;
 
 import {PoSValidatorManager} from "./PoSValidatorManager.sol";
 import {PoSValidatorManagerSettings} from "./interfaces/IPoSValidatorManager.sol";
-import {ValidatorRegistrationInput} from "./interfaces/IValidatorManager.sol";
-import {INativeTokenStakingManager} from "./interfaces/INativeTokenStakingManager.sol";
+import {
+    INativeTokenStakingManager, PChainOwner
+} from "./interfaces/INativeTokenStakingManager.sol";
 import {INativeMinter} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/INativeMinter.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -59,28 +60,39 @@ contract NativeTokenStakingManager is
     function __NativeTokenStakingManager_init_unchained() internal onlyInitializing {}
 
     /**
-     * @notice See {INativeTokenStakingManager-initializeValidatorRegistration}.
+     * @notice See {INativeTokenStakingManager-initiateValidatorRegistration}.
      */
-    function initializeValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+    function initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration
     ) external payable nonReentrant returns (bytes32) {
-        return _initializeValidatorRegistration(
-            registrationInput, delegationFeeBips, minStakeDuration, msg.value
-        );
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration,
+            stakeAmount: msg.value
+        });
     }
 
     /**
-     * @notice See {INativeTokenStakingManager-initializeDelegatorRegistration}.
+     * @notice See {INativeTokenStakingManager-initiateDelegatorRegistration}.
      */
-    function initializeDelegatorRegistration(bytes32 validationID)
+    function initiateDelegatorRegistration(bytes32 validationID)
         external
         payable
         nonReentrant
         returns (bytes32)
     {
-        return _initializeDelegatorRegistration(validationID, _msgSender(), msg.value);
+        return _initiateDelegatorRegistration(validationID, _msgSender(), msg.value);
     }
 
     /**

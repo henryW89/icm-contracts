@@ -8,7 +8,6 @@ pragma solidity 0.8.25;
 import {Test} from "@forge-std/Test.sol";
 import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
-import {ValidatorRegistrationInput} from "../interfaces/IValidatorManager.sol";
 import {
     WarpMessage,
     IWarpMessenger
@@ -137,16 +136,14 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectRevert(
             abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerThreshold.selector, 2, 1)
         );
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: DEFAULT_NODE_ID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                remainingBalanceOwner: invalidPChainOwner1,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: DEFAULT_EXPIRY
-            }),
-            DEFAULT_WEIGHT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
     }
 
     function testInitializeValidatorRegistrationZeroPChainOwnerThreshold() public {
@@ -158,16 +155,14 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectRevert(
             abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerThreshold.selector, 0, 1)
         );
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: DEFAULT_NODE_ID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                remainingBalanceOwner: invalidPChainOwner1,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: DEFAULT_EXPIRY
-            }),
-            DEFAULT_WEIGHT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
     }
 
     function testInitializeValidatorRegistrationPChainOwnerAddressesUnsorted() public {
@@ -181,16 +176,14 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectRevert(
             abi.encodeWithSelector(ValidatorManager.PChainOwnerAddressesNotSorted.selector)
         );
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: DEFAULT_NODE_ID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                remainingBalanceOwner: invalidPChainOwner1,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: DEFAULT_EXPIRY
-            }),
-            DEFAULT_WEIGHT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
     }
 
     // The following tests call functions that are  implemented in ValidatorManager, but access state that's
@@ -229,7 +222,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         bytes memory uptimeMessage;
-        _initializeEndValidation({
+        _initiateValidatorRemoval({
             validationID: validationID,
             completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
             setWeightMessage: setWeightMessage,
@@ -244,7 +237,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         bytes memory uptimeMessage;
-        _initializeEndValidation({
+        _initiateValidatorRemoval({
             validationID: validationID,
             completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
             setWeightMessage: setWeightMessage,
@@ -264,7 +257,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         bytes memory uptimeMessage;
-        _initializeEndValidation({
+        _initiateValidatorRemoval({
             validationID: validationID,
             completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
             setWeightMessage: setWeightMessage,
@@ -328,7 +321,7 @@ abstract contract ValidatorManagerTest is Test {
 
         bytes32 validationID = sha256(abi.encodePacked(DEFAULT_SUBNET_ID, uint32(0)));
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
-        _forceInitializeEndValidation(validationID, false, address(0));
+        _forceInitiateValidatorRemoval(validationID, false, address(0));
     }
 
     function testCumulativeChurnRegistration() public {
@@ -355,16 +348,14 @@ abstract contract ValidatorManagerTest is Test {
                 churnThreshold + _valueToWeight(DEFAULT_MINIMUM_STAKE_AMOUNT)
             )
         );
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: DEFAULT_NODE_ID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: DEFAULT_REGISTRATION_TIMESTAMP + 1
-            }),
-            _valueToWeight(DEFAULT_MINIMUM_STAKE_AMOUNT)
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_REGISTRATION_TIMESTAMP + 1,
+            weight: _valueToWeight(DEFAULT_MINIMUM_STAKE_AMOUNT)
+        });
     }
 
     function testCumulativeChurnRegistrationAndEndValidation() public {
@@ -402,7 +393,7 @@ abstract contract ValidatorManagerTest is Test {
             )
         );
 
-        _initializeEndValidation(validationID, false, address(0));
+        _initiateValidatorRemoval(validationID, false, address(0));
     }
 
     function testValidatorManagerStorageSlot() public view {
@@ -458,16 +449,14 @@ abstract contract ValidatorManagerTest is Test {
             validationID, fixedID, bytes32(0), registrationExpiry, weight
         );
 
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: nodeID,
-                blsPublicKey: blsPublicKey,
-                remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: registrationExpiry
-            }),
-            weight
-        );
+        _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: registrationExpiry,
+            weight: weight
+        });
     }
 
     function _registerValidator(
@@ -493,7 +482,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.completeValidatorRegistration(0);
     }
 
-    function _initializeEndValidation(
+    function _initiateValidatorRemoval(
         bytes32 validationID,
         uint64 completionTimestamp,
         bytes memory setWeightMessage,
@@ -508,13 +497,13 @@ abstract contract ValidatorManagerTest is Test {
 
         vm.warp(completionTimestamp);
         if (force) {
-            _forceInitializeEndValidation(validationID, includeUptime, address(0));
+            _forceInitiateValidatorRemoval(validationID, includeUptime, address(0));
         } else {
-            _initializeEndValidation(validationID, includeUptime, address(0));
+            _initiateValidatorRemoval(validationID, includeUptime, address(0));
         }
     }
 
-    function _initializeEndValidation(
+    function _initiateValidatorRemoval(
         bytes32 validationID,
         uint64 completionTimestamp,
         bytes memory setWeightMessage,
@@ -530,9 +519,9 @@ abstract contract ValidatorManagerTest is Test {
 
         vm.warp(completionTimestamp);
         if (force) {
-            _forceInitializeEndValidation(validationID, includeUptime, recipientAddress);
+            _forceInitiateValidatorRemoval(validationID, includeUptime, recipientAddress);
         } else {
-            _initializeEndValidation(validationID, includeUptime, recipientAddress);
+            _initiateValidatorRemoval(validationID, includeUptime, recipientAddress);
         }
     }
 
@@ -615,18 +604,22 @@ abstract contract ValidatorManagerTest is Test {
         );
     }
 
-    function _initializeValidatorRegistration(
-        ValidatorRegistrationInput memory input,
+    function _initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual returns (bytes32);
 
-    function _initializeEndValidation(
+    function _initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
         address rewardRecipient
     ) internal virtual;
 
-    function _forceInitializeEndValidation(
+    function _forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
         address rewardRecipient

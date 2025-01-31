@@ -21,7 +21,7 @@ stateDiagram-v2
     V.Active,D.Active --> V.PendingRemoved,D.Active: initEndVdr
 
     % When the Validator is in PendingRemoved or Completed, in general Delegator actions
-    % may be completed, but not initialized.
+    % may be completed, but not initiated.
     V.PendingRemoved,D.PendingAdded --> V.Completed,D.PendingAdded : completeEndVdr
     V.PendingRemoved,D.PendingRemoved --> V.Completed,D.PendingRemoved : completeEndVdr
     V.PendingRemoved,D.PendingRemoved --> V.PendingRemoved : completeEndDel

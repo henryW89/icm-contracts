@@ -6,11 +6,7 @@
 pragma solidity 0.8.25;
 
 import {ValidatorMessages} from "./ValidatorMessages.sol";
-import {
-    IValidatorManager,
-    ValidatorChurnPeriod,
-    ValidatorManagerSettings
-} from "./interfaces/IValidatorManager.sol";
+import {ValidatorChurnPeriod, ValidatorManagerSettings} from "./ValidatorManager.sol";
 import {
     ACP99Manager,
     InitialValidator,
@@ -29,16 +25,33 @@ import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
 
 /**
+ * @dev Describes the current churn period
+ */
+struct ValidatorChurnPeriod {
+    uint256 startTime;
+    uint64 initialWeight;
+    uint64 totalWeight;
+    uint64 churnAmount;
+}
+
+/**
+ * @notice Validator Manager settings, used to initialize the Validator Manager
+ * @notice The subnetID is the ID of the L1 that the Validator Manager is managing
+ * @notice The churnPeriodSeconds is the duration of the churn period in seconds
+ * @notice The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
+ */
+struct ValidatorManagerSettings {
+    bytes32 subnetID;
+    uint64 churnPeriodSeconds;
+    uint8 maximumChurnPercentage;
+}
+
+/**
  * @dev Implementation of the {ACP99Manager} abstract contract.
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-abstract contract ValidatorManager is
-    Initializable,
-    ContextUpgradeable,
-    IValidatorManager,
-    ACP99Manager
-{
+abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
 
@@ -320,7 +333,9 @@ abstract contract ValidatorManager is
     }
 
     /**
-     * @notice See {IValidatorManager-resendRegisterValidatorMessage}.
+     * @notice Resubmits a validator registration message to be sent to the P-Chain.
+     * Only necessary if the original message can't be delivered due to validator churn.
+     * @param validationID The ID of the validation period being registered.
      */
     function resendRegisterValidatorMessage(bytes32 validationID) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -467,7 +482,9 @@ abstract contract ValidatorManager is
     }
 
     /**
-     * @notice See {IValidatorManager-resendEndValidatorMessage}.
+     * @notice Resubmits a validator end message to be sent to the P-Chain.
+     * Only necessary if the original message can't be delivered due to validator churn.
+     * @param validationID The ID of the validation period being ended.
      */
     function resendEndValidatorMessage(bytes32 validationID) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -487,11 +504,11 @@ abstract contract ValidatorManager is
      * @notice Completes the process of ending a validation period by receiving an acknowledgement from the P-Chain
      * that the validation ID is not active and will never be active in the future.
      * Note: that this function can be used for successful validation periods that have been explicitly
-     * ended by calling {initializeEndValidation} or for validation periods that never began on the P-Chain due to the
+     * ended by calling {_initiateValidatorRemoval} or for validation periods that never began on the P-Chain due to the
      * {registrationExpiry} being reached.
      * @return (Validation ID, Validator instance) representing the completed validation period.
      */
-    function _completeEndValidation(uint32 messageIndex)
+    function _completeValidatorRemoval(uint32 messageIndex)
         internal
         returns (bytes32, Validator memory)
     {
@@ -506,7 +523,7 @@ abstract contract ValidatorManager is
 
         Validator memory validator = $._validationPeriods[validationID];
 
-        // The validation status is PendingRemoved if validator removal was initiated with a call to {initiateEndValidation}.
+        // The validation status is PendingRemoved if validator removal was initiated with a call to {initiateValidatorRemoval}.
         // The validation status is PendingAdded if the validator was never registered on the P-Chain.
         // The initial validator set must have been set already to have pending validation messages.
         if (

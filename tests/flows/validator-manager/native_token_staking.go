@@ -136,7 +136,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		)
 		initRegistrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			nativeStakingManager.ParseDelegatorAdded,
+			nativeStakingManager.ParseInitiatedDelegatorRegistration,
 		)
 		Expect(err).Should(BeNil())
 		delegationID = initRegistrationEvent.DelegationID
@@ -179,7 +179,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		// Check that the validator is registered in the staking contract
 		registrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			nativeStakingManager.ParseDelegatorRegistered,
+			nativeStakingManager.ParseCompletedDelegatorRegistration,
 		)
 		Expect(err).Should(BeNil())
 		Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -200,7 +200,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		)
 		delegatorRemovalEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			nativeStakingManager.ParseDelegatorRemovalInitialized,
+			nativeStakingManager.ParseInitiatedDelegatorRemoval,
 		)
 		Expect(err).Should(BeNil())
 		Expect(delegatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -247,7 +247,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		// Check that the delegator has been delisted from the staking contract
 		registrationEvent, err := utils.GetEventFromLogs(
 			receipt.Logs,
-			nativeStakingManager.ParseDelegationEnded,
+			nativeStakingManager.ParseCompletedDelegatorRemoval,
 		)
 		Expect(err).Should(BeNil())
 		Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))

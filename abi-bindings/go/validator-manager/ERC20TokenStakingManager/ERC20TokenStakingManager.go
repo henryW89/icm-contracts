@@ -93,19 +93,10 @@ type ValidatorMessagesValidationPeriod struct {
 	Weight                uint64
 }
 
-// ValidatorRegistrationInput is an auto generated low-level Go binding around an user-defined struct.
-type ValidatorRegistrationInput struct {
-	NodeID                []byte
-	BlsPublicKey          []byte
-	RegistrationExpiry    uint64
-	RemainingBalanceOwner PChainOwner
-	DisableOwner          PChainOwner
-}
-
 // ERC20TokenStakingManagerMetaData contains all meta data concerning the ERC20TokenStakingManager contract.
 var ERC20TokenStakingManagerMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"enumICMInitializable\",\"name\":\"init\",\"type\":\"uint8\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorIneligibleForRewards\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"InvalidBLSKeyLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"encodedConversionID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"expectedConversionID\",\"type\":\"bytes32\"}],\"name\":\"InvalidConversionID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"delegationFeeBips\",\"type\":\"uint16\"}],\"name\":\"InvalidDelegationFee\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"InvalidDelegationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumDelegatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"InvalidDelegatorStatus\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitializationStatus\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"maximumChurnPercentage\",\"type\":\"uint8\"}],\"name\":\"InvalidMaximumChurnPercentage\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"minStakeDuration\",\"type\":\"uint64\"}],\"name\":\"InvalidMinStakeDuration\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InvalidNodeID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"}],\"name\":\"InvalidNonce\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"threshold\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"addressesLength\",\"type\":\"uint256\"}],\"name\":\"InvalidPChainOwnerThreshold\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"InvalidRegistrationExpiry\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"InvalidRewardRecipient\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"InvalidStakeAmount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"maximumStakeMultiplier\",\"type\":\"uint8\"}],\"name\":\"InvalidStakeMultiplier\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"InvalidTokenAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InvalidTotalWeight\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"uptimeBlockchainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidUptimeBlockchainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"InvalidValidationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"}],\"name\":\"InvalidValidatorManagerAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"blockchainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidValidatorManagerBlockchainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"InvalidValidatorStatus\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidWarpMessage\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"senderAddress\",\"type\":\"address\"}],\"name\":\"InvalidWarpOriginSenderAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"sourceChainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidWarpSourceChainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"churnAmount\",\"type\":\"uint64\"}],\"name\":\"MaxChurnRateExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"newValidatorWeight\",\"type\":\"uint64\"}],\"name\":\"MaxWeightExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"MinStakeDurationNotPassed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"NodeAlreadyRegistered\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PChainOwnerAddressesNotSorted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"UnauthorizedOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"validRegistration\",\"type\":\"bool\"}],\"name\":\"UnexpectedRegistrationStatus\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"expectedValidationID\",\"type\":\"bytes32\"}],\"name\":\"UnexpectedValidationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorIneligibleForRewards\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorNotPoS\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ZeroWeightToValueFactor\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"CompletedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewards\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fees\",\"type\":\"uint256\"}],\"name\":\"DelegationEnded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegatorAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"validatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"delegatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"}],\"name\":\"DelegatorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorRemovalInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"registrationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"validatorWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"weightUpdateMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"RegisteredInitialValidator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"uptime\",\"type\":\"uint64\"}],\"name\":\"UptimeUpdated\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ADDRESS_LENGTH\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"BIPS_CONVERSION_FACTOR\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"BLS_PUBLIC_KEY_LENGTH\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ERC20_STAKING_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_CHURN_PERCENTAGE_LIMIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_DELEGATION_FEE_BIPS\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_REGISTRATION_EXPIRY_LENGTH\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_STAKE_MULTIPLIER_LIMIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"NODE_ID_LENGTH\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"POS_VALIDATOR_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"P_CHAIN_BLOCKCHAIN_ID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"VALIDATOR_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WARP_MESSENGER\",\"outputs\":[{\"internalType\":\"contractIWarpMessenger\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"changeDelegatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"changeValidatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"claimDelegationFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRemoval\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorWeightUpdate\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20\",\"outputs\":[{\"internalType\":\"contractIERC20Mintable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"forceInitializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"forceInitializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"getValidator\",\"outputs\":[{\"components\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"startingWeight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"sentNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"receivedNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"startTime\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"internalType\":\"structValidator\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"churnPeriodSeconds\",\"type\":\"uint64\"},{\"internalType\":\"uint8\",\"name\":\"maximumChurnPercentage\",\"type\":\"uint8\"}],\"internalType\":\"structValidatorManagerSettings\",\"name\":\"baseSettings\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"minimumStakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maximumStakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"minimumStakeDuration\",\"type\":\"uint64\"},{\"internalType\":\"uint16\",\"name\":\"minimumDelegationFeeBips\",\"type\":\"uint16\"},{\"internalType\":\"uint8\",\"name\":\"maximumStakeMultiplier\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"weightToValueFactor\",\"type\":\"uint256\"},{\"internalType\":\"contractIRewardCalculator\",\"name\":\"rewardCalculator\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"uptimeBlockchainID\",\"type\":\"bytes32\"}],\"internalType\":\"structPoSValidatorManagerSettings\",\"name\":\"settings\",\"type\":\"tuple\"},{\"internalType\":\"contractIERC20Mintable\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"delegationAmount\",\"type\":\"uint256\"}],\"name\":\"initializeDelegatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"initializeEndDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeEndValidation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"components\":[{\"internalType\":\"uint32\",\"name\":\"threshold\",\"type\":\"uint32\"},{\"internalType\":\"address[]\",\"name\":\"addresses\",\"type\":\"address[]\"}],\"internalType\":\"structPChainOwner\",\"name\":\"remainingBalanceOwner\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint32\",\"name\":\"threshold\",\"type\":\"uint32\"},{\"internalType\":\"address[]\",\"name\":\"addresses\",\"type\":\"address[]\"}],\"internalType\":\"structPChainOwner\",\"name\":\"disableOwner\",\"type\":\"tuple\"}],\"internalType\":\"structValidatorRegistrationInput\",\"name\":\"registrationInput\",\"type\":\"tuple\"},{\"internalType\":\"uint16\",\"name\":\"delegationFeeBips\",\"type\":\"uint16\"},{\"internalType\":\"uint64\",\"name\":\"minStakeDuration\",\"type\":\"uint64\"},{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"initializeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"l1TotalWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"registeredValidators\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"resendUpdateDelegation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"submitUptimeProof\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"subnetID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"valueToWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"weightToValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
-	Bin: "0x608060405234801561000f575f80fd5b50604051615e8e380380615e8e83398101604081905261002e91610107565b60018160018111156100425761004261012c565b0361004f5761004f610055565b50610140565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00805468010000000000000000900460ff16156100a55760405163f92ee8a960e01b815260040160405180910390fd5b80546001600160401b03908116146101045780546001600160401b0319166001600160401b0390811782556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a15b50565b5f60208284031215610117575f80fd5b815160028110610125575f80fd5b9392505050565b634e487b7160e01b5f52602160045260245ffd5b615d418061014d5f395ff3fe608060405234801561000f575f80fd5b506004361061026b575f3560e01c80638280a25a1161014b578063ba3a4b97116100bf578063ce161f1411610084578063ce161f141461056b578063d5f20ff61461059b578063df93d8de146105bb578063e4a63c40146105c5578063fb8b11dd146105d9578063fd7ac5e7146105ec575f80fd5b8063ba3a4b971461050e578063bb0b193814610521578063bc5fbfec14610529578063bee0a03f14610550578063c974d1b614610563575f80fd5b80639e1bc4ef116101105780639e1bc4ef146104a05780639e478eea146104b3578063a3a65e48146104c6578063a9778a7a1461031a578063afb98096146104d9578063b771b3bc14610500575f80fd5b80638280a25a1461044c5780638ef34c981461045457806393e24598146104675780639681d9401461047a5780639ae064471461048d575f80fd5b80635dc1f535116101e257806363e2ca97116101a757806363e2ca9714610398578063732214f8146103db57806376f78621146103e2578063785e9e86146103f55780637d8d2f771461042657806380dd672f14610439575f80fd5b80635dc1f5351461037d5780635dd6a6cb1461038557806360305d621461039857806360ad7784146103b557806362065856146103c8575f80fd5b806325e1c7761161023357806325e1c776146102dc5780632e2194d8146102ef57806335455ded1461031a57806337b9be8f146103365780633a1cfff6146103495780634bee00401461035c575f80fd5b80630118acc41461026f5780630322ed9814610284578063151d30d1146102975780631ec44724146102b657806320d91b7a146102c9575b5f80fd5b61028261027d366004614d5b565b6105ff565b005b610282610292366004614d96565b610610565b61029f600a81565b60405160ff90911681526020015b60405180910390f35b6102826102c4366004614d5b565b6108a3565b6102826102d7366004614dad565b6108af565b6102826102ea366004614dfb565b610e63565b6103026102fd366004614d96565b610ed7565b6040516001600160401b0390911681526020016102ad565b61032361271081565b60405161ffff90911681526020016102ad565b610282610344366004614e30565b610f2b565b610282610357366004614d5b565b610f3e565b61036f61036a366004614ea3565b610f4a565b6040519081526020016102ad565b61036f610f7f565b610282610393366004614e30565b610f8e565b6103a0601481565b60405163ffffffff90911681526020016102ad565b6102826103c3366004614dfb565b610f9a565b61036f6103d6366004614f0a565b6111ed565b61036f5f81565b6102826103f0366004614d5b565b61120d565b5f80516020615ccc833981519152546001600160a01b03165b6040516001600160a01b0390911681526020016102ad565b610282610434366004614e30565b611219565b610282610447366004614dfb565b611225565b61029f603081565b610282610462366004614f25565b611426565b610282610475366004614d96565b6114d7565b61036f610488366004614f53565b61156b565b61028261049b366004614e30565b611644565b61036f6104ae366004614f6c565b611650565b6102826104c1366004614f8c565b61167c565b61036f6104d4366004614f53565b61175b565b61036f7f4317713f7ecbdddd4bc99e95d903adedaa883b2e7c2551610bd13e2c7e473d0081565b61040e6005600160991b0181565b61028261051c366004614d96565b61194a565b610302611ba3565b61036f7fe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb0081565b61028261055e366004614d96565b611bc5565b61029f601481565b61057e610579366004614f53565b611ce1565b604080519283526001600160401b039091166020830152016102ad565b6105ae6105a9366004614d96565b611e64565b6040516102ad9190615034565b6103026202a30081565b61036f5f80516020615ccc83398151915281565b6102826105e7366004614f25565b611fb3565b61036f6105fa3660046150ea565b61204a565b61060b8383835f612082565b505050565b5f6106196120ae565b5f838152600580830160205260408083208151610100810190925280549495509293909291839160ff169081111561065357610653614fbf565b600581111561066457610664614fbf565b815260200160018201805461067890615155565b80601f01602080910402602001604051908101604052809291908181526020018280546106a490615155565b80156106ef5780601f106106c6576101008083540402835291602001916106ef565b820191905f5260205f20905b8154815290600101906020018083116106d257829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039384015480821660a0850152919091041660c0909101529091508151600581111561076757610767614fbf565b146107a3575f8381526005830160205260409081902054905163170cc93360e21b815261079a9160ff169060040161518d565b60405180910390fd5b606081015160405163854a893f60e01b8152600481018590526001600160401b0390911660248201525f60448201526005600160991b019063ee5b48eb9073__$fd0c147b4031eef6079b0498cbafa865f0$__9063854a893f906064015f60405180830381865af415801561081a573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f191682016040526108419190810190615296565b6040518263ffffffff1660e01b815260040161085d91906152c7565b6020604051808303815f875af1158015610879573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061089d91906152d9565b50505050565b61089d8383835f6120d2565b5f6108b86120ae565b600781015490915060ff16156108e157604051637fab81e560e01b815260040160405180910390fd5b6005600160991b016001600160a01b0316634213cf786040518163ffffffff1660e01b8152600401602060405180830381865afa158015610924573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061094891906152d9565b836020013514610971576040516372b0a7e760e11b81526020840135600482015260240161079a565b3061098260608501604086016152f0565b6001600160a01b0316146109c5576109a060608401604085016152f0565b604051632f88120d60e21b81526001600160a01b03909116600482015260240161079a565b5f6109d3606085018561530b565b905090505f805b828163ffffffff161015610c59575f6109f6606088018861530b565b8363ffffffff16818110610a0c57610a0c615350565b9050602002810190610a1e9190615364565b610a27906153cf565b80516040519192505f916006880191610a3f9161544a565b90815260200160405180910390205414610a6f57805160405163a41f772f60e01b815261079a91906004016152c7565b805151601414610a95578051604051633e08a12560e11b815261079a91906004016152c7565b5f6002885f013584604051602001610ac492919091825260e01b6001600160e01b031916602082015260240190565b60408051601f1981840301815290829052610ade9161544a565b602060405180830381855afa158015610af9573d5f803e3d5ffd5b5050506040513d601f19601f82011682018060405250810190610b1c91906152d9565b90508086600601835f0151604051610b34919061544a565b90815260408051918290036020908101909220929092555f8381526005890190915220805460ff191660021781558251600190910190610b74908261549f565b50604082810180515f84815260058a016020529290922060028101805492516001600160401b0394851667ffffffffffffffff60801b90941693909317600160c01b858516021790556003018054429093166001600160801b031990931692909217909155610be3908561556e565b8251602001519094506bffffffffffffffffffffffff1916817f9d9c026e2cadfec89cccc2cd72705360eca1beba24774f3363f4bb33faabc7d78460400151604051610c3e91906001600160401b0391909116815260200190565b60405180910390a3505080610c529061558e565b90506109da565b5060038301805467ffffffffffffffff60401b1916600160401b6001600160401b0384168102919091179091556001840154606491610c9c910460ff16836155b0565b6001600160401b03161015610ccf57604051633e1a785160e01b81526001600160401b038216600482015260240161079a565b5f73__$fd0c147b4031eef6079b0498cbafa865f0$__634d847884610cf3876123ff565b604001516040518263ffffffff1660e01b8152600401610d1391906152c7565b602060405180830381865af4158015610d2e573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610d5291906152d9565b90505f73__$fd0c147b4031eef6079b0498cbafa865f0$__6387418b8e886040518263ffffffff1660e01b8152600401610d8c9190615706565b5f60405180830381865af4158015610da6573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052610dcd9190810190615296565b90505f600282604051610de0919061544a565b602060405180830381855afa158015610dfb573d5f803e3d5ffd5b5050506040513d601f19601f82011682018060405250810190610e1e91906152d9565b9050828114610e4a5760405163baaea89d60e01b8152600481018290526024810184905260440161079a565b5050506007909201805460ff1916600117905550505050565b610e6c82612515565b610e8c576040516330efa98b60e01b81526004810183905260240161079a565b5f610e9683611e64565b5190506002816005811115610ead57610ead614fbf565b14610ecd578060405163170cc93360e21b815260040161079a919061518d565b61089d838361253e565b5f80610ee16127e4565b60030154610eef908461579a565b9050801580610f0457506001600160401b0381115b15610f255760405163222d164360e21b81526004810184905260240161079a565b92915050565b610f37848484846120d2565b5050505050565b61089d8383835f612808565b5f610f53612a4f565b610f5f85858585612a86565b9050610f7760015f80516020615cec83398151915255565b949350505050565b5f610f886120ae565b54919050565b61089d84848484612cd3565b5f610fa36127e4565b5f848152600782016020526040808220815160e0810190925280549394509192909190829060ff166003811115610fdc57610fdc614fbf565b6003811115610fed57610fed614fbf565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101528101519091505f61106382611e64565b905060018351600381111561107a5761107a614fbf565b1461109b578251604051633b0d540d60e21b815261079a91906004016157b9565b6004815160058111156110b0576110b0614fbf565b036110c6576110be86612cff565b505050505050565b8260a001516001600160401b031681608001516001600160401b03161015611166575f806110f387611ce1565b915091508184146111215760405163fee3144560e01b8152600481018390526024810185905260440161079a565b8460a001516001600160401b0316816001600160401b0316101561116357604051632e19bc2d60e11b81526001600160401b038216600482015260240161079a565b50505b5f868152600785016020908152604091829020805460ff1916600290811782550180546001600160401b034216600160401b810267ffffffffffffffff60401b19909216919091179091559151918252839188917f047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6910160405180910390a3505050505050565b5f6111f66127e4565b60030154610f25906001600160401b0384166157d3565b61060b8383835f612cd3565b610f3784848484612808565b61122d612a4f565b5f6112366127e4565b5f848152600782016020526040808220815160e0810190925280549394509192909190829060ff16600381111561126f5761126f614fbf565b600381111561128057611280614fbf565b8152815461010090046001600160a01b03166020820152600182015460408201526002909101546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c09091015290506003815160038111156112f9576112f9614fbf565b1461131a578051604051633b0d540d60e21b815261079a91906004016157b9565b5f6113288260400151611e64565b905060046113398360400151611e64565b51600581111561134b5761134b614fbf565b1415801561137257508160c001516001600160401b031681608001516001600160401b0316105b15611400575f8061138286611ce1565b91509150818460400151146113bb5781846040015160405163fee3144560e01b815260040161079a929190918252602082015260400190565b806001600160401b03168460c001516001600160401b031611156113fd57604051632e19bc2d60e11b81526001600160401b038216600482015260240161079a565b50505b61140985612cff565b50505061142260015f80516020615cec83398151915255565b5050565b5f61142f6127e4565b90506001600160a01b0382166114635760405163caa903f960e01b81526001600160a01b038316600482015260240161079a565b5f8381526006820160205260409020546001600160a01b031633146114a957335b604051636e2ccd7560e11b81526001600160a01b03909116600482015260240161079a565b5f928352600b01602052604090912080546001600160a01b0319166001600160a01b03909216919091179055565b5f6114e06127e4565b90505f6114ec83611e64565b519050600481600581111561150357611503614fbf565b14611523578060405163170cc93360e21b815260040161079a919061518d565b5f8381526006830160205260409020546001600160a01b031633146115485733611484565b5f83815260068301602052604090205461060b906001600160a01b031684612ed0565b5f611574612a4f565b5f61157d6127e4565b90505f8061158a85612efa565b9150915061159782612515565b6115a5575091506116299050565b5f828152600684016020908152604080832054600b870190925290912080546001600160a01b031981169091556001600160a01b039182169116806115e75750805b6004835160058111156115fc576115fc614fbf565b0361160b5761160b8185612ed0565b6116218261161c85604001516111ed565b6132af565b509193505050505b61163f60015f80516020615cec83398151915255565b919050565b61089d84848484612082565b5f611659612a4f565b6116648333846132d2565b9050610f2560015f80516020615cec83398151915255565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00805460029190600160401b900460ff16806116c5575080546001600160401b03808416911610155b156116e35760405163f92ee8a960e01b815260040160405180910390fd5b805468ffffffffffffffffff19166001600160401b03831617600160401b17815561170e8484613517565b805460ff60401b191681556040516001600160401b03831681527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a150505050565b5f806117656120ae565b90505f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63021de88f61178c876123ff565b604001516040518263ffffffff1660e01b81526004016117ac91906152c7565b6040805180830381865af41580156117c6573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906117ea91906157ea565b915091508061181057604051632d07135360e01b8152811515600482015260240161079a565b5f8281526004840160205260409020805461182a90615155565b90505f0361184e5760405163089938b360e11b81526004810183905260240161079a565b60015f838152600580860160205260409091205460ff169081111561187557611875614fbf565b146118a8575f8281526005840160205260409081902054905163170cc93360e21b815261079a9160ff169060040161518d565b5f82815260048401602052604081206118c091614ca7565b5f828152600584016020908152604091829020805460ff1916600290811782556003820180546001600160401b0342811667ffffffffffffffff19909216919091179091559101549251600160c01b90930416825283917f967ae87813a3b5f201dd9bcba778d457176eafe6f41facee1c718091d3952d06910160405180910390a2509392505050565b5f6119536127e4565b5f838152600782016020526040808220815160e0810190925280549394509192909190829060ff16600381111561198c5761198c614fbf565b600381111561199d5761199d614fbf565b8152815461010090046001600160a01b0316602082015260018083015460408301526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c09091015290915081516003811115611a1657611a16614fbf565b14158015611a375750600381516003811115611a3457611a34614fbf565b14155b15611a58578051604051633b0d540d60e21b815261079a91906004016157b9565b5f611a668260400151611e64565b905080606001516001600160401b03165f03611a98576040516339b894f960e21b81526004810185905260240161079a565b604080830151606083015160a0840151925163854a893f60e01b81526005600160991b019363ee5b48eb9373__$fd0c147b4031eef6079b0498cbafa865f0$__9363854a893f93611b0693906004019283526001600160401b03918216602084015216604082015260600190565b5f60405180830381865af4158015611b20573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052611b479190810190615296565b6040518263ffffffff1660e01b8152600401611b6391906152c7565b6020604051808303815f875af1158015611b7f573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610f3791906152d9565b5f611bac6120ae565b60030154600160401b90046001600160401b0316919050565b5f611bce6120ae565b5f8381526004820160205260409020805491925090611bec90615155565b90505f03611c105760405163089938b360e11b81526004810183905260240161079a565b60015f838152600580840160205260409091205460ff1690811115611c3757611c37614fbf565b14611c6a575f8281526005820160205260409081902054905163170cc93360e21b815261079a9160ff169060040161518d565b5f8281526004808301602052604091829020915163ee5b48eb60e01b81526005600160991b019263ee5b48eb92611ca1920161580d565b6020604051808303815f875af1158015611cbd573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061060b91906152d9565b5f805f611ced846123ff565b90505f805f73__$fd0c147b4031eef6079b0498cbafa865f0$__6350782b0f85604001516040518263ffffffff1660e01b8152600401611d2d91906152c7565b606060405180830381865af4158015611d48573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190611d6c9190615897565b9250925092505f611d7b6120ae565b5f8581526005820160205260409020600201549091506001600160401b03808516600160401b909204161015611dcf57604051632e19bc2d60e11b81526001600160401b038416600482015260240161079a565b5f8481526005820160205260409081902060020180546001600160401b038616600160801b0267ffffffffffffffff60801b199091161790555184907fc917996591802ecedcfced71321d4bb5320f7dfbacf5477dffe1dbf8b8839ff990611e4f90869086906001600160401b0392831681529116602082015260400190565b60405180910390a25091969095509350505050565b611e6c614cde565b5f611e756120ae565b5f84815260058083016020526040918290208251610100810190935280549394509192839160ff90911690811115611eaf57611eaf614fbf565b6005811115611ec057611ec0614fbf565b8152602001600182018054611ed490615155565b80601f0160208091040260200160405190810160405280929190818152602001828054611f0090615155565b8015611f4b5780601f10611f2257610100808354040283529160200191611f4b565b820191905f5260205f20905b815481529060010190602001808311611f2e57829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039093015480841660a08401520490911660c0909101529392505050565b6001600160a01b038116611fe55760405163caa903f960e01b81526001600160a01b038216600482015260240161079a565b5f611fee6127e4565b5f8481526007820160205260409020549091506001600160a01b0361010090910416331461201c5733611484565b5f928352600901602052604090912080546001600160a01b0319166001600160a01b03909216919091179055565b5f806120546120ae565b905080600601848460405161206a9291906158d7565b90815260200160405180910390205491505092915050565b61208e848484846120d2565b61089d57604051631036cf9160e11b81526004810185905260240161079a565b7fe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb0090565b5f806120dc6127e4565b5f878152600782016020526040808220815160e0810190925280549394509192909190829060ff16600381111561211557612115614fbf565b600381111561212657612126614fbf565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101528101519091505f61219c82611e64565b90506002835160038111156121b3576121b3614fbf565b146121d4578251604051633b0d540d60e21b815261079a91906004016157b9565b60208301516001600160a01b03163314612270575f8281526006850160205260409020546001600160a01b0316331461220d5733611484565b5f82815260068501602052604090205460c082015161223c91600160b01b90046001600160401b03169061556e565b6001600160401b03164210156122705760405163fb6ce63f60e01b81526001600160401b034216600482015260240161079a565b60028151600581111561228557612285614fbf565b036123a757600284015460808401516122a7916001600160401b03169061556e565b6001600160401b03164210156122db5760405163fb6ce63f60e01b81526001600160401b034216600482015260240161079a565b87156122ed576122eb828861253e565b505b5f8981526007850160205260409020805460ff19166003179055606083015160a082015161232691849161232191906158e6565b613531565b505f8a8152600786016020526040812060020180546001600160401b03909316600160c01b026001600160c01b039093169290921790915561236984888c6136fb565b9050828a7f366d336c0ab380dc799f095a6f82a26326585c52909cc698b09ba4540709ed5760405160405180910390a315159450610f779350505050565b6004815160058111156123bc576123bc614fbf565b036123e3576123cc83878b6136fb565b506123d689612cff565b6001945050505050610f77565b805160405163170cc93360e21b815261079a919060040161518d565b60408051606080820183525f8083526020830152918101919091526040516306f8253560e41b815263ffffffff831660048201525f9081906005600160991b0190636f825350906024015f60405180830381865afa158015612463573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f1916820160405261248a9190810190615906565b91509150806124ac57604051636b2f19e960e01b815260040160405180910390fd5b8151156124d2578151604051636ba589a560e01b8152600481019190915260240161079a565b60208201516001600160a01b03161561250e576020820151604051624de75d60e31b81526001600160a01b03909116600482015260240161079a565b5092915050565b5f8061251f6127e4565b5f938452600601602052505060409020546001600160a01b0316151590565b6040516306f8253560e41b815263ffffffff821660048201525f90819081906005600160991b0190636f825350906024015f60405180830381865afa158015612589573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f191682016040526125b09190810190615906565b91509150806125d257604051636b2f19e960e01b815260040160405180910390fd5b5f6125db6127e4565b6005810154845191925014612609578251604051636ba589a560e01b8152600481019190915260240161079a565b60208301516001600160a01b031615612645576020830151604051624de75d60e31b81526001600160a01b03909116600482015260240161079a565b60208301516001600160a01b031615612681576020830151604051624de75d60e31b81526001600160a01b03909116600482015260240161079a565b5f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63088c246386604001516040518263ffffffff1660e01b81526004016126be91906152c7565b6040805180830381865af41580156126d8573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906126fc9190615996565b9150915081881461272a5760405163fee3144560e01b8152600481018390526024810189905260440161079a565b5f8881526006840160205260409020600101546001600160401b0390811690821611156127bb575f888152600684016020908152604091829020600101805467ffffffffffffffff19166001600160401b038516908117909155915191825289917fec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435910160405180910390a26127d9565b505f8781526006830160205260409020600101546001600160401b03165b979650505050505050565b7f4317713f7ecbdddd4bc99e95d903adedaa883b2e7c2551610bd13e2c7e473d0090565b5f806128126127e4565b905061281d866138e9565b5f61282787611e64565b905061283287612515565b61284157600192505050610f77565b5f8781526006830160205260409020546001600160a01b031633146128665733611484565b5f87815260068301602052604090205460c082015161289591600160b01b90046001600160401b03169061556e565b6001600160401b03168160e001516001600160401b031610156128dc5760e081015160405163fb6ce63f60e01b81526001600160401b03909116600482015260240161079a565b5f86156128f4576128ed888761253e565b9050612912565b505f8781526006830160205260409020600101546001600160401b03165b600483015460408301515f916001600160a01b031690634f22429f90612937906111ed565b60c086015160e0808801516040519185901b6001600160e01b031916825260048201939093526001600160401b0391821660248201819052604482015291811660648301528516608482015260a401602060405180830381865afa1580156129a1573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906129c591906152d9565b90506001600160a01b0386166129f1575f8981526006850160205260409020546001600160a01b031695505b5f898152600a8501602052604081208054839290612a109084906159b9565b90915550505f898152600b909401602052604090932080546001600160a01b0387166001600160a01b0319909116179055505015159050949350505050565b5f80516020615cec833981519152805460011901612a8057604051633ee5aeb560e01b815260040160405180910390fd5b60029055565b5f80612a906127e4565b600281015490915061ffff600160401b90910481169086161080612ab9575061271061ffff8616115b15612add57604051635f12e6c360e11b815261ffff8616600482015260240161079a565b60028101546001600160401b039081169085161015612b19576040516202a06d60e11b81526001600160401b038516600482015260240161079a565b8054831080612b2b5750806001015483115b15612b4c5760405163222d164360e21b81526004810184905260240161079a565b5f612b5684613bd4565b90505f612b6282610ed7565b90505f612c29612b728a806159cc565b8080601f0160208091040260200160405190810160405280939291908181526020018383808284375f92019190915250612bb39250505060208c018c6159cc565b8080601f0160208091040260200160405190810160405280939291908181526020018383808284375f92019190915250612bf79250505060608d0160408e01614f0a565b612c0460608e018e615a0e565b612c0d90615a22565b612c1a60808f018f615a0e565b612c2390615a22565b87613bf7565b5f818152600686016020908152604080832080546001600160401b039c909c16600160b01b0267ffffffffffffffff60b01b1961ffff9e909e16600160a01b02336001600160b01b0319909e168e17179d909d169c909c178c556001909b01805467ffffffffffffffff19169055600b9096019095529790932080546001600160a01b031916909617909555509395945050505050565b60015f80516020615cec83398151915255565b612cdf84848484612808565b61089d57604051635bff683f60e11b81526004810185905260240161079a565b5f612d086127e4565b5f838152600782016020526040808220815160e0810190925280549394509192909190829060ff166003811115612d4157612d41614fbf565b6003811115612d5257612d52614fbf565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c090910152810151909150612dc6613fe1565b8260800151612dd5919061556e565b6001600160401b0316421015612e095760405163fb6ce63f60e01b81526001600160401b034216600482015260240161079a565b5f848152600784016020908152604080832080546001600160a81b03191681556001810184905560020183905560098601909152902080546001600160a01b031981169091556001600160a01b031680612e64575060208201515b5f80612e71838886613ffc565b91509150612e8a856020015161161c87606001516111ed565b6040805183815260208101839052859189917f8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993910160405180910390a350505050505050565b5f612ed96127e4565b5f838152600a820160205260408120805491905590915061089d84826140a9565b5f612f03614cde565b5f612f0c6120ae565b90505f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63021de88f612f33886123ff565b604001516040518263ffffffff1660e01b8152600401612f5391906152c7565b6040805180830381865af4158015612f6d573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190612f9191906157ea565b915091508015612fb857604051632d07135360e01b8152811515600482015260240161079a565b5f8281526005808501602052604080832081516101008101909252805491929091839160ff90911690811115612ff057612ff0614fbf565b600581111561300157613001614fbf565b815260200160018201805461301590615155565b80601f016020809104026020016040519081016040528092919081815260200182805461304190615155565b801561308c5780601f106130635761010080835404028352916020019161308c565b820191905f5260205f20905b81548152906001019060200180831161306f57829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039384015480821660a0850152919091041660c0909101529091508151600581111561310457613104614fbf565b14158015613125575060018151600581111561312257613122614fbf565b14155b1561314657805160405163170cc93360e21b815261079a919060040161518d565b60038151600581111561315b5761315b614fbf565b03613169576004815261316e565b600581525b836006018160200151604051613184919061544a565b90815260408051602092819003830190205f90819055858152600587810190935220825181548493839160ff19169060019084908111156131c7576131c7614fbf565b0217905550602082015160018201906131e0908261549f565b506040828101516002830180546060860151608087015160a08801516001600160401b039586166001600160801b031994851617600160401b9387168402176001600160801b0316600160801b928716929092026001600160c01b031691909117600160c01b918616919091021790925560c08601516003909501805460e09097015195841696909116959095179390911602919091179091555183907fafaccef7080649a725bc30a35359a257a4a27225be352875c80bdf6b5f04080c905f90a29196919550909350505050565b5f80516020615ccc83398151915254611422906001600160a01b0316838361411f565b5f806132dc6127e4565b90505f6132eb6102fd85613bd4565b90505f6132f787611e64565b905061330287612515565b613322576040516330efa98b60e01b81526004810188905260240161079a565b60028151600581111561333757613337614fbf565b1461335857805160405163170cc93360e21b815261079a919060040161518d565b5f828260a00151613369919061556e565b905083600201600a9054906101000a90046001600160401b0316826040015161339291906155b0565b6001600160401b0316816001600160401b031611156133cf57604051636d51fe0560e11b81526001600160401b038216600482015260240161079a565b5f806133db8a84613531565b915091505f8a8360405160200161340992919091825260c01b6001600160c01b031916602082015260280190565b60408051601f1981840301815291815281516020928301205f81815260078b019093529120805491925060019160ff1916828002179055505f8181526007880160209081526040918290208054610100600160a81b0319166101006001600160a01b038f16908102919091178255600182018f9055600290910180546001600160401b038b81166001600160c01b03199092168217600160801b8a8316908102919091176001600160c01b031690935585519283528916938201939093529283019190915260608201849052908c9083907fb0024b263bc3a0b728a6edea50a69efa841189f8d32ee8af9d1c2b1a1a2234269060800160405180910390a496505050505050505b9392505050565b61351f61417e565b613528826141c9565b61142281614246565b5f805f61353c6120ae565b5f868152600582016020526040902060020154909150600160c01b90046001600160401b031661356c85826142ae565b5f6135768761451b565b5f88815260058501602052604080822060020180546001600160c01b0316600160c01b6001600160401b038c811691820292909217909255915163854a893f60e01b8152600481018c905291841660248301526044820152919250906005600160991b019063ee5b48eb9073__$fd0c147b4031eef6079b0498cbafa865f0$__9063854a893f906064015f60405180830381865af415801561361a573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f191682016040526136419190810190615296565b6040518263ffffffff1660e01b815260040161365d91906152c7565b6020604051808303815f875af1158015613679573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061369d91906152d9565b604080516001600160401b038581168252602082018490528a1681830152905191925089917f6e350dd49b060d87f297206fd309234ed43156d890ced0f139ecf704310481d39181900360600190a2909450925050505b9250929050565b5f806137056127e4565b90505f6137158660400151611e64565b90505f60038251600581111561372d5761372d614fbf565b148061374b575060048251600581111561374957613749614fbf565b145b1561375b575060e0810151613798565b60028251600581111561377057613770614fbf565b0361377c575042613798565b815160405163170cc93360e21b815261079a919060040161518d565b86608001516001600160401b0316816001600160401b0316116137c0575f9350505050613510565b600483015460608801515f916001600160a01b031690634f22429f906137e5906111ed565b60c086015160808c01516040808e01515f90815260068b0160205281902060010154905160e086901b6001600160e01b031916815260048101949094526001600160401b0392831660248501529082166044840152818716606484015216608482015260a401602060405180830381865afa158015613866573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061388a91906152d9565b90506001600160a01b0387166138a257876020015196505b5f8681526008850160209081526040808320849055600990960190529390932080546001600160a01b0388166001600160a01b031990911617905550909150509392505050565b5f6138f26120ae565b5f838152600580830160205260408083208151610100810190925280549495509293909291839160ff169081111561392c5761392c614fbf565b600581111561393d5761393d614fbf565b815260200160018201805461395190615155565b80601f016020809104026020016040519081016040528092919081815260200182805461397d90615155565b80156139c85780601f1061399f576101008083540402835291602001916139c8565b820191905f5260205f20905b8154815290600101906020018083116139ab57829003601f168201915b50505091835250506002828101546001600160401b038082166020850152600160401b80830482166040860152600160801b830482166060860152600160c01b9092048116608085015260039094015480851660a08501520490921660c09091015290915081516005811115613a4057613a40614fbf565b14613a73575f8381526005830160205260409081902054905163170cc93360e21b815261079a9160ff169060040161518d565b60038152426001600160401b031660e08201525f83815260058381016020526040909120825181548493839160ff1916906001908490811115613ab857613ab8614fbf565b021790555060208201516001820190613ad1908261549f565b5060408201516002820180546060850151608086015160a08701516001600160401b039586166001600160801b031994851617600160401b9387168402176001600160801b0316600160801b928716929092026001600160c01b031691909117600160c01b918616919091021790925560c08501516003909401805460e090960151948416959091169490941792909116021790555f613b718482613531565b915050837fbae388a94e7f18411fe57098f12f418b8e1a8273e0532a90188a3a059b897273828460a0015142604051613bc6939291909283526001600160401b03918216602084015216604082015260600190565b60405180910390a250505050565b5f610f25825f80516020615ccc833981519152546001600160a01b031690614584565b5f613c006120ae565b6007015460ff16613c2457604051637fab81e560e01b815260040160405180910390fd5b5f613c2d6120ae565b905042866001600160401b0316111580613c5c5750613c4f6202a300426159b9565b866001600160401b031610155b15613c8557604051635879da1360e11b81526001600160401b038716600482015260240161079a565b60038101546001600160401b0390613ca890600160401b900482168583166159b9565b1115613cd257604051633e1a785160e01b81526001600160401b038416600482015260240161079a565b613cdb85614590565b613ce484614590565b8651603014613d0b5786516040516326475b2f60e11b815260040161079a91815260200190565b8751601414613d2f5787604051633e08a12560e11b815260040161079a91906152c7565b5f801b8160060189604051613d44919061544a565b90815260200160405180910390205414613d73578760405163a41f772f60e01b815260040161079a91906152c7565b613d7d835f6142ae565b5f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63eb97ce516040518060e00160405280865f015481526020018d81526020018c81526020018b6001600160401b031681526020018a8152602001898152602001886001600160401b03168152506040518263ffffffff1660e01b8152600401613dfd9190615b4f565b5f60405180830381865af4158015613e17573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052613e3e9190810190615c06565b5f82815260048601602052604090209193509150613e5c828261549f565b5081836006018b604051613e70919061544a565b9081526040519081900360200181209190915563ee5b48eb60e01b81525f906005600160991b019063ee5b48eb90613eac9085906004016152c7565b6020604051808303815f875af1158015613ec8573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190613eec91906152d9565b5f8481526005860160205260409020805460ff19166001908117825591925001613f168c8261549f565b505f8381526005850160205260409020600281018054600160c01b6001600160401b038a1690810267ffffffffffffffff60801b9092161717905560030180546001600160801b0319169055613f6d8b6020015190565b6bffffffffffffffffffffffff1916837f5881be437bdcb008bfa5f20e32d3e335ccf8ab90ef2818852a251625260af35d838c8a604051613fca939291909283526001600160401b03918216602084015216604082015260600190565b60405180910390a350909998505050505050505050565b5f613fea6120ae565b600101546001600160401b0316919050565b5f805f6140076127e4565b5f8681526008820160205260408120805490829055919250908190801561409b575f8781526006850160205260409020546127109061405190600160a01b900461ffff16836157d3565b61405b919061579a565b91508184600a015f8981526020019081526020015f205f82825461407f91906159b9565b9091555061408f90508282615c49565b925061409b89846140a9565b509097909650945050505050565b5f5f80516020615ccc83398151915280546040516340c10f1960e01b81526001600160a01b038681166004830152602482018690529293509116906340c10f19906044015f604051808303815f87803b158015614104575f80fd5b505af1158015614116573d5f803e3d5ffd5b50505050505050565b6040516001600160a01b0383811660248301526044820183905261060b91859182169063a9059cbb906064015b604051602081830303815290604052915060e01b6020820180516001600160e01b0383818316178352505050506146af565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0054600160401b900460ff166141c757604051631afcd79f60e31b815260040160405180910390fd5b565b6141d161417e565b6141da81614710565b6141e2614729565b614243606082013560808301356141ff60c0850160a08601614f0a565b61420f60e0860160c08701615c5c565b614220610100870160e08801615c75565b61010087013561423861014089016101208a016152f0565b886101400135614739565b50565b61424e61417e565b5f80516020615ccc8339815191526001600160a01b03821661428e57604051637330680360e01b81526001600160a01b038316600482015260240161079a565b80546001600160a01b0319166001600160a01b0392909216919091179055565b5f6142b76120ae565b90505f826001600160401b0316846001600160401b031611156142e5576142de83856158e6565b90506142f2565b6142ef84846158e6565b90505b60408051608081018252600284015480825260038501546001600160401b038082166020850152600160401b8204811694840194909452600160801b900490921660608201524291158061435f57506001840154815161435b916001600160401b0316906159b9565b8210155b15614387576001600160401b03808416606083015282825260408201511660208201526143a6565b8281606001818151614399919061556e565b6001600160401b03169052505b60608101516143b69060646155b0565b602082015160018601546001600160401b0392909216916143e19190600160401b900460ff166155b0565b6001600160401b0316101561441a57606081015160405163dfae880160e01b81526001600160401b03909116600482015260240161079a565b858160400181815161442c919061556e565b6001600160401b031690525060408101805186919061444c9083906158e6565b6001600160401b03169052506001840154604082015160649161447a91600160401b90910460ff16906155b0565b6001600160401b031610156144b3576040808201519051633e1a785160e01b81526001600160401b03909116600482015260240161079a565b8051600285015560208101516003909401805460408301516060909301516001600160401b03908116600160801b0267ffffffffffffffff60801b19948216600160401b026001600160801b0319909316919097161717919091169390931790925550505050565b5f806145256120ae565b5f848152600582016020526040902060020180549192509060089061455990600160401b90046001600160401b0316615c95565b91906101000a8154816001600160401b0302191690836001600160401b031602179055915050919050565b5f6135108333846148fb565b805163ffffffff161580156145a9575060208101515115155b156145dd57805160208201515160405163c08a0f1d60e01b815263ffffffff9092166004830152602482015260440161079a565b602081015151815163ffffffff16111561462057805160208201515160405163c08a0f1d60e01b815263ffffffff9092166004830152602482015260440161079a565b60015b816020015151811015611422576020820151614640600183615c49565b8151811061465057614650615350565b60200260200101516001600160a01b03168260200151828151811061467757614677615350565b60200260200101516001600160a01b031610156146a757604051630dbc8d5f60e31b815260040160405180910390fd5b600101614623565b5f6146c36001600160a01b03841683614a5e565b905080515f141580156146e75750808060200190518101906146e59190615cb0565b155b1561060b57604051635274afe760e01b81526001600160a01b038416600482015260240161079a565b61471861417e565b614720614a6b565b61424381614a73565b61473161417e565b6141c7614b57565b61474161417e565b5f61474a6127e4565b905061ffff86161580614762575061271061ffff8716115b1561478657604051635f12e6c360e11b815261ffff8716600482015260240161079a565b878911156147aa5760405163222d164360e21b8152600481018a905260240161079a565b60ff851615806147bd5750600a60ff8616115b156147e05760405163170db35960e31b815260ff8616600482015260240161079a565b6147e8613fe1565b6001600160401b0316876001600160401b03161015614824576040516202a06d60e11b81526001600160401b038816600482015260240161079a565b835f036148445760405163a733007160e01b815260040160405180910390fd5b8161486557604051632f6bd1db60e01b81526004810183905260240161079a565b97885560018801969096556002870180546001600160401b039690961669ffffffffffffffffffff1990961695909517600160401b61ffff95909516949094029390931767ffffffffffffffff60501b191660ff92909216600160501b029190911790925560038401919091556004830180546001600160a01b0319166001600160a01b03909216919091179055600590910155565b6040516370a0823160e01b81523060048201525f9081906001600160a01b038616906370a0823190602401602060405180830381865afa158015614941573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061496591906152d9565b905061497c6001600160a01b038616853086614b5f565b6040516370a0823160e01b81523060048201525f906001600160a01b038716906370a0823190602401602060405180830381865afa1580156149c0573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906149e491906152d9565b9050818111614a4a5760405162461bcd60e51b815260206004820152602c60248201527f5361666545524332305472616e7366657246726f6d3a2062616c616e6365206e60448201526b1bdd081a5b98dc99585cd95960a21b606482015260840161079a565b614a548282615c49565b9695505050505050565b606061351083835f614b98565b6141c761417e565b614a7b61417e565b5f614a846120ae565b8235815590506014614a9c6060840160408501615c75565b60ff161180614abb5750614ab66060830160408401615c75565b60ff16155b15614aef57614ad06060830160408401615c75565b604051634a59bbff60e11b815260ff909116600482015260240161079a565b614aff6060830160408401615c75565b60018201805460ff92909216600160401b0260ff60401b19909216919091179055614b306040830160208401614f0a565b600191909101805467ffffffffffffffff19166001600160401b0390921691909117905550565b612cc061417e565b6040516001600160a01b03848116602483015283811660448301526064820183905261089d9186918216906323b872dd9060840161414c565b606081471015614bbd5760405163cd78605960e01b815230600482015260240161079a565b5f80856001600160a01b03168486604051614bd8919061544a565b5f6040518083038185875af1925050503d805f8114614c12576040519150601f19603f3d011682016040523d82523d5f602084013e614c17565b606091505b5091509150614a54868383606082614c3757614c3282614c7e565b613510565b8151158015614c4e57506001600160a01b0384163b155b15614c7757604051639996b31560e01b81526001600160a01b038516600482015260240161079a565b5080613510565b805115614c8e5780518082602001fd5b604051630a12f52160e11b815260040160405180910390fd5b508054614cb390615155565b5f825580601f10614cc2575050565b601f0160209004905f5260205f20908101906142439190614d23565b604080516101008101909152805f81526060602082018190525f604083018190529082018190526080820181905260a0820181905260c0820181905260e09091015290565b5b80821115614d37575f8155600101614d24565b5090565b8015158114614243575f80fd5b803563ffffffff8116811461163f575f80fd5b5f805f60608486031215614d6d575f80fd5b833592506020840135614d7f81614d3b565b9150614d8d60408501614d48565b90509250925092565b5f60208284031215614da6575f80fd5b5035919050565b5f8060408385031215614dbe575f80fd5b82356001600160401b03811115614dd3575f80fd5b830160808186031215614de4575f80fd5b9150614df260208401614d48565b90509250929050565b5f8060408385031215614e0c575f80fd5b82359150614df260208401614d48565b6001600160a01b0381168114614243575f80fd5b5f805f8060808587031215614e43575f80fd5b843593506020850135614e5581614d3b565b9250614e6360408601614d48565b91506060850135614e7381614e1c565b939692955090935050565b803561ffff8116811461163f575f80fd5b6001600160401b0381168114614243575f80fd5b5f805f8060808587031215614eb6575f80fd5b84356001600160401b03811115614ecb575f80fd5b850160a08188031215614edc575f80fd5b9350614eea60208601614e7e565b92506040850135614efa81614e8f565b9396929550929360600135925050565b5f60208284031215614f1a575f80fd5b813561351081614e8f565b5f8060408385031215614f36575f80fd5b823591506020830135614f4881614e1c565b809150509250929050565b5f60208284031215614f63575f80fd5b61351082614d48565b5f8060408385031215614f7d575f80fd5b50508035926020909101359150565b5f80828403610180811215614f9f575f80fd5b61016080821215614fae575f80fd5b8493508301359050614f4881614e1c565b634e487b7160e01b5f52602160045260245ffd5b60068110614fe357614fe3614fbf565b9052565b5f5b83811015615001578181015183820152602001614fe9565b50505f910152565b5f8151808452615020816020860160208601614fe7565b601f01601f19169290920160200192915050565b60208152615046602082018351614fd3565b5f6020830151610100806040850152615063610120850183615009565b915060408501516001600160401b038082166060870152806060880151166080870152505060808501516150a260a08601826001600160401b03169052565b5060a08501516001600160401b03811660c08601525060c08501516001600160401b03811660e08601525060e08501516001600160401b038116858301525090949350505050565b5f80602083850312156150fb575f80fd5b82356001600160401b0380821115615111575f80fd5b818501915085601f830112615124575f80fd5b813581811115615132575f80fd5b866020828501011115615143575f80fd5b60209290920196919550909350505050565b600181811c9082168061516957607f821691505b60208210810361518757634e487b7160e01b5f52602260045260245ffd5b50919050565b60208101610f258284614fd3565b634e487b7160e01b5f52604160045260245ffd5b604051606081016001600160401b03811182821017156151d1576151d161519b565b60405290565b604080519081016001600160401b03811182821017156151d1576151d161519b565b604051601f8201601f191681016001600160401b03811182821017156152215761522161519b565b604052919050565b5f6001600160401b038211156152415761524161519b565b50601f01601f191660200190565b5f82601f83011261525e575f80fd5b815161527161526c82615229565b6151f9565b818152846020838601011115615285575f80fd5b610f77826020830160208701614fe7565b5f602082840312156152a6575f80fd5b81516001600160401b038111156152bb575f80fd5b610f778482850161524f565b602081525f6135106020830184615009565b5f602082840312156152e9575f80fd5b5051919050565b5f60208284031215615300575f80fd5b813561351081614e1c565b5f808335601e19843603018112615320575f80fd5b8301803591506001600160401b03821115615339575f80fd5b6020019150600581901b36038213156136f4575f80fd5b634e487b7160e01b5f52603260045260245ffd5b5f8235605e19833603018112615378575f80fd5b9190910192915050565b5f82601f830112615391575f80fd5b813561539f61526c82615229565b8181528460208386010111156153b3575f80fd5b816020850160208301375f918101602001919091529392505050565b5f606082360312156153df575f80fd5b6153e76151af565b82356001600160401b03808211156153fd575f80fd5b61540936838701615382565b8352602085013591508082111561541e575f80fd5b5061542b36828601615382565b602083015250604083013561543f81614e8f565b604082015292915050565b5f8251615378818460208701614fe7565b601f82111561060b57805f5260205f20601f840160051c810160208510156154805750805b601f840160051c820191505b81811015610f37575f815560010161548c565b81516001600160401b038111156154b8576154b861519b565b6154cc816154c68454615155565b8461545b565b602080601f8311600181146154ff575f84156154e85750858301515b5f19600386901b1c1916600185901b1785556110be565b5f85815260208120601f198616915b8281101561552d5788860151825594840194600190910190840161550e565b508582101561554a57878501515f19600388901b60f8161c191681555b5050505050600190811b01905550565b634e487b7160e01b5f52601160045260245ffd5b6001600160401b0381811683821601908082111561250e5761250e61555a565b5f63ffffffff8083168181036155a6576155a661555a565b6001019392505050565b6001600160401b038181168382160280821691908281146155d3576155d361555a565b505092915050565b5f808335601e198436030181126155f0575f80fd5b83016020810192503590506001600160401b0381111561560e575f80fd5b8036038213156136f4575f80fd5b81835281816020850137505f828201602090810191909152601f909101601f19169091010190565b5f8383855260208086019550808560051b830101845f5b878110156156f957848303601f19018952813536889003605e19018112615680575f80fd5b8701606061568e82806155db565b82875261569e838801828461561c565b925050506156ae868301836155db565b868303888801526156c083828461561c565b9250505060408083013592506156d583614e8f565b6001600160401b03929092169490910193909352978301979083019060010161565b565b5090979650505050505050565b6020815281356020820152602082013560408201525f604083013561572a81614e1c565b6001600160a01b031660608381019190915283013536849003601e19018112615751575f80fd5b83016020810190356001600160401b0381111561576c575f80fd5b8060051b360382131561577d575f80fd5b60808085015261579160a085018284615644565b95945050505050565b5f826157b457634e487b7160e01b5f52601260045260245ffd5b500490565b60208101600483106157cd576157cd614fbf565b91905290565b8082028115828204841417610f2557610f2561555a565b5f80604083850312156157fb575f80fd5b825191506020830151614f4881614d3b565b5f60208083525f845461581f81615155565b806020870152604060018084165f8114615840576001811461585c57615889565b60ff19851660408a0152604084151560051b8a01019550615889565b895f5260205f205f5b858110156158805781548b8201860152908301908801615865565b8a016040019650505b509398975050505050505050565b5f805f606084860312156158a9575f80fd5b8351925060208401516158bb81614e8f565b60408501519092506158cc81614e8f565b809150509250925092565b818382375f9101908152919050565b6001600160401b0382811682821603908082111561250e5761250e61555a565b5f8060408385031215615917575f80fd5b82516001600160401b038082111561592d575f80fd5b9084019060608287031215615940575f80fd5b6159486151af565b82518152602083015161595a81614e1c565b6020820152604083015182811115615970575f80fd5b61597c8882860161524f565b6040830152508094505050506020830151614f4881614d3b565b5f80604083850312156159a7575f80fd5b825191506020830151614f4881614e8f565b80820180821115610f2557610f2561555a565b5f808335601e198436030181126159e1575f80fd5b8301803591506001600160401b038211156159fa575f80fd5b6020019150368190038213156136f4575f80fd5b5f8235603e19833603018112615378575f80fd5b5f60408236031215615a32575f80fd5b615a3a6151d7565b615a4383614d48565b81526020808401356001600160401b0380821115615a5f575f80fd5b9085019036601f830112615a71575f80fd5b813581811115615a8357615a8361519b565b8060051b9150615a948483016151f9565b8181529183018401918481019036841115615aad575f80fd5b938501935b83851015615ad75784359250615ac783614e1c565b8282529385019390850190615ab2565b94860194909452509295945050505050565b5f6040830163ffffffff8351168452602080840151604060208701528281518085526060880191506020830194505f92505b80831015615b445784516001600160a01b03168252938301936001929092019190830190615b1b565b509695505050505050565b60208152815160208201525f602083015160e06040840152615b75610100840182615009565b90506040840151601f1980858403016060860152615b938383615009565b92506001600160401b03606087015116608086015260808601519150808584030160a0860152615bc38383615ae9565b925060a08601519150808584030160c086015250615be18282615ae9565b91505060c0840151615bfe60e08501826001600160401b03169052565b509392505050565b5f8060408385031215615c17575f80fd5b8251915060208301516001600160401b03811115615c33575f80fd5b615c3f8582860161524f565b9150509250929050565b81810381811115610f2557610f2561555a565b5f60208284031215615c6c575f80fd5b61351082614e7e565b5f60208284031215615c85575f80fd5b813560ff81168114613510575f80fd5b5f6001600160401b038083168181036155a6576155a661555a565b5f60208284031215615cc0575f80fd5b815161351081614d3b56fe6e5bdfcce15e53c3406ea67bfce37dcd26f5152d5492824e43fd5e3c8ac5ab009b779b17422d0df92223018b32b4d1fa46e071723d6817e2486d003becc55f00a2646970667358221220ddf9048e6e6779d040a184e9d35df5eabe9bdaf0aad963310918011dedf64a3e64736f6c63430008190033",
+	ABI: "[{\"inputs\":[{\"internalType\":\"enumICMInitializable\",\"name\":\"init\",\"type\":\"uint8\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"DelegatorIneligibleForRewards\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"InvalidBLSKeyLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"encodedConversionID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"expectedConversionID\",\"type\":\"bytes32\"}],\"name\":\"InvalidConversionID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"delegationFeeBips\",\"type\":\"uint16\"}],\"name\":\"InvalidDelegationFee\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"InvalidDelegationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumDelegatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"InvalidDelegatorStatus\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitializationStatus\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"maximumChurnPercentage\",\"type\":\"uint8\"}],\"name\":\"InvalidMaximumChurnPercentage\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"minStakeDuration\",\"type\":\"uint64\"}],\"name\":\"InvalidMinStakeDuration\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"InvalidNodeID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"}],\"name\":\"InvalidNonce\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"threshold\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"addressesLength\",\"type\":\"uint256\"}],\"name\":\"InvalidPChainOwnerThreshold\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"}],\"name\":\"InvalidRegistrationExpiry\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"InvalidRewardRecipient\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"InvalidStakeAmount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"maximumStakeMultiplier\",\"type\":\"uint8\"}],\"name\":\"InvalidStakeMultiplier\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"InvalidTokenAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InvalidTotalWeight\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"uptimeBlockchainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidUptimeBlockchainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"InvalidValidationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"}],\"name\":\"InvalidValidatorManagerAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"blockchainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidValidatorManagerBlockchainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"InvalidValidatorStatus\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidWarpMessage\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"senderAddress\",\"type\":\"address\"}],\"name\":\"InvalidWarpOriginSenderAddress\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"sourceChainID\",\"type\":\"bytes32\"}],\"name\":\"InvalidWarpSourceChainID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"churnAmount\",\"type\":\"uint64\"}],\"name\":\"MaxChurnRateExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"newValidatorWeight\",\"type\":\"uint64\"}],\"name\":\"MaxWeightExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"MinStakeDurationNotPassed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"NodeAlreadyRegistered\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PChainOwnerAddressesNotSorted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"UnauthorizedOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"validRegistration\",\"type\":\"bool\"}],\"name\":\"UnexpectedRegistrationStatus\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"expectedValidationID\",\"type\":\"bytes32\"}],\"name\":\"UnexpectedValidationID\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorIneligibleForRewards\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"ValidatorNotPoS\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ZeroWeightToValueFactor\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"}],\"name\":\"CompletedDelegatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewards\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fees\",\"type\":\"uint256\"}],\"name\":\"CompletedDelegatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"CompletedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"CompletedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegatorAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"validatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"delegatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"InitiatedDelegatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"InitiatedDelegatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"registrationMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"validatorWeightMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"weightUpdateMessageID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"InitiatedValidatorWeightUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes20\",\"name\":\"nodeID\",\"type\":\"bytes20\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"RegisteredInitialValidator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"uptime\",\"type\":\"uint64\"}],\"name\":\"UptimeUpdated\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ADDRESS_LENGTH\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"BIPS_CONVERSION_FACTOR\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"BLS_PUBLIC_KEY_LENGTH\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ERC20_STAKING_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_CHURN_PERCENTAGE_LIMIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_DELEGATION_FEE_BIPS\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_REGISTRATION_EXPIRY_LENGTH\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAXIMUM_STAKE_MULTIPLIER_LIMIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"NODE_ID_LENGTH\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"POS_VALIDATOR_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"P_CHAIN_BLOCKCHAIN_ID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"VALIDATOR_MANAGER_STORAGE_LOCATION\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WARP_MESSENGER\",\"outputs\":[{\"internalType\":\"contractIWarpMessenger\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"changeDelegatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"changeValidatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"claimDelegationFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRemoval\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorWeightUpdate\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20\",\"outputs\":[{\"internalType\":\"contractIERC20Mintable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"forceInitiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"forceInitiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"getValidator\",\"outputs\":[{\"components\":[{\"internalType\":\"enumValidatorStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"startingWeight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"sentNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"receivedNonce\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"startTime\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"endTime\",\"type\":\"uint64\"}],\"internalType\":\"structValidator\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"churnPeriodSeconds\",\"type\":\"uint64\"},{\"internalType\":\"uint8\",\"name\":\"maximumChurnPercentage\",\"type\":\"uint8\"}],\"internalType\":\"structValidatorManagerSettings\",\"name\":\"baseSettings\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"minimumStakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maximumStakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"minimumStakeDuration\",\"type\":\"uint64\"},{\"internalType\":\"uint16\",\"name\":\"minimumDelegationFeeBips\",\"type\":\"uint16\"},{\"internalType\":\"uint8\",\"name\":\"maximumStakeMultiplier\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"weightToValueFactor\",\"type\":\"uint256\"},{\"internalType\":\"contractIRewardCalculator\",\"name\":\"rewardCalculator\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"uptimeBlockchainID\",\"type\":\"bytes32\"}],\"internalType\":\"structPoSValidatorManagerSettings\",\"name\":\"settings\",\"type\":\"tuple\"},{\"internalType\":\"contractIERC20Mintable\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"subnetID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"validatorManagerBlockchainID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"validatorManagerAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"internalType\":\"structInitialValidator[]\",\"name\":\"initialValidators\",\"type\":\"tuple[]\"}],\"internalType\":\"structConversionData\",\"name\":\"conversionData\",\"type\":\"tuple\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initializeValidatorSet\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"delegationAmount\",\"type\":\"uint256\"}],\"name\":\"initiateDelegatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"initiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"blsPublicKey\",\"type\":\"bytes\"},{\"internalType\":\"uint64\",\"name\":\"registrationExpiry\",\"type\":\"uint64\"},{\"components\":[{\"internalType\":\"uint32\",\"name\":\"threshold\",\"type\":\"uint32\"},{\"internalType\":\"address[]\",\"name\":\"addresses\",\"type\":\"address[]\"}],\"internalType\":\"structPChainOwner\",\"name\":\"remainingBalanceOwner\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint32\",\"name\":\"threshold\",\"type\":\"uint32\"},{\"internalType\":\"address[]\",\"name\":\"addresses\",\"type\":\"address[]\"}],\"internalType\":\"structPChainOwner\",\"name\":\"disableOwner\",\"type\":\"tuple\"},{\"internalType\":\"uint16\",\"name\":\"delegationFeeBips\",\"type\":\"uint16\"},{\"internalType\":\"uint64\",\"name\":\"minStakeDuration\",\"type\":\"uint64\"},{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"initiateValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"rewardRecipient\",\"type\":\"address\"}],\"name\":\"initiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"l1TotalWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"nodeID\",\"type\":\"bytes\"}],\"name\":\"registeredValidators\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendEndValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"resendRegisterValidatorMessage\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"resendUpdateDelegator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"submitUptimeProof\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"subnetID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"valueToWeight\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"weight\",\"type\":\"uint64\"}],\"name\":\"weightToValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	Bin: "0x608060405234801561000f575f80fd5b50604051615e13380380615e1383398101604081905261002e91610107565b60018160018111156100425761004261012c565b0361004f5761004f610055565b50610140565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00805468010000000000000000900460ff16156100a55760405163f92ee8a960e01b815260040160405180910390fd5b80546001600160401b03908116146101045780546001600160401b0319166001600160401b0390811782556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a15b50565b5f60208284031215610117575f80fd5b815160028110610125575f80fd5b9392505050565b634e487b7160e01b5f52602160045260245ffd5b615cc68061014d5f395ff3fe608060405234801561000f575f80fd5b506004361061026b575f3560e01c80638af5499e1161014b578063bb0b1938116100bf578063ce161f1411610084578063ce161f141461056b578063d5f20ff61461059b578063df93d8de146105bb578063e4a63c40146105c5578063fb8b11dd146105d9578063fd7ac5e7146105ec575f80fd5b8063bb0b19381461050e578063bc5fbfec14610516578063bee0a03f1461053d578063c974d1b614610550578063cc71bbba14610558575f80fd5b8063a3a65e4811610110578063a3a65e48146104a0578063a9778a7a14610374578063aac80c39146104b3578063afb98096146104c6578063b2c1712e146104ed578063b771b3bc14610500575f80fd5b80638af5499e146104415780638ef34c981461045457806393e24598146104675780639681d9401461047a5780639e478eea1461048d575f80fd5b806335455ded116101e257806362065856116101a757806362065856146103db57806363e2ca97146103ab578063732214f8146103ee578063739b4eff146103f5578063785e9e86146104085780638280a25a14610439575f80fd5b806335455ded146103745780634b396bcc146103905780635dc1f535146103a357806360305d62146103ab57806360ad7784146103c8575f80fd5b806320d91b7a1161023357806320d91b7a146102ea578063245dafcb146102fd57806325e1c7761461031057806327bf60cd146103235780632aa56638146103365780632e2194d814610349575f80fd5b80630322ed981461026f5780631340964514610284578063151d30d11461029757806316679564146102b65780631af1872b146102c9575b5f80fd5b61028261027d366004614c91565b6105ff565b005b610282610292366004614cbb565b610892565b61029f600a81565b60405160ff90911681526020015b60405180910390f35b6102826102c4366004614cf2565b610a93565b6102dc6102d7366004614f40565b610a9f565b6040519081526020016102ad565b6102826102f836600461501f565b610adc565b61028261030b366004614c91565b611090565b61028261031e366004614cbb565b6112f0565b610282610331366004614cf2565b611364565b610282610344366004614cf2565b611370565b61035c610357366004614c91565b611381565b6040516001600160401b0390911681526020016102ad565b61037d61271081565b60405161ffff90911681526020016102ad565b61028261039e366004615064565b6113d5565b6102dc6113e1565b6103b3601481565b60405163ffffffff90911681526020016102ad565b6102826103d6366004614cbb565b6113f0565b6102dc6103e93660046150b2565b611643565b6102dc5f81565b6102dc6104033660046150cd565b611663565b5f80516020615c51833981519152546001600160a01b03165b6040516001600160a01b0390911681526020016102ad565b61029f603081565b61028261044f366004615064565b61168f565b6102826104623660046150ed565b61169b565b610282610475366004614c91565b61174c565b6102dc61048836600461511b565b6117e0565b61028261049b366004615134565b6118b9565b6102dc6104ae36600461511b565b611998565b6102826104c1366004615064565b611b87565b6102dc7f4317713f7ecbdddd4bc99e95d903adedaa883b2e7c2551610bd13e2c7e473d0081565b6102826104fb366004614cf2565b611b93565b6104216005600160991b0181565b61035c611b9f565b6102dc7fe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb0081565b61028261054b366004614c91565b611bc1565b61029f601481565b610282610566366004615064565b611cdd565b61057e61057936600461511b565b611ce9565b604080519283526001600160401b039091166020830152016102ad565b6105ae6105a9366004614c91565b611e6c565b6040516102ad91906151dc565b61035c6202a30081565b6102dc5f80516020615c5183398151915281565b6102826105e73660046150ed565b611fbb565b6102dc6105fa366004615292565b612052565b5f61060861208a565b5f838152600580830160205260408083208151610100810190925280549495509293909291839160ff169081111561064257610642615167565b600581111561065357610653615167565b8152602001600182018054610667906152fd565b80601f0160208091040260200160405190810160405280929190818152602001828054610693906152fd565b80156106de5780601f106106b5576101008083540402835291602001916106de565b820191905f5260205f20905b8154815290600101906020018083116106c157829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039384015480821660a0850152919091041660c0909101529091508151600581111561075657610756615167565b14610792575f8381526005830160205260409081902054905163170cc93360e21b81526107899160ff1690600401615335565b60405180910390fd5b606081015160405163854a893f60e01b8152600481018590526001600160401b0390911660248201525f60448201526005600160991b019063ee5b48eb9073__$fd0c147b4031eef6079b0498cbafa865f0$__9063854a893f906064015f60405180830381865af4158015610809573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f191682016040526108309190810190615385565b6040518263ffffffff1660e01b815260040161084c91906153b6565b6020604051808303815f875af1158015610868573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061088c91906153c8565b50505050565b61089a6120ae565b5f6108a36120e5565b5f848152600782016020526040808220815160e0810190925280549394509192909190829060ff1660038111156108dc576108dc615167565b60038111156108ed576108ed615167565b8152815461010090046001600160a01b03166020820152600182015460408201526002909101546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c090910152905060038151600381111561096657610966615167565b14610987578051604051633b0d540d60e21b815261078991906004016153df565b5f6109958260400151611e6c565b905060046109a68360400151611e6c565b5160058111156109b8576109b8615167565b141580156109df57508160c001516001600160401b031681608001516001600160401b0316105b15610a6d575f806109ef86611ce9565b9150915081846040015114610a285781846040015160405163fee3144560e01b8152600401610789929190918252602082015260400190565b806001600160401b03168460c001516001600160401b03161115610a6a57604051632e19bc2d60e11b81526001600160401b0382166004820152602401610789565b50505b610a7685612109565b505050610a8f60015f80516020615c7183398151915255565b5050565b61088c8383835f6122ed565b5f610aa86120ae565b610ab88989898989898989612534565b9050610ad060015f80516020615c7183398151915255565b98975050505050505050565b5f610ae561208a565b600781015490915060ff1615610b0e57604051637fab81e560e01b815260040160405180910390fd5b6005600160991b016001600160a01b0316634213cf786040518163ffffffff1660e01b8152600401602060405180830381865afa158015610b51573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610b7591906153c8565b836020013514610b9e576040516372b0a7e760e11b815260208401356004820152602401610789565b30610baf60608501604086016153f9565b6001600160a01b031614610bf257610bcd60608401604085016153f9565b604051632f88120d60e21b81526001600160a01b039091166004820152602401610789565b5f610c006060850185615414565b905090505f805b828163ffffffff161015610e86575f610c236060880188615414565b8363ffffffff16818110610c3957610c39615459565b9050602002810190610c4b919061546d565b610c549061548b565b80516040519192505f916006880191610c6c91615506565b90815260200160405180910390205414610c9c57805160405163a41f772f60e01b815261078991906004016153b6565b805151601414610cc2578051604051633e08a12560e11b815261078991906004016153b6565b5f6002885f013584604051602001610cf192919091825260e01b6001600160e01b031916602082015260240190565b60408051601f1981840301815290829052610d0b91615506565b602060405180830381855afa158015610d26573d5f803e3d5ffd5b5050506040513d601f19601f82011682018060405250810190610d4991906153c8565b90508086600601835f0151604051610d619190615506565b90815260408051918290036020908101909220929092555f8381526005890190915220805460ff191660021781558251600190910190610da1908261555b565b50604082810180515f84815260058a016020529290922060028101805492516001600160401b0394851667ffffffffffffffff60801b90941693909317600160c01b858516021790556003018054429093166001600160801b031990931692909217909155610e10908561562a565b8251602001519094506bffffffffffffffffffffffff1916817f9d9c026e2cadfec89cccc2cd72705360eca1beba24774f3363f4bb33faabc7d78460400151604051610e6b91906001600160401b0391909116815260200190565b60405180910390a3505080610e7f9061564a565b9050610c07565b5060038301805467ffffffffffffffff60401b1916600160401b6001600160401b0384168102919091179091556001840154606491610ec9910460ff168361566c565b6001600160401b03161015610efc57604051633e1a785160e01b81526001600160401b0382166004820152602401610789565b5f73__$fd0c147b4031eef6079b0498cbafa865f0$__634d847884610f20876126bc565b604001516040518263ffffffff1660e01b8152600401610f4091906153b6565b602060405180830381865af4158015610f5b573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610f7f91906153c8565b90505f73__$fd0c147b4031eef6079b0498cbafa865f0$__6387418b8e886040518263ffffffff1660e01b8152600401610fb991906157c2565b5f60405180830381865af4158015610fd3573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052610ffa9190810190615385565b90505f60028260405161100d9190615506565b602060405180830381855afa158015611028573d5f803e3d5ffd5b5050506040513d601f19601f8201168201806040525081019061104b91906153c8565b90508281146110775760405163baaea89d60e01b81526004810182905260248101849052604401610789565b5050506007909201805460ff1916600117905550505050565b5f6110996120e5565b5f838152600782016020526040808220815160e0810190925280549394509192909190829060ff1660038111156110d2576110d2615167565b60038111156110e3576110e3615167565b8152815461010090046001600160a01b0316602082015260018083015460408301526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101529091508151600381111561115c5761115c615167565b1415801561117d575060038151600381111561117a5761117a615167565b14155b1561119e578051604051633b0d540d60e21b815261078991906004016153df565b5f6111ac8260400151611e6c565b905080606001516001600160401b03165f036111de576040516339b894f960e21b815260048101859052602401610789565b604080830151606083015160a0840151925163854a893f60e01b81526005600160991b019363ee5b48eb9373__$fd0c147b4031eef6079b0498cbafa865f0$__9363854a893f9361124c93906004019283526001600160401b03918216602084015216604082015260600190565b5f60405180830381865af4158015611266573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f1916820160405261128d9190810190615385565b6040518263ffffffff1660e01b81526004016112a991906153b6565b6020604051808303815f875af11580156112c5573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906112e991906153c8565b5050505050565b6112f9826127d2565b611319576040516330efa98b60e01b815260048101839052602401610789565b5f61132383611e6c565b519050600281600581111561133a5761133a615167565b1461135a578060405163170cc93360e21b81526004016107899190615335565b61088c83836127fb565b61088c8383835f612aa1565b61137c8383835f612dce565b505050565b5f8061138b6120e5565b600301546113999084615856565b90508015806113ae57506001600160401b0381115b156113cf5760405163222d164360e21b815260048101849052602401610789565b92915050565b6112e9848484846122ed565b5f6113ea61208a565b54919050565b5f6113f96120e5565b5f848152600782016020526040808220815160e0810190925280549394509192909190829060ff16600381111561143257611432615167565b600381111561144357611443615167565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101528101519091505f6114b982611e6c565b90506001835160038111156114d0576114d0615167565b146114f1578251604051633b0d540d60e21b815261078991906004016153df565b60048151600581111561150657611506615167565b0361151c5761151486612109565b505050505050565b8260a001516001600160401b031681608001516001600160401b031610156115bc575f8061154987611ce9565b915091508184146115775760405163fee3144560e01b81526004810183905260248101859052604401610789565b8460a001516001600160401b0316816001600160401b031610156115b957604051632e19bc2d60e11b81526001600160401b0382166004820152602401610789565b50505b5f868152600785016020908152604091829020805460ff1916600290811782550180546001600160401b034216600160401b810267ffffffffffffffff60401b19909216919091179091559151918252839188917f3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa910160405180910390a3505050505050565b5f61164c6120e5565b600301546113cf906001600160401b038416615875565b5f61166c6120ae565b611677833384612dfa565b90506113cf60015f80516020615c7183398151915255565b61088c84848484612dce565b5f6116a46120e5565b90506001600160a01b0382166116d85760405163caa903f960e01b81526001600160a01b0383166004820152602401610789565b5f8381526006820160205260409020546001600160a01b0316331461171e57335b604051636e2ccd7560e11b81526001600160a01b039091166004820152602401610789565b5f928352600b01602052604090912080546001600160a01b0319166001600160a01b03909216919091179055565b5f6117556120e5565b90505f61176183611e6c565b519050600481600581111561177857611778615167565b14611798578060405163170cc93360e21b81526004016107899190615335565b5f8381526006830160205260409020546001600160a01b031633146117bd57336116f9565b5f83815260068301602052604090205461137c906001600160a01b03168461303f565b5f6117e96120ae565b5f6117f26120e5565b90505f806117ff85613069565b9150915061180c826127d2565b61181a5750915061189e9050565b5f828152600684016020908152604080832054600b870190925290912080546001600160a01b031981169091556001600160a01b0391821691168061185c5750805b60048351600581111561187157611871615167565b0361188057611880818561303f565b611896826118918560400151611643565b61341e565b509193505050505b6118b460015f80516020615c7183398151915255565b919050565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00805460029190600160401b900460ff1680611902575080546001600160401b03808416911610155b156119205760405163f92ee8a960e01b815260040160405180910390fd5b805468ffffffffffffffffff19166001600160401b03831617600160401b17815561194b8484613441565b805460ff60401b191681556040516001600160401b03831681527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a150505050565b5f806119a261208a565b90505f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63021de88f6119c9876126bc565b604001516040518263ffffffff1660e01b81526004016119e991906153b6565b6040805180830381865af4158015611a03573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190611a27919061588c565b9150915080611a4d57604051632d07135360e01b81528115156004820152602401610789565b5f82815260048401602052604090208054611a67906152fd565b90505f03611a8b5760405163089938b360e11b815260048101839052602401610789565b60015f838152600580860160205260409091205460ff1690811115611ab257611ab2615167565b14611ae5575f8281526005840160205260409081902054905163170cc93360e21b81526107899160ff1690600401615335565b5f8281526004840160205260408120611afd91614bfd565b5f828152600584016020908152604091829020805460ff1916600290811782556003820180546001600160401b0342811667ffffffffffffffff19909216919091179091559101549251600160c01b90930416825283917f967ae87813a3b5f201dd9bcba778d457176eafe6f41facee1c718091d3952d06910160405180910390a2509392505050565b6112e984848484612aa1565b61137c8383835f61345b565b5f611ba861208a565b60030154600160401b90046001600160401b0316919050565b5f611bca61208a565b5f8381526004820160205260409020805491925090611be8906152fd565b90505f03611c0c5760405163089938b360e11b815260048101839052602401610789565b60015f838152600580840160205260409091205460ff1690811115611c3357611c33615167565b14611c66575f8281526005820160205260409081902054905163170cc93360e21b81526107899160ff1690600401615335565b5f8281526004808301602052604091829020915163ee5b48eb60e01b81526005600160991b019263ee5b48eb92611c9d92016158af565b6020604051808303815f875af1158015611cb9573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061137c91906153c8565b61088c8484848461345b565b5f805f611cf5846126bc565b90505f805f73__$fd0c147b4031eef6079b0498cbafa865f0$__6350782b0f85604001516040518263ffffffff1660e01b8152600401611d3591906153b6565b606060405180830381865af4158015611d50573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190611d749190615939565b9250925092505f611d8361208a565b5f8581526005820160205260409020600201549091506001600160401b03808516600160401b909204161015611dd757604051632e19bc2d60e11b81526001600160401b0384166004820152602401610789565b5f8481526005820160205260409081902060020180546001600160401b038616600160801b0267ffffffffffffffff60801b199091161790555184907fc917996591802ecedcfced71321d4bb5320f7dfbacf5477dffe1dbf8b8839ff990611e5790869086906001600160401b0392831681529116602082015260400190565b60405180910390a25091969095509350505050565b611e74614c34565b5f611e7d61208a565b5f84815260058083016020526040918290208251610100810190935280549394509192839160ff90911690811115611eb757611eb7615167565b6005811115611ec857611ec8615167565b8152602001600182018054611edc906152fd565b80601f0160208091040260200160405190810160405280929190818152602001828054611f08906152fd565b8015611f535780601f10611f2a57610100808354040283529160200191611f53565b820191905f5260205f20905b815481529060010190602001808311611f3657829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039093015480841660a08401520490911660c0909101529392505050565b6001600160a01b038116611fed5760405163caa903f960e01b81526001600160a01b0382166004820152602401610789565b5f611ff66120e5565b5f8481526007820160205260409020549091506001600160a01b0361010090910416331461202457336116f9565b5f928352600901602052604090912080546001600160a01b0319166001600160a01b03909216919091179055565b5f8061205c61208a565b9050806006018484604051612072929190615979565b90815260200160405180910390205491505092915050565b7fe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb0090565b5f80516020615c718339815191528054600119016120df57604051633ee5aeb560e01b815260040160405180910390fd5b60029055565b7f4317713f7ecbdddd4bc99e95d903adedaa883b2e7c2551610bd13e2c7e473d0090565b5f6121126120e5565b5f838152600782016020526040808220815160e0810190925280549394509192909190829060ff16600381111561214b5761214b615167565b600381111561215c5761215c615167565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101528101519091506121d0613487565b82608001516121df919061562a565b6001600160401b03164210156122135760405163fb6ce63f60e01b81526001600160401b0342166004820152602401610789565b5f848152600784016020908152604080832080546001600160a81b03191681556001810184905560020183905560098601909152902080546001600160a01b031981169091556001600160a01b03168061226e575060208201515b5f8061227b8388866134a2565b9150915061229485602001516118918760600151611643565b6040805183815260208101839052859189917f5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e910160405180910390a350505050505050565b60015f80516020615c7183398151915255565b5f806122f76120e5565b90506123028661354f565b5f61230c87611e6c565b9050612317876127d2565b6123265760019250505061252c565b5f8781526006830160205260409020546001600160a01b0316331461234b57336116f9565b5f87815260068301602052604090205460c082015161237a91600160b01b90046001600160401b03169061562a565b6001600160401b03168160e001516001600160401b031610156123c15760e081015160405163fb6ce63f60e01b81526001600160401b039091166004820152602401610789565b5f86156123d9576123d288876127fb565b90506123f7565b505f8781526006830160205260409020600101546001600160401b03165b600483015460408301515f916001600160a01b031690634f22429f9061241c90611643565b60c086015160e0808801516040519185901b6001600160e01b031916825260048201939093526001600160401b0391821660248201819052604482015291811660648301528516608482015260a401602060405180830381865afa158015612486573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906124aa91906153c8565b90506001600160a01b0386166124d6575f8981526006850160205260409020546001600160a01b031695505b5f898152600a85016020526040812080548392906124f5908490615988565b90915550505f898152600b94909401602052604090932080546001600160a01b0319166001600160a01b0387161790555050151590505b949350505050565b5f8061253e6120e5565b600281015490915061ffff600160401b90910481169086161080612567575061271061ffff8616115b1561258b57604051635f12e6c360e11b815261ffff86166004820152602401610789565b60028101546001600160401b0390811690851610156125c7576040516202a06d60e11b81526001600160401b0385166004820152602401610789565b80548310806125d95750806001015483115b156125fa5760405163222d164360e21b815260048101849052602401610789565b5f6126048461383a565b90505f61261082611381565b90505f6126218d8d8d8d8d8761385d565b5f818152600686016020908152604080832080546001600160401b039c909c16600160b01b0267ffffffffffffffff60b01b1961ffff9e909e16600160a01b02336001600160b01b0319909e168e17179d909d169c909c178c556001909b01805467ffffffffffffffff19169055600b9096019095529790932080546001600160a01b03191690961790955550939998505050505050505050565b60408051606080820183525f8083526020830152918101919091526040516306f8253560e41b815263ffffffff831660048201525f9081906005600160991b0190636f825350906024015f60405180830381865afa158015612720573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052612747919081019061599b565b915091508061276957604051636b2f19e960e01b815260040160405180910390fd5b81511561278f578151604051636ba589a560e01b81526004810191909152602401610789565b60208201516001600160a01b0316156127cb576020820151604051624de75d60e31b81526001600160a01b039091166004820152602401610789565b5092915050565b5f806127dc6120e5565b5f938452600601602052505060409020546001600160a01b0316151590565b6040516306f8253560e41b815263ffffffff821660048201525f90819081906005600160991b0190636f825350906024015f60405180830381865afa158015612846573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f1916820160405261286d919081019061599b565b915091508061288f57604051636b2f19e960e01b815260040160405180910390fd5b5f6128986120e5565b60058101548451919250146128c6578251604051636ba589a560e01b81526004810191909152602401610789565b60208301516001600160a01b031615612902576020830151604051624de75d60e31b81526001600160a01b039091166004820152602401610789565b60208301516001600160a01b03161561293e576020830151604051624de75d60e31b81526001600160a01b039091166004820152602401610789565b5f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63088c246386604001516040518263ffffffff1660e01b815260040161297b91906153b6565b6040805180830381865af4158015612995573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906129b99190615a2b565b915091508188146129e75760405163fee3144560e01b81526004810183905260248101899052604401610789565b5f8881526006840160205260409020600101546001600160401b039081169082161115612a78575f888152600684016020908152604091829020600101805467ffffffffffffffff19166001600160401b038516908117909155915191825289917fec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435910160405180910390a2612a96565b505f8781526006830160205260409020600101546001600160401b03165b979650505050505050565b5f80612aab6120e5565b5f878152600782016020526040808220815160e0810190925280549394509192909190829060ff166003811115612ae457612ae4615167565b6003811115612af557612af5615167565b8152815461010090046001600160a01b0316602082015260018201546040808301919091526002909201546001600160401b038082166060840152600160401b820481166080840152600160801b8204811660a0840152600160c01b9091041660c0909101528101519091505f612b6b82611e6c565b9050600283516003811115612b8257612b82615167565b14612ba3578251604051633b0d540d60e21b815261078991906004016153df565b60208301516001600160a01b03163314612c3f575f8281526006850160205260409020546001600160a01b03163314612bdc57336116f9565b5f82815260068501602052604090205460c0820151612c0b91600160b01b90046001600160401b03169061562a565b6001600160401b0316421015612c3f5760405163fb6ce63f60e01b81526001600160401b0342166004820152602401610789565b600281516005811115612c5457612c54615167565b03612d765760028401546080840151612c76916001600160401b03169061562a565b6001600160401b0316421015612caa5760405163fb6ce63f60e01b81526001600160401b0342166004820152602401610789565b8715612cbc57612cba82886127fb565b505b5f8981526007850160205260409020805460ff19166003179055606083015160a0820151612cf5918491612cf09190615a4e565b613c47565b505f8a8152600786016020526040812060020180546001600160401b03909316600160c01b026001600160c01b0390931692909217909155612d3884888c613e11565b9050828a7f5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf60405160405180910390a31515945061252c9350505050565b600481516005811115612d8b57612d8b615167565b03612db257612d9b83878b613e11565b50612da589612109565b600194505050505061252c565b805160405163170cc93360e21b81526107899190600401615335565b612dda84848484612aa1565b61088c57604051631036cf9160e11b815260048101859052602401610789565b5f80612e046120e5565b90505f612e136103578561383a565b90505f612e1f87611e6c565b9050612e2a876127d2565b612e4a576040516330efa98b60e01b815260048101889052602401610789565b600281516005811115612e5f57612e5f615167565b14612e8057805160405163170cc93360e21b81526107899190600401615335565b5f828260a00151612e91919061562a565b905083600201600a9054906101000a90046001600160401b03168260400151612eba919061566c565b6001600160401b0316816001600160401b03161115612ef757604051636d51fe0560e11b81526001600160401b0382166004820152602401610789565b5f80612f038a84613c47565b915091505f8a83604051602001612f3192919091825260c01b6001600160c01b031916602082015260280190565b60408051601f1981840301815291815281516020928301205f81815260078b019093529120805491925060019160ff1916828002179055505f8181526007880160209081526040918290208054610100600160a81b0319166101006001600160a01b038f16908102919091178255600182018f9055600290910180546001600160401b038b81166001600160c01b03199092168217600160801b8a8316908102919091176001600160c01b031690935585519283528916938201939093529283019190915260608201849052908c9083907fdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d19060800160405180910390a496505050505050505b9392505050565b5f6130486120e5565b5f838152600a820160205260408120805491905590915061088c8482613fff565b5f613072614c34565b5f61307b61208a565b90505f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63021de88f6130a2886126bc565b604001516040518263ffffffff1660e01b81526004016130c291906153b6565b6040805180830381865af41580156130dc573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190613100919061588c565b91509150801561312757604051632d07135360e01b81528115156004820152602401610789565b5f8281526005808501602052604080832081516101008101909252805491929091839160ff9091169081111561315f5761315f615167565b600581111561317057613170615167565b8152602001600182018054613184906152fd565b80601f01602080910402602001604051908101604052809291908181526020018280546131b0906152fd565b80156131fb5780601f106131d2576101008083540402835291602001916131fb565b820191905f5260205f20905b8154815290600101906020018083116131de57829003601f168201915b505050918352505060028201546001600160401b038082166020840152600160401b80830482166040850152600160801b830482166060850152600160c01b9092048116608084015260039384015480821660a0850152919091041660c0909101529091508151600581111561327357613273615167565b14158015613294575060018151600581111561329157613291615167565b14155b156132b557805160405163170cc93360e21b81526107899190600401615335565b6003815160058111156132ca576132ca615167565b036132d857600481526132dd565b600581525b8360060181602001516040516132f39190615506565b90815260408051602092819003830190205f90819055858152600587810190935220825181548493839160ff191690600190849081111561333657613336615167565b02179055506020820151600182019061334f908261555b565b506040828101516002830180546060860151608087015160a08801516001600160401b039586166001600160801b031994851617600160401b9387168402176001600160801b0316600160801b928716929092026001600160c01b031691909117600160c01b918616919091021790925560c08601516003909501805460e09097015195841696909116959095179390911602919091179091555183907fafaccef7080649a725bc30a35359a257a4a27225be352875c80bdf6b5f04080c905f90a29196919550909350505050565b5f80516020615c5183398151915254610a8f906001600160a01b03168383614075565b6134496140d4565b6134528261411f565b610a8f8161419c565b613467848484846122ed565b61088c57604051635bff683f60e11b815260048101859052602401610789565b5f61349061208a565b600101546001600160401b0316919050565b5f805f6134ad6120e5565b5f86815260088201602052604081208054908290559192509081908015613541575f878152600685016020526040902054612710906134f790600160a01b900461ffff1683615875565b6135019190615856565b91508184600a015f8981526020019081526020015f205f8282546135259190615988565b9091555061353590508282615a6e565b92506135418984613fff565b509097909650945050505050565b5f61355861208a565b5f838152600580830160205260408083208151610100810190925280549495509293909291839160ff169081111561359257613592615167565b60058111156135a3576135a3615167565b81526020016001820180546135b7906152fd565b80601f01602080910402602001604051908101604052809291908181526020018280546135e3906152fd565b801561362e5780601f106136055761010080835404028352916020019161362e565b820191905f5260205f20905b81548152906001019060200180831161361157829003601f168201915b50505091835250506002828101546001600160401b038082166020850152600160401b80830482166040860152600160801b830482166060860152600160c01b9092048116608085015260039094015480851660a08501520490921660c090910152909150815160058111156136a6576136a6615167565b146136d9575f8381526005830160205260409081902054905163170cc93360e21b81526107899160ff1690600401615335565b60038152426001600160401b031660e08201525f83815260058381016020526040909120825181548493839160ff191690600190849081111561371e5761371e615167565b021790555060208201516001820190613737908261555b565b5060408201516002820180546060850151608086015160a08701516001600160401b039586166001600160801b031994851617600160401b9387168402176001600160801b0316600160801b928716929092026001600160c01b031691909117600160c01b918616919091021790925560c08501516003909401805460e090960151948416959091169490941792909116021790555f6137d78482613c47565b915050837fbae388a94e7f18411fe57098f12f418b8e1a8273e0532a90188a3a059b897273828460a001514260405161382c939291909283526001600160401b03918216602084015216604082015260600190565b60405180910390a250505050565b5f6113cf825f80516020615c51833981519152546001600160a01b031690614204565b5f61386661208a565b6007015460ff1661388a57604051637fab81e560e01b815260040160405180910390fd5b5f61389361208a565b905042866001600160401b03161115806138c257506138b56202a30042615988565b866001600160401b031610155b156138eb57604051635879da1360e11b81526001600160401b0387166004820152602401610789565b60038101546001600160401b039061390e90600160401b90048216858316615988565b111561393857604051633e1a785160e01b81526001600160401b0384166004820152602401610789565b61394185614210565b61394a84614210565b86516030146139715786516040516326475b2f60e11b815260040161078991815260200190565b87516014146139955787604051633e08a12560e11b815260040161078991906153b6565b5f801b81600601896040516139aa9190615506565b908152602001604051809103902054146139d9578760405163a41f772f60e01b815260040161078991906153b6565b6139e3835f61432f565b5f8073__$fd0c147b4031eef6079b0498cbafa865f0$__63eb97ce516040518060e00160405280865f015481526020018d81526020018c81526020018b6001600160401b031681526020018a8152602001898152602001886001600160401b03168152506040518263ffffffff1660e01b8152600401613a639190615ae7565b5f60405180830381865af4158015613a7d573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052613aa49190810190615b9e565b5f82815260048601602052604090209193509150613ac2828261555b565b5081836006018b604051613ad69190615506565b9081526040519081900360200181209190915563ee5b48eb60e01b81525f906005600160991b019063ee5b48eb90613b129085906004016153b6565b6020604051808303815f875af1158015613b2e573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190613b5291906153c8565b5f8481526005860160205260409020805460ff19166001908117825591925001613b7c8c8261555b565b505f8381526005850160205260409020600281018054600160c01b6001600160401b038a1690810267ffffffffffffffff60801b9092161717905560030180546001600160801b0319169055613bd38b6020015190565b6bffffffffffffffffffffffff1916837f5881be437bdcb008bfa5f20e32d3e335ccf8ab90ef2818852a251625260af35d838c8a604051613c30939291909283526001600160401b03918216602084015216604082015260600190565b60405180910390a350909998505050505050505050565b5f805f613c5261208a565b5f868152600582016020526040902060020154909150600160c01b90046001600160401b0316613c82858261432f565b5f613c8c8761459c565b5f88815260058501602052604080822060020180546001600160c01b0316600160c01b6001600160401b038c811691820292909217909255915163854a893f60e01b8152600481018c905291841660248301526044820152919250906005600160991b019063ee5b48eb9073__$fd0c147b4031eef6079b0498cbafa865f0$__9063854a893f906064015f60405180830381865af4158015613d30573d5f803e3d5ffd5b505050506040513d5f823e601f3d908101601f19168201604052613d579190810190615385565b6040518263ffffffff1660e01b8152600401613d7391906153b6565b6020604051808303815f875af1158015613d8f573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190613db391906153c8565b604080516001600160401b038581168252602082018490528a1681830152905191925089917f6e350dd49b060d87f297206fd309234ed43156d890ced0f139ecf704310481d39181900360600190a2909450925050505b9250929050565b5f80613e1b6120e5565b90505f613e2b8660400151611e6c565b90505f600382516005811115613e4357613e43615167565b1480613e615750600482516005811115613e5f57613e5f615167565b145b15613e71575060e0810151613eae565b600282516005811115613e8657613e86615167565b03613e92575042613eae565b815160405163170cc93360e21b81526107899190600401615335565b86608001516001600160401b0316816001600160401b031611613ed6575f9350505050613038565b600483015460608801515f916001600160a01b031690634f22429f90613efb90611643565b60c086015160808c01516040808e01515f90815260068b0160205281902060010154905160e086901b6001600160e01b031916815260048101949094526001600160401b0392831660248501529082166044840152818716606484015216608482015260a401602060405180830381865afa158015613f7c573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190613fa091906153c8565b90506001600160a01b038716613fb857876020015196505b5f8681526008850160209081526040808320849055600990960190529390932080546001600160a01b0388166001600160a01b031990911617905550909150509392505050565b5f5f80516020615c5183398151915280546040516340c10f1960e01b81526001600160a01b038681166004830152602482018690529293509116906340c10f19906044015f604051808303815f87803b15801561405a575f80fd5b505af115801561406c573d5f803e3d5ffd5b50505050505050565b6040516001600160a01b0383811660248301526044820183905261137c91859182169063a9059cbb906064015b604051602081830303815290604052915060e01b6020820180516001600160e01b038381831617835250505050614605565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0054600160401b900460ff1661411d57604051631afcd79f60e31b815260040160405180910390fd5b565b6141276140d4565b61413081614666565b61413861467f565b6141996060820135608083013561415560c0850160a086016150b2565b61416560e0860160c08701615be1565b614176610100870160e08801615bfa565b61010087013561418e61014089016101208a016153f9565b88610140013561468f565b50565b6141a46140d4565b5f80516020615c518339815191526001600160a01b0382166141e457604051637330680360e01b81526001600160a01b0383166004820152602401610789565b80546001600160a01b0319166001600160a01b0392909216919091179055565b5f613038833384614851565b805163ffffffff16158015614229575060208101515115155b1561425d57805160208201515160405163c08a0f1d60e01b815263ffffffff90921660048301526024820152604401610789565b602081015151815163ffffffff1611156142a057805160208201515160405163c08a0f1d60e01b815263ffffffff90921660048301526024820152604401610789565b60015b816020015151811015610a8f5760208201516142c0600183615a6e565b815181106142d0576142d0615459565b60200260200101516001600160a01b0316826020015182815181106142f7576142f7615459565b60200260200101516001600160a01b0316101561432757604051630dbc8d5f60e31b815260040160405180910390fd5b6001016142a3565b5f61433861208a565b90505f826001600160401b0316846001600160401b031611156143665761435f8385615a4e565b9050614373565b6143708484615a4e565b90505b60408051608081018252600284015480825260038501546001600160401b038082166020850152600160401b8204811694840194909452600160801b90049092166060820152429115806143e05750600184015481516143dc916001600160401b031690615988565b8210155b15614408576001600160401b0380841660608301528282526040820151166020820152614427565b828160600181815161441a919061562a565b6001600160401b03169052505b606081015161443790606461566c565b602082015160018601546001600160401b0392909216916144629190600160401b900460ff1661566c565b6001600160401b0316101561449b57606081015160405163dfae880160e01b81526001600160401b039091166004820152602401610789565b85816040018181516144ad919061562a565b6001600160401b03169052506040810180518691906144cd908390615a4e565b6001600160401b0316905250600184015460408201516064916144fb91600160401b90910460ff169061566c565b6001600160401b03161015614534576040808201519051633e1a785160e01b81526001600160401b039091166004820152602401610789565b8051600285015560208101516003909401805460408301516060909301516001600160401b03908116600160801b0267ffffffffffffffff60801b19948216600160401b026001600160801b0319909316919097161717919091169390931790925550505050565b5f806145a661208a565b5f84815260058201602052604090206002018054919250906008906145da90600160401b90046001600160401b0316615c1a565b91906101000a8154816001600160401b0302191690836001600160401b031602179055915050919050565b5f6146196001600160a01b038416836149b4565b905080515f1415801561463d57508080602001905181019061463b9190615c35565b155b1561137c57604051635274afe760e01b81526001600160a01b0384166004820152602401610789565b61466e6140d4565b6146766149c1565b614199816149c9565b6146876140d4565b61411d614aad565b6146976140d4565b5f6146a06120e5565b905061ffff861615806146b8575061271061ffff8716115b156146dc57604051635f12e6c360e11b815261ffff87166004820152602401610789565b878911156147005760405163222d164360e21b8152600481018a9052602401610789565b60ff851615806147135750600a60ff8616115b156147365760405163170db35960e31b815260ff86166004820152602401610789565b61473e613487565b6001600160401b0316876001600160401b0316101561477a576040516202a06d60e11b81526001600160401b0388166004820152602401610789565b835f0361479a5760405163a733007160e01b815260040160405180910390fd5b816147bb57604051632f6bd1db60e01b815260048101839052602401610789565b97885560018801969096556002870180546001600160401b039690961669ffffffffffffffffffff1990961695909517600160401b61ffff95909516949094029390931767ffffffffffffffff60501b191660ff92909216600160501b029190911790925560038401919091556004830180546001600160a01b0319166001600160a01b03909216919091179055600590910155565b6040516370a0823160e01b81523060048201525f9081906001600160a01b038616906370a0823190602401602060405180830381865afa158015614897573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906148bb91906153c8565b90506148d26001600160a01b038616853086614ab5565b6040516370a0823160e01b81523060048201525f906001600160a01b038716906370a0823190602401602060405180830381865afa158015614916573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061493a91906153c8565b90508181116149a05760405162461bcd60e51b815260206004820152602c60248201527f5361666545524332305472616e7366657246726f6d3a2062616c616e6365206e60448201526b1bdd081a5b98dc99585cd95960a21b6064820152608401610789565b6149aa8282615a6e565b9695505050505050565b606061303883835f614aee565b61411d6140d4565b6149d16140d4565b5f6149da61208a565b82358155905060146149f26060840160408501615bfa565b60ff161180614a115750614a0c6060830160408401615bfa565b60ff16155b15614a4557614a266060830160408401615bfa565b604051634a59bbff60e11b815260ff9091166004820152602401610789565b614a556060830160408401615bfa565b60018201805460ff92909216600160401b0260ff60401b19909216919091179055614a8660408301602084016150b2565b600191909101805467ffffffffffffffff19166001600160401b0390921691909117905550565b6122da6140d4565b6040516001600160a01b03848116602483015283811660448301526064820183905261088c9186918216906323b872dd906084016140a2565b606081471015614b135760405163cd78605960e01b8152306004820152602401610789565b5f80856001600160a01b03168486604051614b2e9190615506565b5f6040518083038185875af1925050503d805f8114614b68576040519150601f19603f3d011682016040523d82523d5f602084013e614b6d565b606091505b50915091506149aa868383606082614b8d57614b8882614bd4565b613038565b8151158015614ba457506001600160a01b0384163b155b15614bcd57604051639996b31560e01b81526001600160a01b0385166004820152602401610789565b5080613038565b805115614be45780518082602001fd5b604051630a12f52160e11b815260040160405180910390fd5b508054614c09906152fd565b5f825580601f10614c18575050565b601f0160209004905f5260205f20908101906141999190614c79565b604080516101008101909152805f81526060602082018190525f604083018190529082018190526080820181905260a0820181905260c0820181905260e09091015290565b5b80821115614c8d575f8155600101614c7a565b5090565b5f60208284031215614ca1575f80fd5b5035919050565b803563ffffffff811681146118b4575f80fd5b5f8060408385031215614ccc575f80fd5b82359150614cdc60208401614ca8565b90509250929050565b8015158114614199575f80fd5b5f805f60608486031215614d04575f80fd5b833592506020840135614d1681614ce5565b9150614d2460408501614ca8565b90509250925092565b634e487b7160e01b5f52604160045260245ffd5b604080519081016001600160401b0381118282101715614d6357614d63614d2d565b60405290565b604051606081016001600160401b0381118282101715614d6357614d63614d2d565b604051601f8201601f191681016001600160401b0381118282101715614db357614db3614d2d565b604052919050565b5f6001600160401b03821115614dd357614dd3614d2d565b50601f01601f191660200190565b5f82601f830112614df0575f80fd5b8135614e03614dfe82614dbb565b614d8b565b818152846020838601011115614e17575f80fd5b816020850160208301375f918101602001919091529392505050565b6001600160401b0381168114614199575f80fd5b80356118b481614e33565b6001600160a01b0381168114614199575f80fd5b5f60408284031215614e76575f80fd5b614e7e614d41565b9050614e8982614ca8565b81526020808301356001600160401b0380821115614ea5575f80fd5b818501915085601f830112614eb8575f80fd5b813581811115614eca57614eca614d2d565b8060051b9150614edb848301614d8b565b8181529183018401918481019088841115614ef4575f80fd5b938501935b83851015614f1e5784359250614f0e83614e52565b8282529385019390850190614ef9565b808688015250505050505092915050565b803561ffff811681146118b4575f80fd5b5f805f805f805f80610100898b031215614f58575f80fd5b88356001600160401b0380821115614f6e575f80fd5b614f7a8c838d01614de1565b995060208b0135915080821115614f8f575f80fd5b614f9b8c838d01614de1565b9850614fa960408c01614e47565b975060608b0135915080821115614fbe575f80fd5b614fca8c838d01614e66565b965060808b0135915080821115614fdf575f80fd5b50614fec8b828c01614e66565b945050614ffb60a08a01614f2f565b925061500960c08a01614e47565b915060e089013590509295985092959890939650565b5f8060408385031215615030575f80fd5b82356001600160401b03811115615045575f80fd5b830160808186031215615056575f80fd5b9150614cdc60208401614ca8565b5f805f8060808587031215615077575f80fd5b84359350602085013561508981614ce5565b925061509760408601614ca8565b915060608501356150a781614e52565b939692955090935050565b5f602082840312156150c2575f80fd5b813561303881614e33565b5f80604083850312156150de575f80fd5b50508035926020909101359150565b5f80604083850312156150fe575f80fd5b82359150602083013561511081614e52565b809150509250929050565b5f6020828403121561512b575f80fd5b61303882614ca8565b5f80828403610180811215615147575f80fd5b61016080821215615156575f80fd5b849350830135905061511081614e52565b634e487b7160e01b5f52602160045260245ffd5b6006811061518b5761518b615167565b9052565b5f5b838110156151a9578181015183820152602001615191565b50505f910152565b5f81518084526151c881602086016020860161518f565b601f01601f19169290920160200192915050565b602081526151ee60208201835161517b565b5f602083015161010080604085015261520b6101208501836151b1565b915060408501516001600160401b0380821660608701528060608801511660808701525050608085015161524a60a08601826001600160401b03169052565b5060a08501516001600160401b03811660c08601525060c08501516001600160401b03811660e08601525060e08501516001600160401b038116858301525090949350505050565b5f80602083850312156152a3575f80fd5b82356001600160401b03808211156152b9575f80fd5b818501915085601f8301126152cc575f80fd5b8135818111156152da575f80fd5b8660208285010111156152eb575f80fd5b60209290920196919550909350505050565b600181811c9082168061531157607f821691505b60208210810361532f57634e487b7160e01b5f52602260045260245ffd5b50919050565b602081016113cf828461517b565b5f82601f830112615352575f80fd5b8151615360614dfe82614dbb565b818152846020838601011115615374575f80fd5b61252c82602083016020870161518f565b5f60208284031215615395575f80fd5b81516001600160401b038111156153aa575f80fd5b61252c84828501615343565b602081525f61303860208301846151b1565b5f602082840312156153d8575f80fd5b5051919050565b60208101600483106153f3576153f3615167565b91905290565b5f60208284031215615409575f80fd5b813561303881614e52565b5f808335601e19843603018112615429575f80fd5b8301803591506001600160401b03821115615442575f80fd5b6020019150600581901b3603821315613e0a575f80fd5b634e487b7160e01b5f52603260045260245ffd5b5f8235605e19833603018112615481575f80fd5b9190910192915050565b5f6060823603121561549b575f80fd5b6154a3614d69565b82356001600160401b03808211156154b9575f80fd5b6154c536838701614de1565b835260208501359150808211156154da575f80fd5b506154e736828601614de1565b60208301525060408301356154fb81614e33565b604082015292915050565b5f825161548181846020870161518f565b601f82111561137c57805f5260205f20601f840160051c8101602085101561553c5750805b601f840160051c820191505b818110156112e9575f8155600101615548565b81516001600160401b0381111561557457615574614d2d565b6155888161558284546152fd565b84615517565b602080601f8311600181146155bb575f84156155a45750858301515b5f19600386901b1c1916600185901b178555611514565b5f85815260208120601f198616915b828110156155e9578886015182559484019460019091019084016155ca565b508582101561560657878501515f19600388901b60f8161c191681555b5050505050600190811b01905550565b634e487b7160e01b5f52601160045260245ffd5b6001600160401b038181168382160190808211156127cb576127cb615616565b5f63ffffffff80831681810361566257615662615616565b6001019392505050565b6001600160401b0381811683821602808216919082811461568f5761568f615616565b505092915050565b5f808335601e198436030181126156ac575f80fd5b83016020810192503590506001600160401b038111156156ca575f80fd5b803603821315613e0a575f80fd5b81835281816020850137505f828201602090810191909152601f909101601f19169091010190565b5f8383855260208086019550808560051b830101845f5b878110156157b557848303601f19018952813536889003605e1901811261573c575f80fd5b8701606061574a8280615697565b82875261575a83880182846156d8565b9250505061576a86830183615697565b8683038888015261577c8382846156d8565b92505050604080830135925061579183614e33565b6001600160401b039290921694909101939093529783019790830190600101615717565b5090979650505050505050565b6020815281356020820152602082013560408201525f60408301356157e681614e52565b6001600160a01b031660608381019190915283013536849003601e1901811261580d575f80fd5b83016020810190356001600160401b03811115615828575f80fd5b8060051b3603821315615839575f80fd5b60808085015261584d60a085018284615700565b95945050505050565b5f8261587057634e487b7160e01b5f52601260045260245ffd5b500490565b80820281158282048414176113cf576113cf615616565b5f806040838503121561589d575f80fd5b82519150602083015161511081614ce5565b5f60208083525f84546158c1816152fd565b806020870152604060018084165f81146158e257600181146158fe5761592b565b60ff19851660408a0152604084151560051b8a0101955061592b565b895f5260205f205f5b858110156159225781548b8201860152908301908801615907565b8a016040019650505b509398975050505050505050565b5f805f6060848603121561594b575f80fd5b83519250602084015161595d81614e33565b604085015190925061596e81614e33565b809150509250925092565b818382375f9101908152919050565b808201808211156113cf576113cf615616565b5f80604083850312156159ac575f80fd5b82516001600160401b03808211156159c2575f80fd5b90840190606082870312156159d5575f80fd5b6159dd614d69565b8251815260208301516159ef81614e52565b6020820152604083015182811115615a05575f80fd5b615a1188828601615343565b604083015250809450505050602083015161511081614ce5565b5f8060408385031215615a3c575f80fd5b82519150602083015161511081614e33565b6001600160401b038281168282160390808211156127cb576127cb615616565b818103818111156113cf576113cf615616565b5f6040830163ffffffff8351168452602080840151604060208701528281518085526060880191506020830194505f92505b80831015615adc5784516001600160a01b03168252938301936001929092019190830190615ab3565b509695505050505050565b60208152815160208201525f602083015160e06040840152615b0d6101008401826151b1565b90506040840151601f1980858403016060860152615b2b83836151b1565b92506001600160401b03606087015116608086015260808601519150808584030160a0860152615b5b8383615a81565b925060a08601519150808584030160c086015250615b798282615a81565b91505060c0840151615b9660e08501826001600160401b03169052565b509392505050565b5f8060408385031215615baf575f80fd5b8251915060208301516001600160401b03811115615bcb575f80fd5b615bd785828601615343565b9150509250929050565b5f60208284031215615bf1575f80fd5b61303882614f2f565b5f60208284031215615c0a575f80fd5b813560ff81168114613038575f80fd5b5f6001600160401b0380831681810361566257615662615616565b5f60208284031215615c45575f80fd5b815161303881614ce556fe6e5bdfcce15e53c3406ea67bfce37dcd26f5152d5492824e43fd5e3c8ac5ab009b779b17422d0df92223018b32b4d1fa46e071723d6817e2486d003becc55f00a2646970667358221220134c522d7ebb5407597523b03383f5d7ff6b691106136ade49f5c163b07b692164736f6c63430008190033",
 }
 
 // ERC20TokenStakingManagerABI is the input ABI used to generate the binding from.
@@ -982,25 +973,25 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) Comp
 	return _ERC20TokenStakingManager.Contract.CompleteDelegatorRegistration(&_ERC20TokenStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
-// CompleteEndDelegation is a paid mutator transaction binding the contract method 0x80dd672f.
+// CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
-// Solidity: function completeEndDelegation(bytes32 delegationID, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) CompleteEndDelegation(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "completeEndDelegation", delegationID, messageIndex)
+// Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) CompleteDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "completeDelegatorRemoval", delegationID, messageIndex)
 }
 
-// CompleteEndDelegation is a paid mutator transaction binding the contract method 0x80dd672f.
+// CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
-// Solidity: function completeEndDelegation(bytes32 delegationID, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) CompleteEndDelegation(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.CompleteEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, messageIndex)
+// Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.CompleteDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
-// CompleteEndDelegation is a paid mutator transaction binding the contract method 0x80dd672f.
+// CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
-// Solidity: function completeEndDelegation(bytes32 delegationID, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) CompleteEndDelegation(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.CompleteEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, messageIndex)
+// Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.CompleteDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
 // CompleteValidatorRegistration is a paid mutator transaction binding the contract method 0xa3a65e48.
@@ -1066,88 +1057,88 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) Comp
 	return _ERC20TokenStakingManager.Contract.CompleteValidatorWeightUpdate(&_ERC20TokenStakingManager.TransactOpts, messageIndex)
 }
 
-// ForceInitializeEndDelegation is a paid mutator transaction binding the contract method 0x1ec44724.
+// ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitializeEndDelegation(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitializeEndDelegation", delegationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndDelegation is a paid mutator transaction binding the contract method 0x1ec44724.
+// ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitializeEndDelegation(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndDelegation is a paid mutator transaction binding the contract method 0x1ec44724.
+// ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitializeEndDelegation(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x37b9be8f.
+// ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitializeEndDelegation0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitializeEndDelegation0", delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
-// ForceInitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x37b9be8f.
+// ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitializeEndDelegation0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndDelegation0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateDelegatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
-// ForceInitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x37b9be8f.
+// ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
-// Solidity: function forceInitializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitializeEndDelegation0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndDelegation0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateDelegatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
-// ForceInitializeEndValidation is a paid mutator transaction binding the contract method 0x3a1cfff6.
+// ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitializeEndValidation(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitializeEndValidation", validationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndValidation is a paid mutator transaction binding the contract method 0x3a1cfff6.
+// ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitializeEndValidation(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndValidation(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateValidatorRemoval(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndValidation is a paid mutator transaction binding the contract method 0x3a1cfff6.
+// ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitializeEndValidation(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndValidation(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateValidatorRemoval(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
-// ForceInitializeEndValidation0 is a paid mutator transaction binding the contract method 0x7d8d2f77.
+// ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitializeEndValidation0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitializeEndValidation0", validationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ForceInitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "forceInitiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
-// ForceInitializeEndValidation0 is a paid mutator transaction binding the contract method 0x7d8d2f77.
+// ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitializeEndValidation0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndValidation0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateValidatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
-// ForceInitializeEndValidation0 is a paid mutator transaction binding the contract method 0x7d8d2f77.
+// ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
-// Solidity: function forceInitializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitializeEndValidation0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ForceInitializeEndValidation0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
+// Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ForceInitiateValidatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0x9e478eea.
@@ -1171,132 +1162,6 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) Init
 	return _ERC20TokenStakingManager.Contract.Initialize(&_ERC20TokenStakingManager.TransactOpts, settings, token)
 }
 
-// InitializeDelegatorRegistration is a paid mutator transaction binding the contract method 0x9e1bc4ef.
-//
-// Solidity: function initializeDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeDelegatorRegistration(opts *bind.TransactOpts, validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeDelegatorRegistration", validationID, delegationAmount)
-}
-
-// InitializeDelegatorRegistration is a paid mutator transaction binding the contract method 0x9e1bc4ef.
-//
-// Solidity: function initializeDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeDelegatorRegistration(validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeDelegatorRegistration(&_ERC20TokenStakingManager.TransactOpts, validationID, delegationAmount)
-}
-
-// InitializeDelegatorRegistration is a paid mutator transaction binding the contract method 0x9e1bc4ef.
-//
-// Solidity: function initializeDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeDelegatorRegistration(validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeDelegatorRegistration(&_ERC20TokenStakingManager.TransactOpts, validationID, delegationAmount)
-}
-
-// InitializeEndDelegation is a paid mutator transaction binding the contract method 0x0118acc4.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeEndDelegation(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeEndDelegation", delegationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeEndDelegation is a paid mutator transaction binding the contract method 0x0118acc4.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeEndDelegation(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeEndDelegation is a paid mutator transaction binding the contract method 0x0118acc4.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeEndDelegation(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x9ae06447.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeEndDelegation0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeEndDelegation0", delegationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x9ae06447.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeEndDelegation0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndDelegation0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndDelegation0 is a paid mutator transaction binding the contract method 0x9ae06447.
-//
-// Solidity: function initializeEndDelegation(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeEndDelegation0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndDelegation0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndValidation is a paid mutator transaction binding the contract method 0x5dd6a6cb.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeEndValidation(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeEndValidation", validationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndValidation is a paid mutator transaction binding the contract method 0x5dd6a6cb.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeEndValidation(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndValidation(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndValidation is a paid mutator transaction binding the contract method 0x5dd6a6cb.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeEndValidation(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndValidation(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
-}
-
-// InitializeEndValidation0 is a paid mutator transaction binding the contract method 0x76f78621.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeEndValidation0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeEndValidation0", validationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeEndValidation0 is a paid mutator transaction binding the contract method 0x76f78621.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeEndValidation0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndValidation0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeEndValidation0 is a paid mutator transaction binding the contract method 0x76f78621.
-//
-// Solidity: function initializeEndValidation(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeEndValidation0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeEndValidation0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
-}
-
-// InitializeValidatorRegistration is a paid mutator transaction binding the contract method 0x4bee0040.
-//
-// Solidity: function initializeValidatorRegistration((bytes,bytes,uint64,(uint32,address[]),(uint32,address[])) registrationInput, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitializeValidatorRegistration(opts *bind.TransactOpts, registrationInput ValidatorRegistrationInput, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "initializeValidatorRegistration", registrationInput, delegationFeeBips, minStakeDuration, stakeAmount)
-}
-
-// InitializeValidatorRegistration is a paid mutator transaction binding the contract method 0x4bee0040.
-//
-// Solidity: function initializeValidatorRegistration((bytes,bytes,uint64,(uint32,address[]),(uint32,address[])) registrationInput, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeValidatorRegistration(registrationInput ValidatorRegistrationInput, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeValidatorRegistration(&_ERC20TokenStakingManager.TransactOpts, registrationInput, delegationFeeBips, minStakeDuration, stakeAmount)
-}
-
-// InitializeValidatorRegistration is a paid mutator transaction binding the contract method 0x4bee0040.
-//
-// Solidity: function initializeValidatorRegistration((bytes,bytes,uint64,(uint32,address[]),(uint32,address[])) registrationInput, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeValidatorRegistration(registrationInput ValidatorRegistrationInput, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.InitializeValidatorRegistration(&_ERC20TokenStakingManager.TransactOpts, registrationInput, delegationFeeBips, minStakeDuration, stakeAmount)
-}
-
 // InitializeValidatorSet is a paid mutator transaction binding the contract method 0x20d91b7a.
 //
 // Solidity: function initializeValidatorSet((bytes32,bytes32,address,(bytes,bytes,uint64)[]) conversionData, uint32 messageIndex) returns()
@@ -1316,6 +1181,132 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitializeVali
 // Solidity: function initializeValidatorSet((bytes32,bytes32,address,(bytes,bytes,uint64)[]) conversionData, uint32 messageIndex) returns()
 func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitializeValidatorSet(conversionData ConversionData, messageIndex uint32) (*types.Transaction, error) {
 	return _ERC20TokenStakingManager.Contract.InitializeValidatorSet(&_ERC20TokenStakingManager.TransactOpts, conversionData, messageIndex)
+}
+
+// InitiateDelegatorRegistration is a paid mutator transaction binding the contract method 0x739b4eff.
+//
+// Solidity: function initiateDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateDelegatorRegistration(opts *bind.TransactOpts, validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateDelegatorRegistration", validationID, delegationAmount)
+}
+
+// InitiateDelegatorRegistration is a paid mutator transaction binding the contract method 0x739b4eff.
+//
+// Solidity: function initiateDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateDelegatorRegistration(validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRegistration(&_ERC20TokenStakingManager.TransactOpts, validationID, delegationAmount)
+}
+
+// InitiateDelegatorRegistration is a paid mutator transaction binding the contract method 0x739b4eff.
+//
+// Solidity: function initiateDelegatorRegistration(bytes32 validationID, uint256 delegationAmount) returns(bytes32)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateDelegatorRegistration(validationID [32]byte, delegationAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRegistration(&_ERC20TokenStakingManager.TransactOpts, validationID, delegationAmount)
+}
+
+// InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRemoval(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+}
+
+// InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+}
+
+// InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
+//
+// Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateDelegatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, rewardRecipient)
+}
+
+// InitiateValidatorRegistration is a paid mutator transaction binding the contract method 0x1af1872b.
+//
+// Solidity: function initiateValidatorRegistration(bytes nodeID, bytes blsPublicKey, uint64 registrationExpiry, (uint32,address[]) remainingBalanceOwner, (uint32,address[]) disableOwner, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateValidatorRegistration(opts *bind.TransactOpts, nodeID []byte, blsPublicKey []byte, registrationExpiry uint64, remainingBalanceOwner PChainOwner, disableOwner PChainOwner, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateValidatorRegistration", nodeID, blsPublicKey, registrationExpiry, remainingBalanceOwner, disableOwner, delegationFeeBips, minStakeDuration, stakeAmount)
+}
+
+// InitiateValidatorRegistration is a paid mutator transaction binding the contract method 0x1af1872b.
+//
+// Solidity: function initiateValidatorRegistration(bytes nodeID, bytes blsPublicKey, uint64 registrationExpiry, (uint32,address[]) remainingBalanceOwner, (uint32,address[]) disableOwner, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateValidatorRegistration(nodeID []byte, blsPublicKey []byte, registrationExpiry uint64, remainingBalanceOwner PChainOwner, disableOwner PChainOwner, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRegistration(&_ERC20TokenStakingManager.TransactOpts, nodeID, blsPublicKey, registrationExpiry, remainingBalanceOwner, disableOwner, delegationFeeBips, minStakeDuration, stakeAmount)
+}
+
+// InitiateValidatorRegistration is a paid mutator transaction binding the contract method 0x1af1872b.
+//
+// Solidity: function initiateValidatorRegistration(bytes nodeID, bytes blsPublicKey, uint64 registrationExpiry, (uint32,address[]) remainingBalanceOwner, (uint32,address[]) disableOwner, uint16 delegationFeeBips, uint64 minStakeDuration, uint256 stakeAmount) returns(bytes32 validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateValidatorRegistration(nodeID []byte, blsPublicKey []byte, registrationExpiry uint64, remainingBalanceOwner PChainOwner, disableOwner PChainOwner, delegationFeeBips uint16, minStakeDuration uint64, stakeAmount *big.Int) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRegistration(&_ERC20TokenStakingManager.TransactOpts, nodeID, blsPublicKey, registrationExpiry, remainingBalanceOwner, disableOwner, delegationFeeBips, minStakeDuration, stakeAmount)
+}
+
+// InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRemoval(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRemoval(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+}
+
+// InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) InitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "initiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, rewardRecipient)
+}
+
+// InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
+}
+
+// InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
+//
+// Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address rewardRecipient) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, rewardRecipient common.Address) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.InitiateValidatorRemoval0(&_ERC20TokenStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, rewardRecipient)
 }
 
 // ResendEndValidatorMessage is a paid mutator transaction binding the contract method 0x0322ed98.
@@ -1360,25 +1351,25 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) Rese
 	return _ERC20TokenStakingManager.Contract.ResendRegisterValidatorMessage(&_ERC20TokenStakingManager.TransactOpts, validationID)
 }
 
-// ResendUpdateDelegation is a paid mutator transaction binding the contract method 0xba3a4b97.
+// ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
-// Solidity: function resendUpdateDelegation(bytes32 delegationID) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ResendUpdateDelegation(opts *bind.TransactOpts, delegationID [32]byte) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.contract.Transact(opts, "resendUpdateDelegation", delegationID)
+// Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactor) ResendUpdateDelegator(opts *bind.TransactOpts, delegationID [32]byte) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.contract.Transact(opts, "resendUpdateDelegator", delegationID)
 }
 
-// ResendUpdateDelegation is a paid mutator transaction binding the contract method 0xba3a4b97.
+// ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
-// Solidity: function resendUpdateDelegation(bytes32 delegationID) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ResendUpdateDelegation(delegationID [32]byte) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ResendUpdateDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID)
+// Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ResendUpdateDelegator(&_ERC20TokenStakingManager.TransactOpts, delegationID)
 }
 
-// ResendUpdateDelegation is a paid mutator transaction binding the contract method 0xba3a4b97.
+// ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
-// Solidity: function resendUpdateDelegation(bytes32 delegationID) returns()
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ResendUpdateDelegation(delegationID [32]byte) (*types.Transaction, error) {
-	return _ERC20TokenStakingManager.Contract.ResendUpdateDelegation(&_ERC20TokenStakingManager.TransactOpts, delegationID)
+// Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
+	return _ERC20TokenStakingManager.Contract.ResendUpdateDelegator(&_ERC20TokenStakingManager.TransactOpts, delegationID)
 }
 
 // SubmitUptimeProof is a paid mutator transaction binding the contract method 0x25e1c776.
@@ -1400,6 +1391,315 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerSession) SubmitUptimePr
 // Solidity: function submitUptimeProof(bytes32 validationID, uint32 messageIndex) returns()
 func (_ERC20TokenStakingManager *ERC20TokenStakingManagerTransactorSession) SubmitUptimeProof(validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
 	return _ERC20TokenStakingManager.Contract.SubmitUptimeProof(&_ERC20TokenStakingManager.TransactOpts, validationID, messageIndex)
+}
+
+// ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator is returned from FilterCompletedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRegistration events raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator struct {
+	Event *ERC20TokenStakingManagerCompletedDelegatorRegistration // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log          // Log channel receiving the found contract events
+	sub  interfaces.Subscription // Subscription for errors, completion and termination
+	done bool                    // Whether the subscription completed delivering logs
+	fail error                   // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ERC20TokenStakingManagerCompletedDelegatorRegistration)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ERC20TokenStakingManagerCompletedDelegatorRegistration)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ERC20TokenStakingManagerCompletedDelegatorRegistration represents a CompletedDelegatorRegistration event raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerCompletedDelegatorRegistration struct {
+	DelegationID [32]byte
+	ValidationID [32]byte
+	StartTime    *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterCompletedDelegatorRegistration is a free log retrieval operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
+//
+// Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterCompletedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ERC20TokenStakingManagerCompletedDelegatorRegistrationIterator{contract: _ERC20TokenStakingManager.contract, event: "CompletedDelegatorRegistration", logs: logs, sub: sub}, nil
+}
+
+// WatchCompletedDelegatorRegistration is a free log subscription operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
+//
+// Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchCompletedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerCompletedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ERC20TokenStakingManagerCompletedDelegatorRegistration)
+				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseCompletedDelegatorRegistration is a log parse operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
+//
+// Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseCompletedDelegatorRegistration(log types.Log) (*ERC20TokenStakingManagerCompletedDelegatorRegistration, error) {
+	event := new(ERC20TokenStakingManagerCompletedDelegatorRegistration)
+	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// ERC20TokenStakingManagerCompletedDelegatorRemovalIterator is returned from FilterCompletedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRemoval events raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerCompletedDelegatorRemovalIterator struct {
+	Event *ERC20TokenStakingManagerCompletedDelegatorRemoval // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log          // Log channel receiving the found contract events
+	sub  interfaces.Subscription // Subscription for errors, completion and termination
+	done bool                    // Whether the subscription completed delivering logs
+	fail error                   // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRemovalIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ERC20TokenStakingManagerCompletedDelegatorRemoval)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ERC20TokenStakingManagerCompletedDelegatorRemoval)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRemovalIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ERC20TokenStakingManagerCompletedDelegatorRemovalIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ERC20TokenStakingManagerCompletedDelegatorRemoval represents a CompletedDelegatorRemoval event raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerCompletedDelegatorRemoval struct {
+	DelegationID [32]byte
+	ValidationID [32]byte
+	Rewards      *big.Int
+	Fees         *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterCompletedDelegatorRemoval is a free log retrieval operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
+//
+// Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterCompletedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerCompletedDelegatorRemovalIterator, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ERC20TokenStakingManagerCompletedDelegatorRemovalIterator{contract: _ERC20TokenStakingManager.contract, event: "CompletedDelegatorRemoval", logs: logs, sub: sub}, nil
+}
+
+// WatchCompletedDelegatorRemoval is a free log subscription operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
+//
+// Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchCompletedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerCompletedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ERC20TokenStakingManagerCompletedDelegatorRemoval)
+				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseCompletedDelegatorRemoval is a log parse operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
+//
+// Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseCompletedDelegatorRemoval(log types.Log) (*ERC20TokenStakingManagerCompletedDelegatorRemoval, error) {
+	event := new(ERC20TokenStakingManagerCompletedDelegatorRemoval)
+	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
 
 // ERC20TokenStakingManagerCompletedValidatorRegistrationIterator is returned from FilterCompletedValidatorRegistration and is used to iterate over the raw logs and unpacked data for CompletedValidatorRegistration events raised by the ERC20TokenStakingManager contract.
@@ -1837,634 +2137,6 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseComplete
 	return event, nil
 }
 
-// ERC20TokenStakingManagerDelegationEndedIterator is returned from FilterDelegationEnded and is used to iterate over the raw logs and unpacked data for DelegationEnded events raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegationEndedIterator struct {
-	Event *ERC20TokenStakingManagerDelegationEnded // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log          // Log channel receiving the found contract events
-	sub  interfaces.Subscription // Subscription for errors, completion and termination
-	done bool                    // Whether the subscription completed delivering logs
-	fail error                   // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ERC20TokenStakingManagerDelegationEndedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ERC20TokenStakingManagerDelegationEnded)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ERC20TokenStakingManagerDelegationEnded)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ERC20TokenStakingManagerDelegationEndedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ERC20TokenStakingManagerDelegationEndedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ERC20TokenStakingManagerDelegationEnded represents a DelegationEnded event raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegationEnded struct {
-	DelegationID [32]byte
-	ValidationID [32]byte
-	Rewards      *big.Int
-	Fees         *big.Int
-	Raw          types.Log // Blockchain specific contextual infos
-}
-
-// FilterDelegationEnded is a free log retrieval operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
-//
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterDelegationEnded(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerDelegationEndedIterator, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ERC20TokenStakingManagerDelegationEndedIterator{contract: _ERC20TokenStakingManager.contract, event: "DelegationEnded", logs: logs, sub: sub}, nil
-}
-
-// WatchDelegationEnded is a free log subscription operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
-//
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchDelegationEnded(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerDelegationEnded, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "DelegationEnded", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ERC20TokenStakingManagerDelegationEnded)
-				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegationEnded", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseDelegationEnded is a log parse operation binding the contract event 0x8ececf510070c320d9a55323ffabe350e294ae505fc0c509dc5736da6f5cc993.
-//
-// Solidity: event DelegationEnded(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseDelegationEnded(log types.Log) (*ERC20TokenStakingManagerDelegationEnded, error) {
-	event := new(ERC20TokenStakingManagerDelegationEnded)
-	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegationEnded", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// ERC20TokenStakingManagerDelegatorAddedIterator is returned from FilterDelegatorAdded and is used to iterate over the raw logs and unpacked data for DelegatorAdded events raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorAddedIterator struct {
-	Event *ERC20TokenStakingManagerDelegatorAdded // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log          // Log channel receiving the found contract events
-	sub  interfaces.Subscription // Subscription for errors, completion and termination
-	done bool                    // Whether the subscription completed delivering logs
-	fail error                   // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ERC20TokenStakingManagerDelegatorAddedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ERC20TokenStakingManagerDelegatorAdded)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ERC20TokenStakingManagerDelegatorAdded)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ERC20TokenStakingManagerDelegatorAddedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ERC20TokenStakingManagerDelegatorAddedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ERC20TokenStakingManagerDelegatorAdded represents a DelegatorAdded event raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorAdded struct {
-	DelegationID       [32]byte
-	ValidationID       [32]byte
-	DelegatorAddress   common.Address
-	Nonce              uint64
-	ValidatorWeight    uint64
-	DelegatorWeight    uint64
-	SetWeightMessageID [32]byte
-	Raw                types.Log // Blockchain specific contextual infos
-}
-
-// FilterDelegatorAdded is a free log retrieval operation binding the contract event 0xb0024b263bc3a0b728a6edea50a69efa841189f8d32ee8af9d1c2b1a1a223426.
-//
-// Solidity: event DelegatorAdded(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterDelegatorAdded(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (*ERC20TokenStakingManagerDelegatorAddedIterator, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-	var delegatorAddressRule []interface{}
-	for _, delegatorAddressItem := range delegatorAddress {
-		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "DelegatorAdded", delegationIDRule, validationIDRule, delegatorAddressRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ERC20TokenStakingManagerDelegatorAddedIterator{contract: _ERC20TokenStakingManager.contract, event: "DelegatorAdded", logs: logs, sub: sub}, nil
-}
-
-// WatchDelegatorAdded is a free log subscription operation binding the contract event 0xb0024b263bc3a0b728a6edea50a69efa841189f8d32ee8af9d1c2b1a1a223426.
-//
-// Solidity: event DelegatorAdded(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchDelegatorAdded(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerDelegatorAdded, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (event.Subscription, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-	var delegatorAddressRule []interface{}
-	for _, delegatorAddressItem := range delegatorAddress {
-		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "DelegatorAdded", delegationIDRule, validationIDRule, delegatorAddressRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ERC20TokenStakingManagerDelegatorAdded)
-				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorAdded", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseDelegatorAdded is a log parse operation binding the contract event 0xb0024b263bc3a0b728a6edea50a69efa841189f8d32ee8af9d1c2b1a1a223426.
-//
-// Solidity: event DelegatorAdded(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseDelegatorAdded(log types.Log) (*ERC20TokenStakingManagerDelegatorAdded, error) {
-	event := new(ERC20TokenStakingManagerDelegatorAdded)
-	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorAdded", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// ERC20TokenStakingManagerDelegatorRegisteredIterator is returned from FilterDelegatorRegistered and is used to iterate over the raw logs and unpacked data for DelegatorRegistered events raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorRegisteredIterator struct {
-	Event *ERC20TokenStakingManagerDelegatorRegistered // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log          // Log channel receiving the found contract events
-	sub  interfaces.Subscription // Subscription for errors, completion and termination
-	done bool                    // Whether the subscription completed delivering logs
-	fail error                   // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ERC20TokenStakingManagerDelegatorRegisteredIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ERC20TokenStakingManagerDelegatorRegistered)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ERC20TokenStakingManagerDelegatorRegistered)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ERC20TokenStakingManagerDelegatorRegisteredIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ERC20TokenStakingManagerDelegatorRegisteredIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ERC20TokenStakingManagerDelegatorRegistered represents a DelegatorRegistered event raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorRegistered struct {
-	DelegationID [32]byte
-	ValidationID [32]byte
-	StartTime    *big.Int
-	Raw          types.Log // Blockchain specific contextual infos
-}
-
-// FilterDelegatorRegistered is a free log retrieval operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
-//
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterDelegatorRegistered(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerDelegatorRegisteredIterator, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ERC20TokenStakingManagerDelegatorRegisteredIterator{contract: _ERC20TokenStakingManager.contract, event: "DelegatorRegistered", logs: logs, sub: sub}, nil
-}
-
-// WatchDelegatorRegistered is a free log subscription operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
-//
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchDelegatorRegistered(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerDelegatorRegistered, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "DelegatorRegistered", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ERC20TokenStakingManagerDelegatorRegistered)
-				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorRegistered", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseDelegatorRegistered is a log parse operation binding the contract event 0x047059b465069b8b751836b41f9f1d83daff583d2238cc7fbb461437ec23a4f6.
-//
-// Solidity: event DelegatorRegistered(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseDelegatorRegistered(log types.Log) (*ERC20TokenStakingManagerDelegatorRegistered, error) {
-	event := new(ERC20TokenStakingManagerDelegatorRegistered)
-	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorRegistered", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// ERC20TokenStakingManagerDelegatorRemovalInitializedIterator is returned from FilterDelegatorRemovalInitialized and is used to iterate over the raw logs and unpacked data for DelegatorRemovalInitialized events raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorRemovalInitializedIterator struct {
-	Event *ERC20TokenStakingManagerDelegatorRemovalInitialized // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log          // Log channel receiving the found contract events
-	sub  interfaces.Subscription // Subscription for errors, completion and termination
-	done bool                    // Whether the subscription completed delivering logs
-	fail error                   // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ERC20TokenStakingManagerDelegatorRemovalInitializedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ERC20TokenStakingManagerDelegatorRemovalInitialized)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ERC20TokenStakingManagerDelegatorRemovalInitialized)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ERC20TokenStakingManagerDelegatorRemovalInitializedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ERC20TokenStakingManagerDelegatorRemovalInitializedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ERC20TokenStakingManagerDelegatorRemovalInitialized represents a DelegatorRemovalInitialized event raised by the ERC20TokenStakingManager contract.
-type ERC20TokenStakingManagerDelegatorRemovalInitialized struct {
-	DelegationID [32]byte
-	ValidationID [32]byte
-	Raw          types.Log // Blockchain specific contextual infos
-}
-
-// FilterDelegatorRemovalInitialized is a free log retrieval operation binding the contract event 0x366d336c0ab380dc799f095a6f82a26326585c52909cc698b09ba4540709ed57.
-//
-// Solidity: event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterDelegatorRemovalInitialized(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerDelegatorRemovalInitializedIterator, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "DelegatorRemovalInitialized", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ERC20TokenStakingManagerDelegatorRemovalInitializedIterator{contract: _ERC20TokenStakingManager.contract, event: "DelegatorRemovalInitialized", logs: logs, sub: sub}, nil
-}
-
-// WatchDelegatorRemovalInitialized is a free log subscription operation binding the contract event 0x366d336c0ab380dc799f095a6f82a26326585c52909cc698b09ba4540709ed57.
-//
-// Solidity: event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchDelegatorRemovalInitialized(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerDelegatorRemovalInitialized, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
-
-	var delegationIDRule []interface{}
-	for _, delegationIDItem := range delegationID {
-		delegationIDRule = append(delegationIDRule, delegationIDItem)
-	}
-	var validationIDRule []interface{}
-	for _, validationIDItem := range validationID {
-		validationIDRule = append(validationIDRule, validationIDItem)
-	}
-
-	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "DelegatorRemovalInitialized", delegationIDRule, validationIDRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ERC20TokenStakingManagerDelegatorRemovalInitialized)
-				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorRemovalInitialized", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseDelegatorRemovalInitialized is a log parse operation binding the contract event 0x366d336c0ab380dc799f095a6f82a26326585c52909cc698b09ba4540709ed57.
-//
-// Solidity: event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseDelegatorRemovalInitialized(log types.Log) (*ERC20TokenStakingManagerDelegatorRemovalInitialized, error) {
-	event := new(ERC20TokenStakingManagerDelegatorRemovalInitialized)
-	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "DelegatorRemovalInitialized", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
 // ERC20TokenStakingManagerInitializedIterator is returned from FilterInitialized and is used to iterate over the raw logs and unpacked data for Initialized events raised by the ERC20TokenStakingManager contract.
 type ERC20TokenStakingManagerInitializedIterator struct {
 	Event *ERC20TokenStakingManagerInitialized // Event containing the contract specifics and raw log
@@ -2593,6 +2265,325 @@ func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchInitiali
 func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseInitialized(log types.Log) (*ERC20TokenStakingManagerInitialized, error) {
 	event := new(ERC20TokenStakingManagerInitialized)
 	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "Initialized", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator is returned from FilterInitiatedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRegistration events raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator struct {
+	Event *ERC20TokenStakingManagerInitiatedDelegatorRegistration // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log          // Log channel receiving the found contract events
+	sub  interfaces.Subscription // Subscription for errors, completion and termination
+	done bool                    // Whether the subscription completed delivering logs
+	fail error                   // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ERC20TokenStakingManagerInitiatedDelegatorRegistration)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ERC20TokenStakingManagerInitiatedDelegatorRegistration)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ERC20TokenStakingManagerInitiatedDelegatorRegistration represents a InitiatedDelegatorRegistration event raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerInitiatedDelegatorRegistration struct {
+	DelegationID       [32]byte
+	ValidationID       [32]byte
+	DelegatorAddress   common.Address
+	Nonce              uint64
+	ValidatorWeight    uint64
+	DelegatorWeight    uint64
+	SetWeightMessageID [32]byte
+	Raw                types.Log // Blockchain specific contextual infos
+}
+
+// FilterInitiatedDelegatorRegistration is a free log retrieval operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
+//
+// Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterInitiatedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (*ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+	var delegatorAddressRule []interface{}
+	for _, delegatorAddressItem := range delegatorAddress {
+		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ERC20TokenStakingManagerInitiatedDelegatorRegistrationIterator{contract: _ERC20TokenStakingManager.contract, event: "InitiatedDelegatorRegistration", logs: logs, sub: sub}, nil
+}
+
+// WatchInitiatedDelegatorRegistration is a free log subscription operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
+//
+// Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchInitiatedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerInitiatedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (event.Subscription, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+	var delegatorAddressRule []interface{}
+	for _, delegatorAddressItem := range delegatorAddress {
+		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ERC20TokenStakingManagerInitiatedDelegatorRegistration)
+				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseInitiatedDelegatorRegistration is a log parse operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
+//
+// Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseInitiatedDelegatorRegistration(log types.Log) (*ERC20TokenStakingManagerInitiatedDelegatorRegistration, error) {
+	event := new(ERC20TokenStakingManagerInitiatedDelegatorRegistration)
+	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator is returned from FilterInitiatedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRemoval events raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator struct {
+	Event *ERC20TokenStakingManagerInitiatedDelegatorRemoval // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log          // Log channel receiving the found contract events
+	sub  interfaces.Subscription // Subscription for errors, completion and termination
+	done bool                    // Whether the subscription completed delivering logs
+	fail error                   // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ERC20TokenStakingManagerInitiatedDelegatorRemoval)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ERC20TokenStakingManagerInitiatedDelegatorRemoval)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ERC20TokenStakingManagerInitiatedDelegatorRemoval represents a InitiatedDelegatorRemoval event raised by the ERC20TokenStakingManager contract.
+type ERC20TokenStakingManagerInitiatedDelegatorRemoval struct {
+	DelegationID [32]byte
+	ValidationID [32]byte
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterInitiatedDelegatorRemoval is a free log retrieval operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
+//
+// Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) FilterInitiatedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.FilterLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ERC20TokenStakingManagerInitiatedDelegatorRemovalIterator{contract: _ERC20TokenStakingManager.contract, event: "InitiatedDelegatorRemoval", logs: logs, sub: sub}, nil
+}
+
+// WatchInitiatedDelegatorRemoval is a free log subscription operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
+//
+// Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) WatchInitiatedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *ERC20TokenStakingManagerInitiatedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+
+	var delegationIDRule []interface{}
+	for _, delegationIDItem := range delegationID {
+		delegationIDRule = append(delegationIDRule, delegationIDItem)
+	}
+	var validationIDRule []interface{}
+	for _, validationIDItem := range validationID {
+		validationIDRule = append(validationIDRule, validationIDItem)
+	}
+
+	logs, sub, err := _ERC20TokenStakingManager.contract.WatchLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ERC20TokenStakingManagerInitiatedDelegatorRemoval)
+				if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseInitiatedDelegatorRemoval is a log parse operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
+//
+// Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
+func (_ERC20TokenStakingManager *ERC20TokenStakingManagerFilterer) ParseInitiatedDelegatorRemoval(log types.Log) (*ERC20TokenStakingManagerInitiatedDelegatorRemoval, error) {
+	event := new(ERC20TokenStakingManagerInitiatedDelegatorRemoval)
+	if err := _ERC20TokenStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

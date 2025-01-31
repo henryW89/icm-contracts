@@ -6,17 +6,13 @@
 pragma solidity 0.8.25;
 
 import {PoAValidatorManager} from "../PoAValidatorManager.sol";
-import {
-    ValidatorManagerSettings,
-    ValidatorRegistrationInput
-} from "../interfaces/IValidatorManager.sol";
+import {ValidatorManager, ValidatorManagerSettings} from "../ValidatorManager.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
-import {ValidatorManager} from "../ValidatorManager.sol";
 import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
-import {ACP99Manager} from "../ACP99Manager.sol";
+import {ACP99Manager, PChainOwner} from "../ACP99Manager.sol";
 
 contract PoAValidatorManagerTest is ValidatorManagerTest {
     PoAValidatorManager public app;
@@ -52,16 +48,14 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
                 OwnableUpgradeable.OwnableUnauthorizedAccount.selector, vm.addr(1)
             )
         );
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: DEFAULT_NODE_ID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                registrationExpiry: DEFAULT_EXPIRY,
-                remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-                disableOwner: DEFAULT_P_CHAIN_OWNER
-            }),
-            DEFAULT_WEIGHT
-        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
     }
 
     // This test applies to all ValidatorManagers, but we test it here to avoid
@@ -74,39 +68,48 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
             abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, weight)
         );
 
-        _initializeValidatorRegistration(
-            ValidatorRegistrationInput({
-                nodeID: nodeID,
-                blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-                remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-                disableOwner: DEFAULT_P_CHAIN_OWNER,
-                registrationExpiry: DEFAULT_EXPIRY
-            }),
-            weight
-        );
+        _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: weight
+        });
     }
 
-    function _initializeValidatorRegistration(
-        ValidatorRegistrationInput memory input,
+    function _initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration(input, weight);
+        return app.initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            registrationExpiry: registrationExpiry,
+            weight: weight
+        });
     }
 
-    function _initializeEndValidation(
+    function _initiateValidatorRemoval(
         bytes32 validationID,
         bool,
         address
     ) internal virtual override {
-        return app.initializeEndValidation(validationID);
+        return app.initiateValidatorRemoval(validationID);
     }
 
-    function _forceInitializeEndValidation(
+    function _forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool,
         address
     ) internal virtual override {
-        return app.initializeEndValidation(validationID);
+        return app.initiateValidatorRemoval(validationID);
     }
 
     function _setUp() internal override returns (ACP99Manager) {
