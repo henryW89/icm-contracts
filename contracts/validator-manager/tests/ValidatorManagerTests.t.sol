@@ -298,7 +298,7 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testInitialWeightsTooLow() public {
-        vm.prank(address(123));
+        vm.prank(address(0x123));
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
@@ -308,7 +308,7 @@ abstract contract ValidatorManagerTest is Test {
 
     function testRemoveValidatorTotalWeight5() public {
         // Use prank here, because otherwise each test will end up with a different contract address, leading to a different subnet conversion hash.
-        vm.prank(address(123));
+        vm.prank(address(0x123));
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
@@ -396,12 +396,12 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testInitiateValidatorRegistrationInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
@@ -413,52 +413,52 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testCompleteValidatorRegistrationInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.completeValidatorRegistration(0);
     }
 
     function testInitiateValidatorWeightUpdateInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
     }
 
     function testCompleteValidatorWeightUpdateInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.completeValidatorWeightUpdate(0);
     }
 
     function testInitiateValidatorRemovalInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.initiateValidatorRemoval(bytes32(0));
     }
 
     function testCompleteValidatorRemovalInvalidAdmin() public {
+        vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
-                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(123)
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
             )
         );
-        vm.prank(address(123));
         validatorManager.completeValidatorRemoval(0);
     }
 
