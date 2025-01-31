@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package iposvalidatormanager
+package istakingmanager
 
 import (
 	"errors"
@@ -61,113 +61,113 @@ type ValidatorMessagesValidationPeriod struct {
 	Weight                uint64
 }
 
-// IPoSValidatorManagerMetaData contains all meta data concerning the IPoSValidatorManager contract.
-var IPoSValidatorManagerMetaData = &bind.MetaData{
+// IStakingManagerMetaData contains all meta data concerning the IStakingManager contract.
+var IStakingManagerMetaData = &bind.MetaData{
 	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"}],\"name\":\"CompletedDelegatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewards\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fees\",\"type\":\"uint256\"}],\"name\":\"CompletedDelegatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegatorAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"nonce\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"validatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"delegatorWeight\",\"type\":\"uint64\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"setWeightMessageID\",\"type\":\"bytes32\"}],\"name\":\"InitiatedDelegatorRegistration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"InitiatedDelegatorRemoval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"uptime\",\"type\":\"uint64\"}],\"name\":\"UptimeUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeDelegatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"changeValidatorRewardRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"}],\"name\":\"claimDelegationFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRegistration\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"completeValidatorRemoval\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"forceInitiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"forceInitiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initiateDelegatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"initiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"includeUptimeProof\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"recipientAddress\",\"type\":\"address\"}],\"name\":\"initiateValidatorRemoval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"delegationID\",\"type\":\"bytes32\"}],\"name\":\"resendUpdateDelegator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"validationID\",\"type\":\"bytes32\"},{\"internalType\":\"uint32\",\"name\":\"messageIndex\",\"type\":\"uint32\"}],\"name\":\"submitUptimeProof\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
-// IPoSValidatorManagerABI is the input ABI used to generate the binding from.
-// Deprecated: Use IPoSValidatorManagerMetaData.ABI instead.
-var IPoSValidatorManagerABI = IPoSValidatorManagerMetaData.ABI
+// IStakingManagerABI is the input ABI used to generate the binding from.
+// Deprecated: Use IStakingManagerMetaData.ABI instead.
+var IStakingManagerABI = IStakingManagerMetaData.ABI
 
-// IPoSValidatorManager is an auto generated Go binding around an Ethereum contract.
-type IPoSValidatorManager struct {
-	IPoSValidatorManagerCaller     // Read-only binding to the contract
-	IPoSValidatorManagerTransactor // Write-only binding to the contract
-	IPoSValidatorManagerFilterer   // Log filterer for contract events
+// IStakingManager is an auto generated Go binding around an Ethereum contract.
+type IStakingManager struct {
+	IStakingManagerCaller     // Read-only binding to the contract
+	IStakingManagerTransactor // Write-only binding to the contract
+	IStakingManagerFilterer   // Log filterer for contract events
 }
 
-// IPoSValidatorManagerCaller is an auto generated read-only Go binding around an Ethereum contract.
-type IPoSValidatorManagerCaller struct {
+// IStakingManagerCaller is an auto generated read-only Go binding around an Ethereum contract.
+type IStakingManagerCaller struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// IPoSValidatorManagerTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type IPoSValidatorManagerTransactor struct {
+// IStakingManagerTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type IStakingManagerTransactor struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// IPoSValidatorManagerFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type IPoSValidatorManagerFilterer struct {
+// IStakingManagerFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type IStakingManagerFilterer struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// IPoSValidatorManagerSession is an auto generated Go binding around an Ethereum contract,
+// IStakingManagerSession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
-type IPoSValidatorManagerSession struct {
-	Contract     *IPoSValidatorManager // Generic contract binding to set the session for
-	CallOpts     bind.CallOpts         // Call options to use throughout this session
-	TransactOpts bind.TransactOpts     // Transaction auth options to use throughout this session
+type IStakingManagerSession struct {
+	Contract     *IStakingManager  // Generic contract binding to set the session for
+	CallOpts     bind.CallOpts     // Call options to use throughout this session
+	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
 
-// IPoSValidatorManagerCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// IStakingManagerCallerSession is an auto generated read-only Go binding around an Ethereum contract,
 // with pre-set call options.
-type IPoSValidatorManagerCallerSession struct {
-	Contract *IPoSValidatorManagerCaller // Generic contract caller binding to set the session for
-	CallOpts bind.CallOpts               // Call options to use throughout this session
+type IStakingManagerCallerSession struct {
+	Contract *IStakingManagerCaller // Generic contract caller binding to set the session for
+	CallOpts bind.CallOpts          // Call options to use throughout this session
 }
 
-// IPoSValidatorManagerTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// IStakingManagerTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
 // with pre-set transact options.
-type IPoSValidatorManagerTransactorSession struct {
-	Contract     *IPoSValidatorManagerTransactor // Generic contract transactor binding to set the session for
-	TransactOpts bind.TransactOpts               // Transaction auth options to use throughout this session
+type IStakingManagerTransactorSession struct {
+	Contract     *IStakingManagerTransactor // Generic contract transactor binding to set the session for
+	TransactOpts bind.TransactOpts          // Transaction auth options to use throughout this session
 }
 
-// IPoSValidatorManagerRaw is an auto generated low-level Go binding around an Ethereum contract.
-type IPoSValidatorManagerRaw struct {
-	Contract *IPoSValidatorManager // Generic contract binding to access the raw methods on
+// IStakingManagerRaw is an auto generated low-level Go binding around an Ethereum contract.
+type IStakingManagerRaw struct {
+	Contract *IStakingManager // Generic contract binding to access the raw methods on
 }
 
-// IPoSValidatorManagerCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type IPoSValidatorManagerCallerRaw struct {
-	Contract *IPoSValidatorManagerCaller // Generic read-only contract binding to access the raw methods on
+// IStakingManagerCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type IStakingManagerCallerRaw struct {
+	Contract *IStakingManagerCaller // Generic read-only contract binding to access the raw methods on
 }
 
-// IPoSValidatorManagerTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type IPoSValidatorManagerTransactorRaw struct {
-	Contract *IPoSValidatorManagerTransactor // Generic write-only contract binding to access the raw methods on
+// IStakingManagerTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type IStakingManagerTransactorRaw struct {
+	Contract *IStakingManagerTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewIPoSValidatorManager creates a new instance of IPoSValidatorManager, bound to a specific deployed contract.
-func NewIPoSValidatorManager(address common.Address, backend bind.ContractBackend) (*IPoSValidatorManager, error) {
-	contract, err := bindIPoSValidatorManager(address, backend, backend, backend)
+// NewIStakingManager creates a new instance of IStakingManager, bound to a specific deployed contract.
+func NewIStakingManager(address common.Address, backend bind.ContractBackend) (*IStakingManager, error) {
+	contract, err := bindIStakingManager(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManager{IPoSValidatorManagerCaller: IPoSValidatorManagerCaller{contract: contract}, IPoSValidatorManagerTransactor: IPoSValidatorManagerTransactor{contract: contract}, IPoSValidatorManagerFilterer: IPoSValidatorManagerFilterer{contract: contract}}, nil
+	return &IStakingManager{IStakingManagerCaller: IStakingManagerCaller{contract: contract}, IStakingManagerTransactor: IStakingManagerTransactor{contract: contract}, IStakingManagerFilterer: IStakingManagerFilterer{contract: contract}}, nil
 }
 
-// NewIPoSValidatorManagerCaller creates a new read-only instance of IPoSValidatorManager, bound to a specific deployed contract.
-func NewIPoSValidatorManagerCaller(address common.Address, caller bind.ContractCaller) (*IPoSValidatorManagerCaller, error) {
-	contract, err := bindIPoSValidatorManager(address, caller, nil, nil)
+// NewIStakingManagerCaller creates a new read-only instance of IStakingManager, bound to a specific deployed contract.
+func NewIStakingManagerCaller(address common.Address, caller bind.ContractCaller) (*IStakingManagerCaller, error) {
+	contract, err := bindIStakingManager(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerCaller{contract: contract}, nil
+	return &IStakingManagerCaller{contract: contract}, nil
 }
 
-// NewIPoSValidatorManagerTransactor creates a new write-only instance of IPoSValidatorManager, bound to a specific deployed contract.
-func NewIPoSValidatorManagerTransactor(address common.Address, transactor bind.ContractTransactor) (*IPoSValidatorManagerTransactor, error) {
-	contract, err := bindIPoSValidatorManager(address, nil, transactor, nil)
+// NewIStakingManagerTransactor creates a new write-only instance of IStakingManager, bound to a specific deployed contract.
+func NewIStakingManagerTransactor(address common.Address, transactor bind.ContractTransactor) (*IStakingManagerTransactor, error) {
+	contract, err := bindIStakingManager(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerTransactor{contract: contract}, nil
+	return &IStakingManagerTransactor{contract: contract}, nil
 }
 
-// NewIPoSValidatorManagerFilterer creates a new log filterer instance of IPoSValidatorManager, bound to a specific deployed contract.
-func NewIPoSValidatorManagerFilterer(address common.Address, filterer bind.ContractFilterer) (*IPoSValidatorManagerFilterer, error) {
-	contract, err := bindIPoSValidatorManager(address, nil, nil, filterer)
+// NewIStakingManagerFilterer creates a new log filterer instance of IStakingManager, bound to a specific deployed contract.
+func NewIStakingManagerFilterer(address common.Address, filterer bind.ContractFilterer) (*IStakingManagerFilterer, error) {
+	contract, err := bindIStakingManager(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerFilterer{contract: contract}, nil
+	return &IStakingManagerFilterer{contract: contract}, nil
 }
 
-// bindIPoSValidatorManager binds a generic wrapper to an already deployed contract.
-func bindIPoSValidatorManager(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := IPoSValidatorManagerMetaData.GetAbi()
+// bindIStakingManager binds a generic wrapper to an already deployed contract.
+func bindIStakingManager(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := IStakingManagerMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
@@ -178,400 +178,400 @@ func bindIPoSValidatorManager(address common.Address, caller bind.ContractCaller
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_IPoSValidatorManager *IPoSValidatorManagerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _IPoSValidatorManager.Contract.IPoSValidatorManagerCaller.contract.Call(opts, result, method, params...)
+func (_IStakingManager *IStakingManagerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _IStakingManager.Contract.IStakingManagerCaller.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_IPoSValidatorManager *IPoSValidatorManagerRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.IPoSValidatorManagerTransactor.contract.Transfer(opts)
+func (_IStakingManager *IStakingManagerRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _IStakingManager.Contract.IStakingManagerTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_IPoSValidatorManager *IPoSValidatorManagerRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.IPoSValidatorManagerTransactor.contract.Transact(opts, method, params...)
+func (_IStakingManager *IStakingManagerRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _IStakingManager.Contract.IStakingManagerTransactor.contract.Transact(opts, method, params...)
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_IPoSValidatorManager *IPoSValidatorManagerCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _IPoSValidatorManager.Contract.contract.Call(opts, result, method, params...)
+func (_IStakingManager *IStakingManagerCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _IStakingManager.Contract.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.contract.Transfer(opts)
+func (_IStakingManager *IStakingManagerTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _IStakingManager.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.contract.Transact(opts, method, params...)
+func (_IStakingManager *IStakingManagerTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _IStakingManager.Contract.contract.Transact(opts, method, params...)
 }
 
 // ChangeDelegatorRewardRecipient is a paid mutator transaction binding the contract method 0xfb8b11dd.
 //
 // Solidity: function changeDelegatorRewardRecipient(bytes32 delegationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ChangeDelegatorRewardRecipient(opts *bind.TransactOpts, delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "changeDelegatorRewardRecipient", delegationID, recipient)
+func (_IStakingManager *IStakingManagerTransactor) ChangeDelegatorRewardRecipient(opts *bind.TransactOpts, delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "changeDelegatorRewardRecipient", delegationID, recipient)
 }
 
 // ChangeDelegatorRewardRecipient is a paid mutator transaction binding the contract method 0xfb8b11dd.
 //
 // Solidity: function changeDelegatorRewardRecipient(bytes32 delegationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ChangeDelegatorRewardRecipient(delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ChangeDelegatorRewardRecipient(&_IPoSValidatorManager.TransactOpts, delegationID, recipient)
+func (_IStakingManager *IStakingManagerSession) ChangeDelegatorRewardRecipient(delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ChangeDelegatorRewardRecipient(&_IStakingManager.TransactOpts, delegationID, recipient)
 }
 
 // ChangeDelegatorRewardRecipient is a paid mutator transaction binding the contract method 0xfb8b11dd.
 //
 // Solidity: function changeDelegatorRewardRecipient(bytes32 delegationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ChangeDelegatorRewardRecipient(delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ChangeDelegatorRewardRecipient(&_IPoSValidatorManager.TransactOpts, delegationID, recipient)
+func (_IStakingManager *IStakingManagerTransactorSession) ChangeDelegatorRewardRecipient(delegationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ChangeDelegatorRewardRecipient(&_IStakingManager.TransactOpts, delegationID, recipient)
 }
 
 // ChangeValidatorRewardRecipient is a paid mutator transaction binding the contract method 0x8ef34c98.
 //
 // Solidity: function changeValidatorRewardRecipient(bytes32 validationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ChangeValidatorRewardRecipient(opts *bind.TransactOpts, validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "changeValidatorRewardRecipient", validationID, recipient)
+func (_IStakingManager *IStakingManagerTransactor) ChangeValidatorRewardRecipient(opts *bind.TransactOpts, validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "changeValidatorRewardRecipient", validationID, recipient)
 }
 
 // ChangeValidatorRewardRecipient is a paid mutator transaction binding the contract method 0x8ef34c98.
 //
 // Solidity: function changeValidatorRewardRecipient(bytes32 validationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ChangeValidatorRewardRecipient(validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ChangeValidatorRewardRecipient(&_IPoSValidatorManager.TransactOpts, validationID, recipient)
+func (_IStakingManager *IStakingManagerSession) ChangeValidatorRewardRecipient(validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ChangeValidatorRewardRecipient(&_IStakingManager.TransactOpts, validationID, recipient)
 }
 
 // ChangeValidatorRewardRecipient is a paid mutator transaction binding the contract method 0x8ef34c98.
 //
 // Solidity: function changeValidatorRewardRecipient(bytes32 validationID, address recipient) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ChangeValidatorRewardRecipient(validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ChangeValidatorRewardRecipient(&_IPoSValidatorManager.TransactOpts, validationID, recipient)
+func (_IStakingManager *IStakingManagerTransactorSession) ChangeValidatorRewardRecipient(validationID [32]byte, recipient common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ChangeValidatorRewardRecipient(&_IStakingManager.TransactOpts, validationID, recipient)
 }
 
 // ClaimDelegationFees is a paid mutator transaction binding the contract method 0x93e24598.
 //
 // Solidity: function claimDelegationFees(bytes32 validationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ClaimDelegationFees(opts *bind.TransactOpts, validationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "claimDelegationFees", validationID)
+func (_IStakingManager *IStakingManagerTransactor) ClaimDelegationFees(opts *bind.TransactOpts, validationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "claimDelegationFees", validationID)
 }
 
 // ClaimDelegationFees is a paid mutator transaction binding the contract method 0x93e24598.
 //
 // Solidity: function claimDelegationFees(bytes32 validationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ClaimDelegationFees(validationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ClaimDelegationFees(&_IPoSValidatorManager.TransactOpts, validationID)
+func (_IStakingManager *IStakingManagerSession) ClaimDelegationFees(validationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ClaimDelegationFees(&_IStakingManager.TransactOpts, validationID)
 }
 
 // ClaimDelegationFees is a paid mutator transaction binding the contract method 0x93e24598.
 //
 // Solidity: function claimDelegationFees(bytes32 validationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ClaimDelegationFees(validationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ClaimDelegationFees(&_IPoSValidatorManager.TransactOpts, validationID)
+func (_IStakingManager *IStakingManagerTransactorSession) ClaimDelegationFees(validationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ClaimDelegationFees(&_IStakingManager.TransactOpts, validationID)
 }
 
 // CompleteDelegatorRegistration is a paid mutator transaction binding the contract method 0x60ad7784.
 //
 // Solidity: function completeDelegatorRegistration(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) CompleteDelegatorRegistration(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "completeDelegatorRegistration", delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) CompleteDelegatorRegistration(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "completeDelegatorRegistration", delegationID, messageIndex)
 }
 
 // CompleteDelegatorRegistration is a paid mutator transaction binding the contract method 0x60ad7784.
 //
 // Solidity: function completeDelegatorRegistration(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) CompleteDelegatorRegistration(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteDelegatorRegistration(&_IPoSValidatorManager.TransactOpts, delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerSession) CompleteDelegatorRegistration(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteDelegatorRegistration(&_IStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
 // CompleteDelegatorRegistration is a paid mutator transaction binding the contract method 0x60ad7784.
 //
 // Solidity: function completeDelegatorRegistration(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) CompleteDelegatorRegistration(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteDelegatorRegistration(&_IPoSValidatorManager.TransactOpts, delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) CompleteDelegatorRegistration(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteDelegatorRegistration(&_IStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
 // CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
 // Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) CompleteDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "completeDelegatorRemoval", delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) CompleteDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "completeDelegatorRemoval", delegationID, messageIndex)
 }
 
 // CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
 // Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
 // CompleteDelegatorRemoval is a paid mutator transaction binding the contract method 0x13409645.
 //
 // Solidity: function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) CompleteDelegatorRemoval(delegationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, messageIndex)
 }
 
 // CompleteValidatorRegistration is a paid mutator transaction binding the contract method 0xa3a65e48.
 //
 // Solidity: function completeValidatorRegistration(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) CompleteValidatorRegistration(opts *bind.TransactOpts, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "completeValidatorRegistration", messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) CompleteValidatorRegistration(opts *bind.TransactOpts, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "completeValidatorRegistration", messageIndex)
 }
 
 // CompleteValidatorRegistration is a paid mutator transaction binding the contract method 0xa3a65e48.
 //
 // Solidity: function completeValidatorRegistration(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) CompleteValidatorRegistration(messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteValidatorRegistration(&_IPoSValidatorManager.TransactOpts, messageIndex)
+func (_IStakingManager *IStakingManagerSession) CompleteValidatorRegistration(messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteValidatorRegistration(&_IStakingManager.TransactOpts, messageIndex)
 }
 
 // CompleteValidatorRegistration is a paid mutator transaction binding the contract method 0xa3a65e48.
 //
 // Solidity: function completeValidatorRegistration(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) CompleteValidatorRegistration(messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteValidatorRegistration(&_IPoSValidatorManager.TransactOpts, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) CompleteValidatorRegistration(messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteValidatorRegistration(&_IStakingManager.TransactOpts, messageIndex)
 }
 
 // CompleteValidatorRemoval is a paid mutator transaction binding the contract method 0x9681d940.
 //
 // Solidity: function completeValidatorRemoval(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) CompleteValidatorRemoval(opts *bind.TransactOpts, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "completeValidatorRemoval", messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) CompleteValidatorRemoval(opts *bind.TransactOpts, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "completeValidatorRemoval", messageIndex)
 }
 
 // CompleteValidatorRemoval is a paid mutator transaction binding the contract method 0x9681d940.
 //
 // Solidity: function completeValidatorRemoval(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) CompleteValidatorRemoval(messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteValidatorRemoval(&_IPoSValidatorManager.TransactOpts, messageIndex)
+func (_IStakingManager *IStakingManagerSession) CompleteValidatorRemoval(messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteValidatorRemoval(&_IStakingManager.TransactOpts, messageIndex)
 }
 
 // CompleteValidatorRemoval is a paid mutator transaction binding the contract method 0x9681d940.
 //
 // Solidity: function completeValidatorRemoval(uint32 messageIndex) returns(bytes32)
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) CompleteValidatorRemoval(messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.CompleteValidatorRemoval(&_IPoSValidatorManager.TransactOpts, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) CompleteValidatorRemoval(messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.CompleteValidatorRemoval(&_IStakingManager.TransactOpts, messageIndex)
 }
 
 // ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ForceInitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "forceInitiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) ForceInitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "forceInitiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x27bf60cd.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) ForceInitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ForceInitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "forceInitiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactor) ForceInitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "forceInitiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateDelegatorRemoval0(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateDelegatorRemoval0(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ForceInitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0xaac80c39.
 //
 // Solidity: function forceInitiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateDelegatorRemoval0(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactorSession) ForceInitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateDelegatorRemoval0(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ForceInitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "forceInitiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) ForceInitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "forceInitiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateValidatorRemoval(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateValidatorRemoval(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateValidatorRemoval is a paid mutator transaction binding the contract method 0x16679564.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateValidatorRemoval(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) ForceInitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateValidatorRemoval(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
 // ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ForceInitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "forceInitiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactor) ForceInitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "forceInitiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateValidatorRemoval0(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateValidatorRemoval0(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ForceInitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0x4b396bcc.
 //
 // Solidity: function forceInitiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ForceInitiateValidatorRemoval0(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactorSession) ForceInitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ForceInitiateValidatorRemoval0(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) InitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "initiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) InitiateDelegatorRemoval(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "initiateDelegatorRemoval", delegationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateDelegatorRemoval is a paid mutator transaction binding the contract method 0x2aa56638.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateDelegatorRemoval(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) InitiateDelegatorRemoval(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateDelegatorRemoval(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) InitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "initiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactor) InitiateDelegatorRemoval0(opts *bind.TransactOpts, delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "initiateDelegatorRemoval0", delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateDelegatorRemoval0(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateDelegatorRemoval0(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateDelegatorRemoval0 is a paid mutator transaction binding the contract method 0x8af5499e.
 //
 // Solidity: function initiateDelegatorRemoval(bytes32 delegationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateDelegatorRemoval0(&_IPoSValidatorManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactorSession) InitiateDelegatorRemoval0(delegationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateDelegatorRemoval0(&_IStakingManager.TransactOpts, delegationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) InitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "initiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) InitiateValidatorRemoval(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "initiateValidatorRemoval", validationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateValidatorRemoval(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateValidatorRemoval(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateValidatorRemoval is a paid mutator transaction binding the contract method 0xb2c1712e.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateValidatorRemoval(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) InitiateValidatorRemoval(validationID [32]byte, includeUptimeProof bool, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateValidatorRemoval(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex)
 }
 
 // InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) InitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "initiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactor) InitiateValidatorRemoval0(opts *bind.TransactOpts, validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "initiateValidatorRemoval0", validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateValidatorRemoval0(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateValidatorRemoval0(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // InitiateValidatorRemoval0 is a paid mutator transaction binding the contract method 0xcc71bbba.
 //
 // Solidity: function initiateValidatorRemoval(bytes32 validationID, bool includeUptimeProof, uint32 messageIndex, address recipientAddress) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.InitiateValidatorRemoval0(&_IPoSValidatorManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
+func (_IStakingManager *IStakingManagerTransactorSession) InitiateValidatorRemoval0(validationID [32]byte, includeUptimeProof bool, messageIndex uint32, recipientAddress common.Address) (*types.Transaction, error) {
+	return _IStakingManager.Contract.InitiateValidatorRemoval0(&_IStakingManager.TransactOpts, validationID, includeUptimeProof, messageIndex, recipientAddress)
 }
 
 // ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
 // Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) ResendUpdateDelegator(opts *bind.TransactOpts, delegationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "resendUpdateDelegator", delegationID)
+func (_IStakingManager *IStakingManagerTransactor) ResendUpdateDelegator(opts *bind.TransactOpts, delegationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "resendUpdateDelegator", delegationID)
 }
 
 // ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
 // Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ResendUpdateDelegator(&_IPoSValidatorManager.TransactOpts, delegationID)
+func (_IStakingManager *IStakingManagerSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ResendUpdateDelegator(&_IStakingManager.TransactOpts, delegationID)
 }
 
 // ResendUpdateDelegator is a paid mutator transaction binding the contract method 0x245dafcb.
 //
 // Solidity: function resendUpdateDelegator(bytes32 delegationID) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.ResendUpdateDelegator(&_IPoSValidatorManager.TransactOpts, delegationID)
+func (_IStakingManager *IStakingManagerTransactorSession) ResendUpdateDelegator(delegationID [32]byte) (*types.Transaction, error) {
+	return _IStakingManager.Contract.ResendUpdateDelegator(&_IStakingManager.TransactOpts, delegationID)
 }
 
 // SubmitUptimeProof is a paid mutator transaction binding the contract method 0x25e1c776.
 //
 // Solidity: function submitUptimeProof(bytes32 validationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactor) SubmitUptimeProof(opts *bind.TransactOpts, validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.contract.Transact(opts, "submitUptimeProof", validationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactor) SubmitUptimeProof(opts *bind.TransactOpts, validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.contract.Transact(opts, "submitUptimeProof", validationID, messageIndex)
 }
 
 // SubmitUptimeProof is a paid mutator transaction binding the contract method 0x25e1c776.
 //
 // Solidity: function submitUptimeProof(bytes32 validationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerSession) SubmitUptimeProof(validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.SubmitUptimeProof(&_IPoSValidatorManager.TransactOpts, validationID, messageIndex)
+func (_IStakingManager *IStakingManagerSession) SubmitUptimeProof(validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.SubmitUptimeProof(&_IStakingManager.TransactOpts, validationID, messageIndex)
 }
 
 // SubmitUptimeProof is a paid mutator transaction binding the contract method 0x25e1c776.
 //
 // Solidity: function submitUptimeProof(bytes32 validationID, uint32 messageIndex) returns()
-func (_IPoSValidatorManager *IPoSValidatorManagerTransactorSession) SubmitUptimeProof(validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
-	return _IPoSValidatorManager.Contract.SubmitUptimeProof(&_IPoSValidatorManager.TransactOpts, validationID, messageIndex)
+func (_IStakingManager *IStakingManagerTransactorSession) SubmitUptimeProof(validationID [32]byte, messageIndex uint32) (*types.Transaction, error) {
+	return _IStakingManager.Contract.SubmitUptimeProof(&_IStakingManager.TransactOpts, validationID, messageIndex)
 }
 
-// IPoSValidatorManagerCompletedDelegatorRegistrationIterator is returned from FilterCompletedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRegistration events raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerCompletedDelegatorRegistrationIterator struct {
-	Event *IPoSValidatorManagerCompletedDelegatorRegistration // Event containing the contract specifics and raw log
+// IStakingManagerCompletedDelegatorRegistrationIterator is returned from FilterCompletedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRegistration events raised by the IStakingManager contract.
+type IStakingManagerCompletedDelegatorRegistrationIterator struct {
+	Event *IStakingManagerCompletedDelegatorRegistration // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -585,7 +585,7 @@ type IPoSValidatorManagerCompletedDelegatorRegistrationIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Next() bool {
+func (it *IStakingManagerCompletedDelegatorRegistrationIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -594,7 +594,7 @@ func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Next() boo
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(IPoSValidatorManagerCompletedDelegatorRegistration)
+			it.Event = new(IStakingManagerCompletedDelegatorRegistration)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -609,7 +609,7 @@ func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Next() boo
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(IPoSValidatorManagerCompletedDelegatorRegistration)
+		it.Event = new(IStakingManagerCompletedDelegatorRegistration)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -625,19 +625,19 @@ func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Next() boo
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Error() error {
+func (it *IStakingManagerCompletedDelegatorRegistrationIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *IPoSValidatorManagerCompletedDelegatorRegistrationIterator) Close() error {
+func (it *IStakingManagerCompletedDelegatorRegistrationIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// IPoSValidatorManagerCompletedDelegatorRegistration represents a CompletedDelegatorRegistration event raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerCompletedDelegatorRegistration struct {
+// IStakingManagerCompletedDelegatorRegistration represents a CompletedDelegatorRegistration event raised by the IStakingManager contract.
+type IStakingManagerCompletedDelegatorRegistration struct {
 	DelegationID [32]byte
 	ValidationID [32]byte
 	StartTime    *big.Int
@@ -647,7 +647,7 @@ type IPoSValidatorManagerCompletedDelegatorRegistration struct {
 // FilterCompletedDelegatorRegistration is a free log retrieval operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
 //
 // Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterCompletedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IPoSValidatorManagerCompletedDelegatorRegistrationIterator, error) {
+func (_IStakingManager *IStakingManagerFilterer) FilterCompletedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IStakingManagerCompletedDelegatorRegistrationIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -658,17 +658,17 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterCompletedDelega
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.FilterLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerCompletedDelegatorRegistrationIterator{contract: _IPoSValidatorManager.contract, event: "CompletedDelegatorRegistration", logs: logs, sub: sub}, nil
+	return &IStakingManagerCompletedDelegatorRegistrationIterator{contract: _IStakingManager.contract, event: "CompletedDelegatorRegistration", logs: logs, sub: sub}, nil
 }
 
 // WatchCompletedDelegatorRegistration is a free log subscription operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
 //
 // Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerCompletedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+func (_IStakingManager *IStakingManagerFilterer) WatchCompletedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *IStakingManagerCompletedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -679,7 +679,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.WatchLogs(opts, "CompletedDelegatorRegistration", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -689,8 +689,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(IPoSValidatorManagerCompletedDelegatorRegistration)
-				if err := _IPoSValidatorManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
+				event := new(IStakingManagerCompletedDelegatorRegistration)
+				if err := _IStakingManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -714,18 +714,18 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 // ParseCompletedDelegatorRegistration is a log parse operation binding the contract event 0x3886b7389bccb22cac62838dee3f400cf8b22289295283e01a2c7093f93dd5aa.
 //
 // Solidity: event CompletedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseCompletedDelegatorRegistration(log types.Log) (*IPoSValidatorManagerCompletedDelegatorRegistration, error) {
-	event := new(IPoSValidatorManagerCompletedDelegatorRegistration)
-	if err := _IPoSValidatorManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
+func (_IStakingManager *IStakingManagerFilterer) ParseCompletedDelegatorRegistration(log types.Log) (*IStakingManagerCompletedDelegatorRegistration, error) {
+	event := new(IStakingManagerCompletedDelegatorRegistration)
+	if err := _IStakingManager.contract.UnpackLog(event, "CompletedDelegatorRegistration", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// IPoSValidatorManagerCompletedDelegatorRemovalIterator is returned from FilterCompletedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRemoval events raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerCompletedDelegatorRemovalIterator struct {
-	Event *IPoSValidatorManagerCompletedDelegatorRemoval // Event containing the contract specifics and raw log
+// IStakingManagerCompletedDelegatorRemovalIterator is returned from FilterCompletedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for CompletedDelegatorRemoval events raised by the IStakingManager contract.
+type IStakingManagerCompletedDelegatorRemovalIterator struct {
+	Event *IStakingManagerCompletedDelegatorRemoval // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -739,7 +739,7 @@ type IPoSValidatorManagerCompletedDelegatorRemovalIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Next() bool {
+func (it *IStakingManagerCompletedDelegatorRemovalIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -748,7 +748,7 @@ func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(IPoSValidatorManagerCompletedDelegatorRemoval)
+			it.Event = new(IStakingManagerCompletedDelegatorRemoval)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -763,7 +763,7 @@ func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(IPoSValidatorManagerCompletedDelegatorRemoval)
+		it.Event = new(IStakingManagerCompletedDelegatorRemoval)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -779,19 +779,19 @@ func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Error() error {
+func (it *IStakingManagerCompletedDelegatorRemovalIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *IPoSValidatorManagerCompletedDelegatorRemovalIterator) Close() error {
+func (it *IStakingManagerCompletedDelegatorRemovalIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// IPoSValidatorManagerCompletedDelegatorRemoval represents a CompletedDelegatorRemoval event raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerCompletedDelegatorRemoval struct {
+// IStakingManagerCompletedDelegatorRemoval represents a CompletedDelegatorRemoval event raised by the IStakingManager contract.
+type IStakingManagerCompletedDelegatorRemoval struct {
 	DelegationID [32]byte
 	ValidationID [32]byte
 	Rewards      *big.Int
@@ -802,7 +802,7 @@ type IPoSValidatorManagerCompletedDelegatorRemoval struct {
 // FilterCompletedDelegatorRemoval is a free log retrieval operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
 //
 // Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterCompletedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IPoSValidatorManagerCompletedDelegatorRemovalIterator, error) {
+func (_IStakingManager *IStakingManagerFilterer) FilterCompletedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IStakingManagerCompletedDelegatorRemovalIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -813,17 +813,17 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterCompletedDelega
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.FilterLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerCompletedDelegatorRemovalIterator{contract: _IPoSValidatorManager.contract, event: "CompletedDelegatorRemoval", logs: logs, sub: sub}, nil
+	return &IStakingManagerCompletedDelegatorRemovalIterator{contract: _IStakingManager.contract, event: "CompletedDelegatorRemoval", logs: logs, sub: sub}, nil
 }
 
 // WatchCompletedDelegatorRemoval is a free log subscription operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
 //
 // Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerCompletedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+func (_IStakingManager *IStakingManagerFilterer) WatchCompletedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *IStakingManagerCompletedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -834,7 +834,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.WatchLogs(opts, "CompletedDelegatorRemoval", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -844,8 +844,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(IPoSValidatorManagerCompletedDelegatorRemoval)
-				if err := _IPoSValidatorManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
+				event := new(IStakingManagerCompletedDelegatorRemoval)
+				if err := _IStakingManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -869,18 +869,18 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchCompletedDelegat
 // ParseCompletedDelegatorRemoval is a log parse operation binding the contract event 0x5ecc5b26a9265302cf871229b3d983e5ca57dbb1448966c6c58b2d3c68bc7f7e.
 //
 // Solidity: event CompletedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseCompletedDelegatorRemoval(log types.Log) (*IPoSValidatorManagerCompletedDelegatorRemoval, error) {
-	event := new(IPoSValidatorManagerCompletedDelegatorRemoval)
-	if err := _IPoSValidatorManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
+func (_IStakingManager *IStakingManagerFilterer) ParseCompletedDelegatorRemoval(log types.Log) (*IStakingManagerCompletedDelegatorRemoval, error) {
+	event := new(IStakingManagerCompletedDelegatorRemoval)
+	if err := _IStakingManager.contract.UnpackLog(event, "CompletedDelegatorRemoval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// IPoSValidatorManagerInitiatedDelegatorRegistrationIterator is returned from FilterInitiatedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRegistration events raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerInitiatedDelegatorRegistrationIterator struct {
-	Event *IPoSValidatorManagerInitiatedDelegatorRegistration // Event containing the contract specifics and raw log
+// IStakingManagerInitiatedDelegatorRegistrationIterator is returned from FilterInitiatedDelegatorRegistration and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRegistration events raised by the IStakingManager contract.
+type IStakingManagerInitiatedDelegatorRegistrationIterator struct {
+	Event *IStakingManagerInitiatedDelegatorRegistration // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -894,7 +894,7 @@ type IPoSValidatorManagerInitiatedDelegatorRegistrationIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Next() bool {
+func (it *IStakingManagerInitiatedDelegatorRegistrationIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -903,7 +903,7 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Next() boo
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(IPoSValidatorManagerInitiatedDelegatorRegistration)
+			it.Event = new(IStakingManagerInitiatedDelegatorRegistration)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -918,7 +918,7 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Next() boo
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(IPoSValidatorManagerInitiatedDelegatorRegistration)
+		it.Event = new(IStakingManagerInitiatedDelegatorRegistration)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -934,19 +934,19 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Next() boo
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Error() error {
+func (it *IStakingManagerInitiatedDelegatorRegistrationIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *IPoSValidatorManagerInitiatedDelegatorRegistrationIterator) Close() error {
+func (it *IStakingManagerInitiatedDelegatorRegistrationIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// IPoSValidatorManagerInitiatedDelegatorRegistration represents a InitiatedDelegatorRegistration event raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerInitiatedDelegatorRegistration struct {
+// IStakingManagerInitiatedDelegatorRegistration represents a InitiatedDelegatorRegistration event raised by the IStakingManager contract.
+type IStakingManagerInitiatedDelegatorRegistration struct {
 	DelegationID       [32]byte
 	ValidationID       [32]byte
 	DelegatorAddress   common.Address
@@ -960,7 +960,7 @@ type IPoSValidatorManagerInitiatedDelegatorRegistration struct {
 // FilterInitiatedDelegatorRegistration is a free log retrieval operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
 //
 // Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitiatedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (*IPoSValidatorManagerInitiatedDelegatorRegistrationIterator, error) {
+func (_IStakingManager *IStakingManagerFilterer) FilterInitiatedDelegatorRegistration(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (*IStakingManagerInitiatedDelegatorRegistrationIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -975,17 +975,17 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitiatedDelega
 		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
+	logs, sub, err := _IStakingManager.contract.FilterLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerInitiatedDelegatorRegistrationIterator{contract: _IPoSValidatorManager.contract, event: "InitiatedDelegatorRegistration", logs: logs, sub: sub}, nil
+	return &IStakingManagerInitiatedDelegatorRegistrationIterator{contract: _IStakingManager.contract, event: "InitiatedDelegatorRegistration", logs: logs, sub: sub}, nil
 }
 
 // WatchInitiatedDelegatorRegistration is a free log subscription operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
 //
 // Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerInitiatedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (event.Subscription, error) {
+func (_IStakingManager *IStakingManagerFilterer) WatchInitiatedDelegatorRegistration(opts *bind.WatchOpts, sink chan<- *IStakingManagerInitiatedDelegatorRegistration, delegationID [][32]byte, validationID [][32]byte, delegatorAddress []common.Address) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -1000,7 +1000,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 		delegatorAddressRule = append(delegatorAddressRule, delegatorAddressItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
+	logs, sub, err := _IStakingManager.contract.WatchLogs(opts, "InitiatedDelegatorRegistration", delegationIDRule, validationIDRule, delegatorAddressRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1010,8 +1010,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(IPoSValidatorManagerInitiatedDelegatorRegistration)
-				if err := _IPoSValidatorManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
+				event := new(IStakingManagerInitiatedDelegatorRegistration)
+				if err := _IStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1035,18 +1035,18 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 // ParseInitiatedDelegatorRegistration is a log parse operation binding the contract event 0xdf91f7709a30fda3fc5fc5dc97cb5d5b05e67e193dccaaef3cb332d23fda83d1.
 //
 // Solidity: event InitiatedDelegatorRegistration(bytes32 indexed delegationID, bytes32 indexed validationID, address indexed delegatorAddress, uint64 nonce, uint64 validatorWeight, uint64 delegatorWeight, bytes32 setWeightMessageID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseInitiatedDelegatorRegistration(log types.Log) (*IPoSValidatorManagerInitiatedDelegatorRegistration, error) {
-	event := new(IPoSValidatorManagerInitiatedDelegatorRegistration)
-	if err := _IPoSValidatorManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
+func (_IStakingManager *IStakingManagerFilterer) ParseInitiatedDelegatorRegistration(log types.Log) (*IStakingManagerInitiatedDelegatorRegistration, error) {
+	event := new(IStakingManagerInitiatedDelegatorRegistration)
+	if err := _IStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRegistration", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// IPoSValidatorManagerInitiatedDelegatorRemovalIterator is returned from FilterInitiatedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRemoval events raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerInitiatedDelegatorRemovalIterator struct {
-	Event *IPoSValidatorManagerInitiatedDelegatorRemoval // Event containing the contract specifics and raw log
+// IStakingManagerInitiatedDelegatorRemovalIterator is returned from FilterInitiatedDelegatorRemoval and is used to iterate over the raw logs and unpacked data for InitiatedDelegatorRemoval events raised by the IStakingManager contract.
+type IStakingManagerInitiatedDelegatorRemovalIterator struct {
+	Event *IStakingManagerInitiatedDelegatorRemoval // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1060,7 +1060,7 @@ type IPoSValidatorManagerInitiatedDelegatorRemovalIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Next() bool {
+func (it *IStakingManagerInitiatedDelegatorRemovalIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1069,7 +1069,7 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(IPoSValidatorManagerInitiatedDelegatorRemoval)
+			it.Event = new(IStakingManagerInitiatedDelegatorRemoval)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1084,7 +1084,7 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(IPoSValidatorManagerInitiatedDelegatorRemoval)
+		it.Event = new(IStakingManagerInitiatedDelegatorRemoval)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1100,19 +1100,19 @@ func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Error() error {
+func (it *IStakingManagerInitiatedDelegatorRemovalIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *IPoSValidatorManagerInitiatedDelegatorRemovalIterator) Close() error {
+func (it *IStakingManagerInitiatedDelegatorRemovalIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// IPoSValidatorManagerInitiatedDelegatorRemoval represents a InitiatedDelegatorRemoval event raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerInitiatedDelegatorRemoval struct {
+// IStakingManagerInitiatedDelegatorRemoval represents a InitiatedDelegatorRemoval event raised by the IStakingManager contract.
+type IStakingManagerInitiatedDelegatorRemoval struct {
 	DelegationID [32]byte
 	ValidationID [32]byte
 	Raw          types.Log // Blockchain specific contextual infos
@@ -1121,7 +1121,7 @@ type IPoSValidatorManagerInitiatedDelegatorRemoval struct {
 // FilterInitiatedDelegatorRemoval is a free log retrieval operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
 //
 // Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitiatedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IPoSValidatorManagerInitiatedDelegatorRemovalIterator, error) {
+func (_IStakingManager *IStakingManagerFilterer) FilterInitiatedDelegatorRemoval(opts *bind.FilterOpts, delegationID [][32]byte, validationID [][32]byte) (*IStakingManagerInitiatedDelegatorRemovalIterator, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -1132,17 +1132,17 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterInitiatedDelega
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.FilterLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerInitiatedDelegatorRemovalIterator{contract: _IPoSValidatorManager.contract, event: "InitiatedDelegatorRemoval", logs: logs, sub: sub}, nil
+	return &IStakingManagerInitiatedDelegatorRemovalIterator{contract: _IStakingManager.contract, event: "InitiatedDelegatorRemoval", logs: logs, sub: sub}, nil
 }
 
 // WatchInitiatedDelegatorRemoval is a free log subscription operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
 //
 // Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerInitiatedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
+func (_IStakingManager *IStakingManagerFilterer) WatchInitiatedDelegatorRemoval(opts *bind.WatchOpts, sink chan<- *IStakingManagerInitiatedDelegatorRemoval, delegationID [][32]byte, validationID [][32]byte) (event.Subscription, error) {
 
 	var delegationIDRule []interface{}
 	for _, delegationIDItem := range delegationID {
@@ -1153,7 +1153,7 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
+	logs, sub, err := _IStakingManager.contract.WatchLogs(opts, "InitiatedDelegatorRemoval", delegationIDRule, validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1163,8 +1163,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(IPoSValidatorManagerInitiatedDelegatorRemoval)
-				if err := _IPoSValidatorManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
+				event := new(IStakingManagerInitiatedDelegatorRemoval)
+				if err := _IStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1188,18 +1188,18 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchInitiatedDelegat
 // ParseInitiatedDelegatorRemoval is a log parse operation binding the contract event 0x5abe543af12bb7f76f6fa9daaa9d95d181c5e90566df58d3c012216b6245eeaf.
 //
 // Solidity: event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseInitiatedDelegatorRemoval(log types.Log) (*IPoSValidatorManagerInitiatedDelegatorRemoval, error) {
-	event := new(IPoSValidatorManagerInitiatedDelegatorRemoval)
-	if err := _IPoSValidatorManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
+func (_IStakingManager *IStakingManagerFilterer) ParseInitiatedDelegatorRemoval(log types.Log) (*IStakingManagerInitiatedDelegatorRemoval, error) {
+	event := new(IStakingManagerInitiatedDelegatorRemoval)
+	if err := _IStakingManager.contract.UnpackLog(event, "InitiatedDelegatorRemoval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// IPoSValidatorManagerUptimeUpdatedIterator is returned from FilterUptimeUpdated and is used to iterate over the raw logs and unpacked data for UptimeUpdated events raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerUptimeUpdatedIterator struct {
-	Event *IPoSValidatorManagerUptimeUpdated // Event containing the contract specifics and raw log
+// IStakingManagerUptimeUpdatedIterator is returned from FilterUptimeUpdated and is used to iterate over the raw logs and unpacked data for UptimeUpdated events raised by the IStakingManager contract.
+type IStakingManagerUptimeUpdatedIterator struct {
+	Event *IStakingManagerUptimeUpdated // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1213,7 +1213,7 @@ type IPoSValidatorManagerUptimeUpdatedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *IPoSValidatorManagerUptimeUpdatedIterator) Next() bool {
+func (it *IStakingManagerUptimeUpdatedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1222,7 +1222,7 @@ func (it *IPoSValidatorManagerUptimeUpdatedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(IPoSValidatorManagerUptimeUpdated)
+			it.Event = new(IStakingManagerUptimeUpdated)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1237,7 +1237,7 @@ func (it *IPoSValidatorManagerUptimeUpdatedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(IPoSValidatorManagerUptimeUpdated)
+		it.Event = new(IStakingManagerUptimeUpdated)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1253,19 +1253,19 @@ func (it *IPoSValidatorManagerUptimeUpdatedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *IPoSValidatorManagerUptimeUpdatedIterator) Error() error {
+func (it *IStakingManagerUptimeUpdatedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *IPoSValidatorManagerUptimeUpdatedIterator) Close() error {
+func (it *IStakingManagerUptimeUpdatedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// IPoSValidatorManagerUptimeUpdated represents a UptimeUpdated event raised by the IPoSValidatorManager contract.
-type IPoSValidatorManagerUptimeUpdated struct {
+// IStakingManagerUptimeUpdated represents a UptimeUpdated event raised by the IStakingManager contract.
+type IStakingManagerUptimeUpdated struct {
 	ValidationID [32]byte
 	Uptime       uint64
 	Raw          types.Log // Blockchain specific contextual infos
@@ -1274,31 +1274,31 @@ type IPoSValidatorManagerUptimeUpdated struct {
 // FilterUptimeUpdated is a free log retrieval operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
 // Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) FilterUptimeUpdated(opts *bind.FilterOpts, validationID [][32]byte) (*IPoSValidatorManagerUptimeUpdatedIterator, error) {
+func (_IStakingManager *IStakingManagerFilterer) FilterUptimeUpdated(opts *bind.FilterOpts, validationID [][32]byte) (*IStakingManagerUptimeUpdatedIterator, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.FilterLogs(opts, "UptimeUpdated", validationIDRule)
+	logs, sub, err := _IStakingManager.contract.FilterLogs(opts, "UptimeUpdated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
-	return &IPoSValidatorManagerUptimeUpdatedIterator{contract: _IPoSValidatorManager.contract, event: "UptimeUpdated", logs: logs, sub: sub}, nil
+	return &IStakingManagerUptimeUpdatedIterator{contract: _IStakingManager.contract, event: "UptimeUpdated", logs: logs, sub: sub}, nil
 }
 
 // WatchUptimeUpdated is a free log subscription operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
 // Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(opts *bind.WatchOpts, sink chan<- *IPoSValidatorManagerUptimeUpdated, validationID [][32]byte) (event.Subscription, error) {
+func (_IStakingManager *IStakingManagerFilterer) WatchUptimeUpdated(opts *bind.WatchOpts, sink chan<- *IStakingManagerUptimeUpdated, validationID [][32]byte) (event.Subscription, error) {
 
 	var validationIDRule []interface{}
 	for _, validationIDItem := range validationID {
 		validationIDRule = append(validationIDRule, validationIDItem)
 	}
 
-	logs, sub, err := _IPoSValidatorManager.contract.WatchLogs(opts, "UptimeUpdated", validationIDRule)
+	logs, sub, err := _IStakingManager.contract.WatchLogs(opts, "UptimeUpdated", validationIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1308,8 +1308,8 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(op
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(IPoSValidatorManagerUptimeUpdated)
-				if err := _IPoSValidatorManager.contract.UnpackLog(event, "UptimeUpdated", log); err != nil {
+				event := new(IStakingManagerUptimeUpdated)
+				if err := _IStakingManager.contract.UnpackLog(event, "UptimeUpdated", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1333,9 +1333,9 @@ func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) WatchUptimeUpdated(op
 // ParseUptimeUpdated is a log parse operation binding the contract event 0xec44148e8ff271f2d0bacef1142154abacb0abb3a29eb3eb50e2ca97e86d0435.
 //
 // Solidity: event UptimeUpdated(bytes32 indexed validationID, uint64 uptime)
-func (_IPoSValidatorManager *IPoSValidatorManagerFilterer) ParseUptimeUpdated(log types.Log) (*IPoSValidatorManagerUptimeUpdated, error) {
-	event := new(IPoSValidatorManagerUptimeUpdated)
-	if err := _IPoSValidatorManager.contract.UnpackLog(event, "UptimeUpdated", log); err != nil {
+func (_IStakingManager *IStakingManagerFilterer) ParseUptimeUpdated(log types.Log) (*IStakingManagerUptimeUpdated, error) {
+	event := new(IStakingManagerUptimeUpdated)
+	if err := _IStakingManager.contract.UnpackLog(event, "UptimeUpdated", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

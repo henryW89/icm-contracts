@@ -5,7 +5,6 @@
 
 pragma solidity 0.8.25;
 
-import {PoAValidatorManager} from "../PoAValidatorManager.sol";
 import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -17,7 +16,7 @@ import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 
 contract PoAValidatorManagerTest is ValidatorManagerTest {
-    PoAValidatorManager public app;
+    ValidatorManager public app;
 
     address public constant DEFAULT_OWNER = address(0x1);
 
@@ -34,9 +33,9 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     }
 
     function testDisableInitialization() public {
-        app = new PoAValidatorManager(ICMInitializable.Disallowed);
+        app = new ValidatorManager(ICMInitializable.Disallowed);
         vm.expectRevert(abi.encodeWithSelector(Initializable.InvalidInitialization.selector));
-        app.initialize(validatorManager, address(this));
+        app.initialize(_defaultSettings(address(this)));
     }
 
     function testInvalidValidatorManager() public {
@@ -64,7 +63,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     }
 
     // This test applies to all ValidatorManagers, but we test it here to avoid
-    // having to source UINT64MAX funds for PoSValidatorManagers.
+    // having to source UINT64MAX funds for StakingManagers.
     function testTotalWeightOverflow() public {
         uint64 weight = type(uint64).max;
 
@@ -136,11 +135,10 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     }
 
     function _setUp() internal override returns (ACP99Manager) {
-        app = new PoAValidatorManager(ICMInitializable.Allowed);
         validatorManager = new ValidatorManager(ICMInitializable.Allowed);
+        app = validatorManager;
 
-        validatorManager.initialize(_defaultSettings(address(app)));
-        app.initialize(validatorManager, address(this));
+        validatorManager.initialize(_defaultSettings(address(this)));
 
         return validatorManager;
     }

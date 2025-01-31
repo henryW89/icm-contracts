@@ -25,10 +25,12 @@ import (
 	"github.com/ava-labs/avalanchego/vms/secp256k1fx"
 	pwallet "github.com/ava-labs/avalanchego/wallet/chain/p/wallet"
 	"github.com/ava-labs/avalanchego/wallet/subnet/primary"
+	ownableupgradeable "github.com/ava-labs/icm-contracts/abi-bindings/go/OwnableUpgradeable"
 	proxyadmin "github.com/ava-labs/icm-contracts/abi-bindings/go/ProxyAdmin"
 	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/icm-contracts/tests/utils"
+	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/ethclient"
 	subnetEvmTestUtils "github.com/ava-labs/subnet-evm/tests/utils"
 
@@ -205,33 +207,48 @@ func (n *LocalNetwork) ConvertSubnet(
 		proxy,
 	)
 
-	specializationAddress, specializationProxyAdmin := utils.DeployAndInitializeValidatorManagerSpecialization(
-		ctx,
-		senderKey,
-		l1,
-		vdrManagerAddress,
-		managerType,
-		proxy,
-	)
-
 	validatorManager, err := validatormanager.NewValidatorManager(vdrManagerAddress, l1.RPCClient)
 	Expect(err).Should(BeNil())
+
+	sender := utils.PrivateKeyToAddress(senderKey)
 
 	utils.InitializeValidatorManager(
 		ctx,
 		senderKey,
 		l1,
 		validatorManager,
-		specializationAddress,
+		sender,
 	)
 
 	n.validatorManagers[l1.SubnetID] = ProxyAddress{
 		Address:    vdrManagerAddress,
 		ProxyAdmin: vdrManagerProxyAdmin,
 	}
-	n.validatorManagerSpecializations[l1.SubnetID] = ProxyAddress{
-		Address:    specializationAddress,
-		ProxyAdmin: specializationProxyAdmin,
+
+	if managerType != utils.PoAValidatorManager {
+		specializationAddress, specializationProxyAdmin := utils.DeployAndInitializeValidatorManagerSpecialization(
+			ctx,
+			senderKey,
+			l1,
+			vdrManagerAddress,
+			managerType,
+			proxy,
+		)
+
+		ownable, err := ownableupgradeable.NewOwnableUpgradeable(vdrManagerAddress, l1.RPCClient)
+		Expect(err).Should(BeNil())
+
+		opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
+		Expect(err).Should(BeNil())
+
+		tx, err := ownable.TransferOwnership(opts, specializationAddress)
+		Expect(err).Should(BeNil())
+		utils.WaitForTransactionSuccess(context.Background(), l1, tx.Hash())
+
+		n.validatorManagerSpecializations[l1.SubnetID] = ProxyAddress{
+			Address:    specializationAddress,
+			ProxyAdmin: specializationProxyAdmin,
+		}
 	}
 
 	tmpnetNodes := n.GetExtraNodes(len(weights))

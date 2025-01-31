@@ -5,8 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {PoSValidatorManager} from "./PoSValidatorManager.sol";
-import {PoSValidatorManagerSettings} from "./interfaces/IPoSValidatorManager.sol";
+import {StakingManager} from "./StakingManager.sol";
+import {StakingManagerSettings} from "./interfaces/IStakingManager.sol";
 import {
     INativeTokenStakingManager, PChainOwner
 } from "./interfaces/INativeTokenStakingManager.sol";
@@ -22,11 +22,7 @@ import {Initializable} from
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-contract NativeTokenStakingManager is
-    Initializable,
-    PoSValidatorManager,
-    INativeTokenStakingManager
-{
+contract NativeTokenStakingManager is Initializable, StakingManager, INativeTokenStakingManager {
     using Address for address payable;
 
     INativeMinter public constant NATIVE_MINTER =
@@ -44,16 +40,16 @@ contract NativeTokenStakingManager is
      * @param settings Initial settings for the PoS validator manager
      */
     // solhint-disable ordering
-    function initialize(PoSValidatorManagerSettings calldata settings) external reinitializer(2) {
+    function initialize(StakingManagerSettings calldata settings) external reinitializer(2) {
         __NativeTokenStakingManager_init(settings);
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __NativeTokenStakingManager_init(PoSValidatorManagerSettings calldata settings)
+    function __NativeTokenStakingManager_init(StakingManagerSettings calldata settings)
         internal
         onlyInitializing
     {
-        __POS_Validator_Manager_init(settings);
+        __STAKING_MANAGER_init(settings);
     }
 
     // solhint-disable-next-line func-name-mixedcase, no-empty-blocks
@@ -96,21 +92,21 @@ contract NativeTokenStakingManager is
     }
 
     /**
-     * @notice See {PoSValidatorManager-_lock}
+     * @notice See {StakingManager-_lock}
      */
     function _lock(uint256 value) internal virtual override returns (uint256) {
         return value;
     }
 
     /**
-     * @notice See {PoSValidatorManager-_unlock}
+     * @notice See {StakingManager-_unlock}
      */
     function _unlock(address to, uint256 value) internal virtual override {
         payable(to).sendValue(value);
     }
 
     /**
-     * @notice See {PoSValidatorManager-_reward}
+     * @notice See {StakingManager-_reward}
      */
     function _reward(address account, uint256 amount) internal virtual override {
         NATIVE_MINTER.mintNativeCoin(account, amount);

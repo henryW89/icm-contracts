@@ -16,10 +16,11 @@ export ARCH=$(uname -m)
 [ $ARCH = x86_64 ] && ARCH=amd64
 echo "ARCH set to $ARCH"
 
-DEFAULT_CONTRACT_LIST="TeleporterMessenger TeleporterRegistry ExampleERC20 ExampleRewardCalculator TestMessenger ValidatorSetSig NativeTokenStakingManager ERC20TokenStakingManager PoAValidatorManager
+DEFAULT_CONTRACT_LIST="TeleporterMessenger TeleporterRegistry ExampleERC20 ExampleRewardCalculator TestMessenger ValidatorSetSig NativeTokenStakingManager ERC20TokenStakingManager
 TokenHome TokenRemote ERC20TokenHome ERC20TokenHomeUpgradeable ERC20TokenRemote ERC20TokenRemoteUpgradeable NativeTokenHome NativeTokenHomeUpgradeable NativeTokenRemote NativeTokenRemoteUpgradeable
-WrappedNativeToken MockERC20SendAndCallReceiver MockNativeSendAndCallReceiver ExampleERC20Decimals IPoSValidatorManager ACP99Manager ValidatorManager"
+WrappedNativeToken MockERC20SendAndCallReceiver MockNativeSendAndCallReceiver ExampleERC20Decimals IStakingManager ACP99Manager ValidatorManager"
 PROXY_LIST="TransparentUpgradeableProxy ProxyAdmin"
+ACCESS_LIST="OwnableUpgradeable"
 
 SUBNET_EVM_LIST="INativeMinter"
 
@@ -183,6 +184,10 @@ generate_bindings "${contract_names[@]}"
 
 contract_names=($SUBNET_EVM_LIST)
 cd $ICM_CONTRACTS_PATH/lib/subnet-evm/contracts/contracts/interfaces
+generate_bindings "${contract_names[@]}"
+
+contract_names=($ACCESS_LIST)
+cd $ICM_CONTRACTS_PATH/lib/openzeppelin-contracts-upgradeable/contracts/access
 generate_bindings "${contract_names[@]}"
 
 exit 0
