@@ -1918,8 +1918,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
     function testStakingManagerStorageSlot() public view {
         assertEq(
-            _erc7201StorageSlot("StakingManager"),
-            stakingManager.STAKING_MANAGER_STORAGE_LOCATION()
+            _erc7201StorageSlot("StakingManager"), stakingManager.STAKING_MANAGER_STORAGE_LOCATION()
         );
     }
 
