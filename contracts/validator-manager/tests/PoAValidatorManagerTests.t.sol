@@ -38,6 +38,13 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         app.initialize(_defaultSettings(address(this)));
     }
 
+    function testInvalidValidatorManager() public {
+        app = new PoAValidatorManager(ICMInitializable.Allowed);
+        vm.expectRevert();
+
+        app.initialize(ValidatorManager(address(0)), address(this));
+    }
+
     function testInvalidOwnerRegistration() public {
         vm.prank(vm.addr(1));
         vm.expectRevert(
