@@ -74,7 +74,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndInitialPoSValidation(
+	utils.InitiateAndCompleteEndInitialPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -94,7 +94,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	// Register the validator as PoS
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	validationID := utils.InitializeAndCompleteERC20ValidatorRegistration(
+	validationID := utils.InitiateAndCompleteERC20ValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -132,7 +132,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 
 		nonce := uint64(1)
 
-		receipt := utils.InitializeERC20DelegatorRegistration(
+		receipt := utils.InitiateERC20DelegatorRegistration(
 			ctx,
 			fundedKey,
 			l1AInfo,
@@ -200,7 +200,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	{
 		log.Println("Delisting delegator")
 		nonce := uint64(2)
-		receipt := utils.InitializeEndDelegation(
+		receipt := utils.InitiateEndDelegation(
 			ctx,
 			fundedKey,
 			l1AInfo,
@@ -266,7 +266,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist the validator
 	//
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,

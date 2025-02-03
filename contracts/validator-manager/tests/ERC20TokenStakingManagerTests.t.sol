@@ -157,9 +157,12 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
     function testInvalidValidatorManager() public {
         app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
+        ValidatorManager invalidManager = ValidatorManager(address(token)); // The contract type is arbitrary
+
         vm.expectRevert();
 
-        // PoSValidatorManagerSettings.manager is not set
+        StakingManagerSettings memory settings = _defaultPoSSettings();
+        settings.manager = invalidManager;
         app.initialize(_defaultPoSSettings(), token);
     }
 

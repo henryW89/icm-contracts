@@ -395,7 +395,7 @@ abstract contract ValidatorManagerTest is Test {
         _initiateValidatorRemoval(validationID, false, address(0));
     }
 
-    function testInitiateValidatorRegistrationInvalidAdmin() public {
+    function testInitiateValidatorRegistrationUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -412,7 +412,7 @@ abstract contract ValidatorManagerTest is Test {
         });
     }
 
-    function testCompleteValidatorRegistrationInvalidAdmin() public {
+    function testCompleteValidatorRegistrationUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -422,7 +422,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.completeValidatorRegistration(0);
     }
 
-    function testInitiateValidatorWeightUpdateInvalidAdmin() public {
+    function testInitiateValidatorWeightUpdateUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -432,7 +432,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
     }
 
-    function testCompleteValidatorWeightUpdateInvalidAdmin() public {
+    function testCompleteValidatorWeightUpdateUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -442,7 +442,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.completeValidatorWeightUpdate(0);
     }
 
-    function testInitiateValidatorRemovalInvalidAdmin() public {
+    function testInitiateValidatorRemovalUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -452,7 +452,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.initiateValidatorRemoval(bytes32(0));
     }
 
-    function testCompleteValidatorRemovalInvalidAdmin() public {
+    function testCompleteValidatorRemovalUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
             abi.encodeWithSelector(

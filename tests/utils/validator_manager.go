@@ -372,7 +372,7 @@ func DeliverL1Conversion(
 // Function call utils
 //
 
-func InitializeNativeValidatorRegistration(
+func InitiateNativeValidatorRegistration(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -409,7 +409,7 @@ func InitializeNativeValidatorRegistration(
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
-func InitializeERC20ValidatorRegistration(
+func InitiateERC20ValidatorRegistration(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -457,7 +457,7 @@ func InitializeERC20ValidatorRegistration(
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
-func InitializePoAValidatorRegistration(
+func InitiatePoAValidatorRegistration(
 	ctx context.Context,
 	ownerKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -539,7 +539,7 @@ func CallWarpReceiver(
 	return SendTransactionAndWaitForSuccess(ctx, l1, signedRegistrationTx)
 }
 
-func InitializeAndCompleteNativeValidatorRegistration(
+func InitiateAndCompleteNativeValidatorRegistration(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
@@ -559,7 +559,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 	)
 	Expect(err).Should(BeNil())
 	// Initiate validator registration
-	receipt, validationID := InitializeNativeValidatorRegistration(
+	receipt, validationID := InitiateNativeValidatorRegistration(
 		ctx,
 		fundedKey,
 		l1Info,
@@ -617,7 +617,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 	return validationID
 }
 
-func InitializeAndCompleteERC20ValidatorRegistration(
+func InitiateAndCompleteERC20ValidatorRegistration(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
@@ -640,7 +640,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 	// Initiate validator registration
 	var receipt *types.Receipt
 	log.Println("Initializing validator registration")
-	receipt, validationID := InitializeERC20ValidatorRegistration(
+	receipt, validationID := InitiateERC20ValidatorRegistration(
 		ctx,
 		fundedKey,
 		l1Info,
@@ -699,7 +699,7 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 	return validationID
 }
 
-func InitializeAndCompletePoAValidatorRegistration(
+func InitiateAndCompletePoAValidatorRegistration(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
@@ -713,7 +713,7 @@ func InitializeAndCompletePoAValidatorRegistration(
 	networkID uint32,
 ) ids.ID {
 	// Initiate validator registration
-	receipt, validationID := InitializePoAValidatorRegistration(
+	receipt, validationID := InitiatePoAValidatorRegistration(
 		ctx,
 		ownerKey,
 		l1Info,
@@ -769,7 +769,7 @@ func InitializeAndCompletePoAValidatorRegistration(
 	return validationID
 }
 
-func InitializeEndPoSValidation(
+func InitiateEndPoSValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -789,7 +789,7 @@ func InitializeEndPoSValidation(
 	return WaitForTransactionSuccess(ctx, l1, tx.Hash())
 }
 
-func ForceInitializeEndPoSValidation(
+func ForceInitiateEndPoSValidation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -836,7 +836,7 @@ func ConstructUptimeProofMessage(
 	return uptimeProofSignedMessage
 }
 
-func ForceInitializeEndPoSValidationWithUptime(
+func ForceInitiateEndPoSValidationWithUptime(
 	ctx context.Context,
 	networkID uint32,
 	signatureAggregator *SignatureAggregator,
@@ -868,7 +868,7 @@ func ForceInitializeEndPoSValidationWithUptime(
 	)
 }
 
-func InitializeEndPoSValidationWithUptime(
+func InitiateEndPoSValidationWithUptime(
 	ctx context.Context,
 	networkID uint32,
 	signatureAggregator *SignatureAggregator,
@@ -900,7 +900,7 @@ func InitializeEndPoSValidationWithUptime(
 	)
 }
 
-func InitializeEndPoAValidation(
+func InitiateEndPoAValidation(
 	ctx context.Context,
 	ownerKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -959,7 +959,7 @@ func CompleteEndPoSValidation(
 	)
 }
 
-func InitializeERC20DelegatorRegistration(
+func InitiateERC20DelegatorRegistration(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -996,7 +996,7 @@ func InitializeERC20DelegatorRegistration(
 	return receipt
 }
 
-func InitializeNativeDelegatorRegistration(
+func InitiateNativeDelegatorRegistration(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -1044,7 +1044,7 @@ func CompleteDelegatorRegistration(
 	)
 }
 
-func InitializeEndDelegation(
+func InitiateEndDelegation(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -1088,7 +1088,7 @@ func CompleteEndDelegation(
 	)
 }
 
-func InitializeAndCompleteEndInitialPoSValidation(
+func InitiateAndCompleteEndInitialPoSValidation(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
@@ -1105,7 +1105,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 ) {
 	log.Println("Initializing initial validator removal")
 	WaitMinStakeDuration(ctx, l1Info, fundedKey)
-	receipt := ForceInitializeEndPoSValidation(
+	receipt := ForceInitiateEndPoSValidation(
 		ctx,
 		fundedKey,
 		l1Info,
@@ -1168,7 +1168,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 	Expect(validationEndedEvent.ValidationID[:]).Should(Equal(validationID[:]))
 }
 
-func InitializeAndCompleteEndPoSValidation(
+func InitiateAndCompleteEndPoSValidation(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	fundedKey *ecdsa.PrivateKey,
@@ -1192,7 +1192,7 @@ func InitializeAndCompleteEndPoSValidation(
 	var receipt *types.Receipt
 	if includeUptime {
 		uptime := uint64(time.Since(validatorStartTime).Seconds())
-		receipt = ForceInitializeEndPoSValidationWithUptime(
+		receipt = ForceInitiateEndPoSValidationWithUptime(
 			ctx,
 			networkID,
 			signatureAggregator,
@@ -1203,7 +1203,7 @@ func InitializeAndCompleteEndPoSValidation(
 			uptime,
 		)
 	} else {
-		receipt = ForceInitializeEndPoSValidation(
+		receipt = ForceInitiateEndPoSValidation(
 			ctx,
 			fundedKey,
 			l1Info,
@@ -1268,7 +1268,7 @@ func InitializeAndCompleteEndPoSValidation(
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
 }
 
-func InitializeAndCompleteEndInitialPoAValidation(
+func InitiateAndCompleteEndInitialPoAValidation(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
@@ -1284,7 +1284,7 @@ func InitializeAndCompleteEndInitialPoAValidation(
 ) {
 	log.Println("Initializing initial validator removal")
 	WaitMinStakeDuration(ctx, l1Info, ownerKey)
-	receipt := InitializeEndPoAValidation(
+	receipt := InitiateEndPoAValidation(
 		ctx,
 		ownerKey,
 		l1Info,
@@ -1347,7 +1347,7 @@ func InitializeAndCompleteEndInitialPoAValidation(
 	Expect(validationEndedEvent.ValidationID[:]).Should(Equal(validationID[:]))
 }
 
-func InitializeAndCompleteEndPoAValidation(
+func InitiateAndCompleteEndPoAValidation(
 	ctx context.Context,
 	signatureAggregator *SignatureAggregator,
 	ownerKey *ecdsa.PrivateKey,
@@ -1360,7 +1360,7 @@ func InitializeAndCompleteEndPoAValidation(
 	nonce uint64,
 	networkID uint32,
 ) {
-	receipt := InitializeEndPoAValidation(
+	receipt := InitiateEndPoAValidation(
 		ctx,
 		ownerKey,
 		l1Info,

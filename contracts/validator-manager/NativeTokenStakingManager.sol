@@ -49,7 +49,7 @@ contract NativeTokenStakingManager is Initializable, StakingManager, INativeToke
         internal
         onlyInitializing
     {
-        __STAKING_MANAGER_init(settings);
+        __StakingManager_init(settings);
     }
 
     // solhint-disable-next-line func-name-mixedcase, no-empty-blocks

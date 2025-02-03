@@ -85,7 +85,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	utils.InitializeAndCompleteEndInitialPoAValidation(
+	utils.InitiateAndCompleteEndInitialPoAValidation(
 		ctx,
 		signatureAggregator,
 		ownerKey,
@@ -119,7 +119,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	// Re-register the validator as a SoV validator
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	poaValidationID := utils.InitializeAndCompletePoAValidatorRegistration(
+	poaValidationID := utils.InitiateAndCompletePoAValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		ownerKey,
@@ -181,7 +181,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	//
 	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerAddress, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		ownerKey,
@@ -201,7 +201,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	)
 
 	expiry2 := uint64(time.Now().Add(24 * time.Hour).Unix())
-	posValidationID := utils.InitializeAndCompleteNativeValidatorRegistration(
+	posValidationID := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -218,7 +218,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	validatorStartTime := time.Now()
 
 	// Delist the PoS validator
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,

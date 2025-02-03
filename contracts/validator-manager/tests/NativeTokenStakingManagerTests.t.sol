@@ -140,9 +140,13 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
     function testInvalidValidatorManager() public {
         app = new NativeTokenStakingManager(ICMInitializable.Allowed);
+        TestableNativeTokenStakingManager invalidManager =
+            new TestableNativeTokenStakingManager(ICMInitializable.Allowed); // the contract type is arbitrary
+
         vm.expectRevert();
 
-        // PoSValidatorManagerSettings.manager is not set
+        StakingManagerSettings memory settings = _defaultPoSSettings();
+        settings.manager = ValidatorManager(address(invalidManager));
         app.initialize(_defaultPoSSettings());
     }
 

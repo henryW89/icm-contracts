@@ -74,7 +74,7 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
         StakingManagerSettings calldata settings,
         IERC20Mintable token
     ) internal onlyInitializing {
-        __STAKING_MANAGER_init(settings);
+        __StakingManager_init(settings);
         __ERC20TokenStakingManager_init_unchained(token);
     }
 

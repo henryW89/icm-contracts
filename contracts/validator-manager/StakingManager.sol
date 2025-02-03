@@ -125,12 +125,12 @@ abstract contract StakingManager is
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __STAKING_MANAGER_init(StakingManagerSettings calldata settings)
+    function __StakingManager_init(StakingManagerSettings calldata settings)
         internal
         onlyInitializing
     {
         __ReentrancyGuard_init();
-        __STAKING_MANAGER_init_unchained({
+        __StakingManager_init_unchained({
             manager: settings.manager,
             minimumStakeAmount: settings.minimumStakeAmount,
             maximumStakeAmount: settings.maximumStakeAmount,
@@ -144,7 +144,7 @@ abstract contract StakingManager is
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __STAKING_MANAGER_init_unchained(
+    function __StakingManager_init_unchained(
         ValidatorManager manager,
         uint256 minimumStakeAmount,
         uint256 maximumStakeAmount,
@@ -226,6 +226,7 @@ abstract contract StakingManager is
 
     /**
      * @notice See {IStakingManager-initiateValidatorRemoval}.
+     * Extends the functionality of {ACP99Manager-initiateValidatorRemoval} updating staker state.
      */
     function initiateValidatorRemoval(
         bytes32 validationID,
@@ -398,6 +399,7 @@ abstract contract StakingManager is
 
     /**
      * @notice See {IStakingManager-completeValidatorRemoval}.
+     * Extends the functionality of {ACP99Manager-completeValidatorRemoval} by unlocking staking rewards.
      */
     function completeValidatorRemoval(uint32 messageIndex)
         external
@@ -580,6 +582,7 @@ abstract contract StakingManager is
 
     /**
      * @notice Initiates delegator registration by updating the validator's weight and storing the delegation information.
+     * Extends {ACP99Manager-initiateValidatorWeightUpdate} by locking delegation stake.
      * @param validationID The ID of the validator to delegate to.
      * @param delegatorAddress The address of the delegator.
      * @param delegationAmount The amount of stake to delegate.
@@ -638,6 +641,7 @@ abstract contract StakingManager is
 
     /**
      * @notice See {IStakingManager-completeDelegatorRegistration}.
+     * Extends {ACP99Manager-completeValidatorWeightUpdate} by updating the delegation status.
      */
     function completeDelegatorRegistration(bytes32 delegationID, uint32 messageIndex) external {
         StakingManagerStorage storage $ = _getStakingManagerStorage();
@@ -904,6 +908,7 @@ abstract contract StakingManager is
 
     /**
      * @notice See {IStakingManager-completeDelegatorRemoval}.
+     * Extends {ACP99Manager-completeValidatorWeightUpdate} by updating the delegation status and unlocking delegation rewards.
      */
     function completeDelegatorRemoval(
         bytes32 delegationID,

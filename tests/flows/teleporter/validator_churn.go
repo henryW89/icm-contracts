@@ -98,7 +98,7 @@ func ValidatorChurn(network *localnetwork.LocalNetwork, teleporter utils.Telepor
 			NodePoP: pop,
 			Weight:  units.Schmeckle,
 		}
-		utils.InitializeAndCompletePoAValidatorRegistration(
+		utils.InitiateAndCompletePoAValidatorRegistration(
 			addValidatorsCtx,
 			aggregator,
 			fundedKey,

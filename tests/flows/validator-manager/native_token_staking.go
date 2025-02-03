@@ -70,7 +70,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndInitialPoSValidation(
+	utils.InitiateAndCompleteEndInitialPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -90,7 +90,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	// Register the validator as PoS
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	validationID := utils.InitializeAndCompleteNativeValidatorRegistration(
+	validationID := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -127,7 +127,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 
 		nonce := uint64(1)
 
-		receipt := utils.InitializeNativeDelegatorRegistration(
+		receipt := utils.InitiateNativeDelegatorRegistration(
 			ctx,
 			fundedKey,
 			l1AInfo,
@@ -192,7 +192,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	{
 		log.Println("Delisting delegator")
 		nonce := uint64(2)
-		receipt := utils.InitializeEndDelegation(
+		receipt := utils.InitiateEndDelegation(
 			ctx,
 			fundedKey,
 			l1AInfo,
@@ -258,7 +258,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist the validator
 	//
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
