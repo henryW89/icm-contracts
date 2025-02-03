@@ -84,6 +84,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
     uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 2 days;
     uint32 public constant ADDRESS_LENGTH = 20; // This is only used as a packed uint32
+    uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
     bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
 
@@ -205,13 +206,15 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             if ($._registeredValidators[initialValidator.nodeID] != bytes32(0)) {
                 revert NodeAlreadyRegistered(initialValidator.nodeID);
             }
+            if (initialValidator.nodeID.length != NODE_ID_LENGTH) {
+                revert InvalidNodeID(initialValidator.nodeID);
+            }
 
             // Validation ID of the initial validators is the sha256 hash of the
             // convert subnet to L1 tx ID and the index of the initial validator.
             bytes32 validationID = sha256(abi.encodePacked(conversionData.subnetID, i));
 
             // Save the initial validator as an active validator.
-
             $._registeredValidators[initialValidator.nodeID] = validationID;
             $._validationPeriods[validationID].status = ValidatorStatus.Active;
             $._validationPeriods[validationID].nodeID = initialValidator.nodeID;
@@ -223,7 +226,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             totalWeight += initialValidator.weight;
 
             emit RegisteredInitialValidator(
-                validationID, initialValidator.nodeID, initialValidator.weight
+                validationID, _fixedNodeID(initialValidator.nodeID), initialValidator.weight
             );
         }
         $._churnTracker.totalWeight = totalWeight;
@@ -317,7 +320,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (blsPublicKey.length != BLS_PUBLIC_KEY_LENGTH) {
             revert InvalidBLSKeyLength(blsPublicKey.length);
         }
-        if (nodeID.length == 0) {
+        if (nodeID.length != NODE_ID_LENGTH) {
             revert InvalidNodeID(nodeID);
         }
         if ($._registeredValidators[nodeID] != bytes32(0)) {
@@ -353,7 +356,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         $._validationPeriods[validationID].endTime = 0;
 
         emit InitiatedValidatorRegistration(
-            validationID, nodeID, messageID, registrationExpiry, weight
+            validationID, _fixedNodeID(nodeID), messageID, registrationExpiry, weight
         );
 
         return validationID;
@@ -406,11 +409,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         delete $._pendingRegisterValidationMessages[validationID];
         $._validationPeriods[validationID].status = ValidatorStatus.Active;
         $._validationPeriods[validationID].startTime = uint64(block.timestamp);
-        emit CompletedValidatorRegistration(
-            validationID,
-            $._validationPeriods[validationID].nodeID,
-            $._validationPeriods[validationID].weight
-        );
+        emit CompletedValidatorRegistration(validationID, $._validationPeriods[validationID].weight);
 
         return validationID;
     }
@@ -705,5 +704,19 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         }
 
         $._churnTracker = churnTracker;
+    }
+
+    /**
+     * @notice Converts a nodeID to a fixed length of 20 bytes.
+     * @param nodeID The nodeID to convert.
+     * @return The fixed length nodeID.
+     */
+    function _fixedNodeID(bytes memory nodeID) private pure returns (bytes20) {
+        bytes20 fixedID;
+        // solhint-disable-next-line no-inline-assembly
+        assembly {
+            fixedID := mload(add(nodeID, 32))
+        }
+        return fixedID;
     }
 }
