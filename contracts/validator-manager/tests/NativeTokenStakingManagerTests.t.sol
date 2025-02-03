@@ -147,7 +147,14 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory settings = _defaultPoSSettings();
         settings.manager = ValidatorManager(address(invalidManager));
-        app.initialize(_defaultPoSSettings());
+        app.initialize(settings);
+    }
+
+    function testUnsetValidatorManager() public {
+        app = new NativeTokenStakingManager(ICMInitializable.Allowed);
+        vm.expectRevert();
+
+        app.initialize(_defaultPoSSettings()); // settings.manager is not set
     }
 
     // Helpers

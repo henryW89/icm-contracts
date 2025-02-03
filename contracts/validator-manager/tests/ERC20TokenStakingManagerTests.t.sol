@@ -163,7 +163,14 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory settings = _defaultPoSSettings();
         settings.manager = invalidManager;
-        app.initialize(_defaultPoSSettings(), token);
+        app.initialize(settings, token);
+    }
+
+    function testUnsetValidatorManager() public {
+        app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
+        vm.expectRevert();
+
+        app.initialize(_defaultPoSSettings(), token); // settings.manager is not set
     }
 
     function testInvalidValidatorMinStakeDuration() public {
