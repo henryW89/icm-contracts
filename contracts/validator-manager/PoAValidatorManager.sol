@@ -5,12 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManager} from "./ValidatorManager.sol";
-import {
-    ValidatorManagerSettings,
-    ValidatorRegistrationInput
-} from "./interfaces/IValidatorManager.sol";
-import {IPoAValidatorManager} from "./interfaces/IPoAValidatorManager.sol";
+import {ValidatorManager, ValidatorManagerSettings} from "./ValidatorManager.sol";
+import {IPoAValidatorManager, PChainOwner} from "./interfaces/IPoAValidatorManager.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
@@ -49,27 +45,44 @@ contract PoAValidatorManager is IPoAValidatorManager, ValidatorManager, OwnableU
     // solhint-enable func-name-mixedcase
 
     /**
-     * @notice See {IPoAValidatorManager-initializeValidatorRegistration}.
+     * @notice See {IPoAValidatorManager-initiateValidatorRegistration}.
      */
-    function initializeValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+    function initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) external onlyOwner returns (bytes32 validationID) {
-        return _initializeValidatorRegistration(registrationInput, weight);
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            weight: weight
+        });
     }
 
     // solhint-enable ordering
     /**
-     * @notice See {IPoAValidatorManager-initializeEndValidation}.
+     * @notice See {IPoAValidatorManager-initiateValidatorRemoval}.
      */
-    function initializeEndValidation(bytes32 validationID) external override onlyOwner {
-        _initializeEndValidation(validationID);
+    function initiateValidatorRemoval(bytes32 validationID) external override onlyOwner {
+        _initiateValidatorRemoval(validationID);
     }
 
     /**
-     * @notice See {IValidatorManager-completeEndValidation}.
+     * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
-    function completeEndValidation(uint32 messageIndex) external {
-        _completeEndValidation(messageIndex);
+    function completeValidatorRemoval(uint32 messageIndex)
+        public
+        virtual
+        override
+        returns (bytes32)
+    {
+        (bytes32 validationID,) = _completeValidatorRemoval(messageIndex);
+        return validationID;
     }
 }

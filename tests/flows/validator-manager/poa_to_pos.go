@@ -104,13 +104,13 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	opts, err := bind.NewKeyedTransactorWithChainID(fundedKey, l1AInfo.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	_, err = poaValidatorManager.InitializeValidatorRegistration(
+	_, err = poaValidatorManager.InitiateValidatorRegistration(
 		opts,
-		poavalidatormanager.ValidatorRegistrationInput{
-			NodeID:             nodes[0].NodeID[:],
-			RegistrationExpiry: uint64(time.Now().Add(24 * time.Hour).Unix()),
-			BlsPublicKey:       nodes[0].NodePoP.PublicKey[:],
-		},
+		nodes[0].NodeID[:],
+		nodes[0].NodePoP.PublicKey[:],
+		uint64(time.Now().Add(24*time.Hour).Unix()),
+		poavalidatormanager.PChainOwner{},
+		poavalidatormanager.PChainOwner{},
 		nodes[0].Weight,
 	)
 	Expect(err).ShouldNot(BeNil())

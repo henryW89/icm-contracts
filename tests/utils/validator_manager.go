@@ -25,12 +25,12 @@ import (
 	pwallet "github.com/ava-labs/avalanchego/wallet/chain/p/wallet"
 	proxyadmin "github.com/ava-labs/icm-contracts/abi-bindings/go/ProxyAdmin"
 	exampleerc20 "github.com/ava-labs/icm-contracts/abi-bindings/go/mocks/ExampleERC20"
+	acp99manager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ACP99Manager"
 	erc20tokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ERC20TokenStakingManager"
 	examplerewardcalculator "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ExampleRewardCalculator"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
 	poavalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/PoAValidatorManager"
 	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
-	ivalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/core/types"
@@ -73,13 +73,13 @@ func DeployValidatorManager(
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
 	managerType ValidatorManagerConcreteType,
-) (common.Address, *ivalidatormanager.IValidatorManager) {
+) (common.Address, *acp99manager.ACP99Manager) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 	var (
 		tx               *types.Transaction
 		address          common.Address
-		validatorManager *ivalidatormanager.IValidatorManager
+		validatorManager *acp99manager.ACP99Manager
 	)
 	switch managerType {
 	case PoAValidatorManager:
@@ -118,7 +118,7 @@ func DeployValidatorManager(
 		Expect(err).Should(BeNil())
 	}
 
-	validatorManager, err = ivalidatormanager.NewIValidatorManager(address, l1.RPCClient)
+	validatorManager, err = acp99manager.NewACP99Manager(address, l1.RPCClient)
 	Expect(err).Should(BeNil())
 
 	// Wait for the transaction to be mined
@@ -277,14 +277,14 @@ func InitializeValidatorSet(
 ) []ids.ID {
 	log.Println("Initializing validator set", "subnetID", l1Info.SubnetID)
 	initialValidators := make([]warpMessage.SubnetToL1ConversionValidatorData, len(nodes))
-	initialValidatorsABI := make([]ivalidatormanager.InitialValidator, len(nodes))
+	initialValidatorsABI := make([]acp99manager.InitialValidator, len(nodes))
 	for i, node := range nodes {
 		initialValidators[i] = warpMessage.SubnetToL1ConversionValidatorData{
 			NodeID:       node.NodeID.Bytes(),
 			BLSPublicKey: node.NodePoP.PublicKey,
 			Weight:       nodes[i].Weight,
 		}
-		initialValidatorsABI[i] = ivalidatormanager.InitialValidator{
+		initialValidatorsABI[i] = acp99manager.InitialValidator{
 			NodeID:       node.NodeID.Bytes(),
 			BlsPublicKey: node.NodePoP.PublicKey[:],
 			Weight:       nodes[i].Weight,
@@ -297,7 +297,7 @@ func InitializeValidatorSet(
 		ManagerAddress: validatorManagerAddress[:],
 		Validators:     initialValidators,
 	}
-	l1ConversionDataABI := ivalidatormanager.ConversionData{
+	l1ConversionDataABI := acp99manager.ConversionData{
 		SubnetID:                     l1Info.SubnetID,
 		ValidatorManagerBlockchainID: l1Info.BlockchainID,
 		ValidatorManagerAddress:      validatorManagerAddress,
@@ -322,16 +322,16 @@ func InitializeValidatorSet(
 		l1ConversionSignedMessage,
 		l1ConversionDataABI,
 	)
-	manager, err := ivalidatormanager.NewIValidatorManager(validatorManagerAddress, l1Info.RPCClient)
+	manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
 	Expect(err).Should(BeNil())
 
 	// Check that the first initial validator was registered successfully
 	initialValidatorCreatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		manager.ParseInitialValidatorCreated,
+		manager.ParseRegisteredInitialValidator,
 	)
 	Expect(err).Should(BeNil())
-	Expect(initialValidatorCreatedEvent.NodeID).Should(Equal(nodes[0].NodeID.Bytes()))
+	Expect(ids.NodeID(initialValidatorCreatedEvent.NodeID)).Should(Equal(nodes[0].NodeID))
 	var validationIDs []ids.ID
 	for i := range nodes {
 		validationIDs = append(validationIDs, l1Info.SubnetID.Append(uint32(i)))
@@ -351,9 +351,9 @@ func DeliverL1Conversion(
 	l1 interfaces.L1TestInfo,
 	validatorManagerAddress common.Address,
 	l1ConversionSignedMessage *avalancheWarp.Message,
-	l1ConversionData ivalidatormanager.ConversionData,
+	l1ConversionData acp99manager.ConversionData,
 ) *types.Receipt {
-	abi, err := ivalidatormanager.IValidatorManagerMetaData.GetAbi()
+	abi, err := acp99manager.ACP99ManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("initializeValidatorSet", l1ConversionData, uint32(0))
 	Expect(err).Should(BeNil())
@@ -379,29 +379,32 @@ func InitializeNativeValidatorRegistration(
 	node Node,
 	expiry uint64,
 	stakingManager *nativetokenstakingmanager.NativeTokenStakingManager,
+	stakingManagerAddress common.Address,
 ) (*types.Receipt, ids.ID) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 	opts.Value = stakeAmount
 
-	tx, err := stakingManager.InitializeValidatorRegistration(
+	tx, err := stakingManager.InitiateValidatorRegistration(
 		opts,
-		nativetokenstakingmanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		nativetokenstakingmanager.PChainOwner{},
+		nativetokenstakingmanager.PChainOwner{},
 		DefaultMinDelegateFeeBips,
 		DefaultMinStakeDurationSeconds,
 	)
 	Expect(err).Should(BeNil())
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationInitiatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodCreated,
+		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -428,25 +431,27 @@ func InitializeERC20ValidatorRegistration(
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := stakingManager.InitializeValidatorRegistration(
+	tx, err := stakingManager.InitiateValidatorRegistration(
 		opts,
-		erc20tokenstakingmanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		erc20tokenstakingmanager.PChainOwner{},
+		erc20tokenstakingmanager.PChainOwner{},
 		DefaultMinDelegateFeeBips,
 		DefaultMinStakeDurationSeconds,
 		stakeAmount,
 	)
 	Expect(err).Should(BeNil())
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationInitiatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodCreated,
+		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -457,27 +462,30 @@ func InitializePoAValidatorRegistration(
 	node Node,
 	expiry uint64,
 	validatorManager *poavalidatormanager.PoAValidatorManager,
+	validatorManagerAddress common.Address,
 ) (*types.Receipt, ids.ID) {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := validatorManager.InitializeValidatorRegistration(
+	tx, err := validatorManager.InitiateValidatorRegistration(
 		opts,
-		poavalidatormanager.ValidatorRegistrationInput{
-			NodeID:             node.NodeID[:],
-			RegistrationExpiry: expiry,
-			BlsPublicKey:       node.NodePoP.PublicKey[:],
-		},
+		node.NodeID[:],
+		node.NodePoP.PublicKey[:],
+		expiry,
+		poavalidatormanager.PChainOwner{},
+		poavalidatormanager.PChainOwner{},
 		node.Weight,
 	)
 	Expect(err).Should(BeNil())
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationInitiatedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		validatorManager.ParseValidationPeriodCreated,
+		acp99Manager.ParseInitiatedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
-	Expect(registrationInitiatedEvent.NodeID).Should(Equal(node.NodeID.Bytes()))
+	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
 	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
 }
 
@@ -488,7 +496,7 @@ func CompleteValidatorRegistration(
 	stakingManagerContractAddress common.Address,
 	registrationSignedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := ivalidatormanager.IValidatorManagerMetaData.GetAbi()
+	abi, err := acp99manager.ACP99ManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
 	callData, err := abi.Pack("completeValidatorRegistration", uint32(0))
 	Expect(err).Should(BeNil())
@@ -536,7 +544,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 	l1Info interfaces.L1TestInfo,
 	pChainInfo interfaces.L1TestInfo,
 	stakingManager *nativetokenstakingmanager.NativeTokenStakingManager,
-	stakingManagerContractAddress common.Address,
+	stakingManagerAddress common.Address,
 	expiry uint64,
 	node Node,
 	pchainWallet pwallet.Wallet,
@@ -556,6 +564,7 @@ func InitializeAndCompleteNativeValidatorRegistration(
 		node,
 		expiry,
 		stakingManager,
+		stakingManagerAddress,
 	)
 
 	// Gather subnet-evm Warp signatures for the RegisterL1ValidatorMessage & relay to the P-Chain
@@ -589,13 +598,15 @@ func InitializeAndCompleteNativeValidatorRegistration(
 		ctx,
 		fundedKey,
 		l1Info,
-		stakingManagerContractAddress,
+		stakingManagerAddress,
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodRegistered,
+		acp99Manager.ParseCompletedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -671,9 +682,11 @@ func InitializeAndCompleteERC20ValidatorRegistration(
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodRegistered,
+		acp99Manager.ParseCompletedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -703,6 +716,7 @@ func InitializeAndCompletePoAValidatorRegistration(
 		node,
 		expiry,
 		validatorManager,
+		validatorManagerAddress,
 	)
 
 	// Gather subnet-evm Warp signatures for the RegisterL1ValidatorMessage & relay to the P-Chain
@@ -739,9 +753,11 @@ func InitializeAndCompletePoAValidatorRegistration(
 		registrationSignedMessage,
 	)
 	// Check that the validator is registered in the staking contract
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		validatorManager.ParseValidationPeriodRegistered,
+		acp99Manager.ParseCompletedValidatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -758,11 +774,12 @@ func InitializeEndPoSValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.InitializeEndValidation0(
+	tx, err := stakingManager.InitiateValidatorRemoval0(
 		opts,
 		validationID,
 		false,
 		0,
+		common.Address{},
 	)
 	Expect(err).Should(BeNil())
 	return WaitForTransactionSuccess(ctx, l1, tx.Hash())
@@ -777,7 +794,7 @@ func ForceInitializeEndPoSValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.ForceInitializeEndValidation(
+	tx, err := stakingManager.ForceInitiateValidatorRemoval(
 		opts,
 		validationID,
 		false,
@@ -835,7 +852,7 @@ func ForceInitializeEndPoSValidationWithUptime(
 
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("forceInitializeEndValidation", validationID, true, uint32(0))
+	callData, err := abi.Pack("forceInitiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -867,7 +884,7 @@ func InitializeEndPoSValidationWithUptime(
 
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("initializeEndValidation", validationID, true, uint32(0))
+	callData, err := abi.Pack("initiateValidatorRemoval", validationID, true, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -888,7 +905,7 @@ func InitializeEndPoAValidation(
 ) *types.Receipt {
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := validatorManager.InitializeEndValidation(
+	tx, err := validatorManager.InitiateValidatorRemoval(
 		opts,
 		validationID,
 	)
@@ -903,9 +920,9 @@ func CompleteEndValidation(
 	stakingManagerContractAddress common.Address,
 	registrationSignedMessage *avalancheWarp.Message,
 ) *types.Receipt {
-	abi, err := ivalidatormanager.IValidatorManagerMetaData.GetAbi()
+	abi, err := acp99manager.ACP99ManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("completeEndValidation", uint32(0))
+	callData, err := abi.Pack("completeValidatorRemoval", uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -939,7 +956,7 @@ func InitializeERC20DelegatorRegistration(
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	tx, err := stakingManager.InitializeDelegatorRegistration(
+	tx, err := stakingManager.InitiateDelegatorRegistration(
 		opts,
 		validationID,
 		delegationAmount,
@@ -948,7 +965,7 @@ func InitializeERC20DelegatorRegistration(
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	_, err = GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseDelegatorAdded,
+		stakingManager.ParseInitiatedDelegatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	return receipt
@@ -967,7 +984,7 @@ func InitializeNativeDelegatorRegistration(
 	Expect(err).Should(BeNil())
 	opts.Value = delegationAmount
 
-	tx, err := stakingManager.InitializeDelegatorRegistration(
+	tx, err := stakingManager.InitiateDelegatorRegistration(
 		opts,
 		validationID,
 	)
@@ -975,7 +992,7 @@ func InitializeNativeDelegatorRegistration(
 	receipt := WaitForTransactionSuccess(ctx, l1, tx.Hash())
 	_, err = GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseDelegatorAdded,
+		stakingManager.ParseInitiatedDelegatorRegistration,
 	)
 	Expect(err).Should(BeNil())
 	return receipt
@@ -1015,7 +1032,7 @@ func InitializeEndDelegation(
 	WaitMinStakeDuration(ctx, l1, senderKey)
 	opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
-	tx, err := stakingManager.ForceInitializeEndDelegation(
+	tx, err := stakingManager.ForceInitiateDelegatorRemoval(
 		opts,
 		delegationID,
 		false,
@@ -1035,7 +1052,7 @@ func CompleteEndDelegation(
 ) *types.Receipt {
 	abi, err := iposvalidatormanager.IPoSValidatorManagerMetaData.GetAbi()
 	Expect(err).Should(BeNil())
-	callData, err := abi.Pack("completeEndDelegation", delegationID, uint32(0))
+	callData, err := abi.Pack("completeDelegatorRemoval", delegationID, uint32(0))
 	Expect(err).Should(BeNil())
 	return CallWarpReceiver(
 		ctx,
@@ -1070,9 +1087,11 @@ func InitializeAndCompleteEndInitialPoSValidation(
 		stakingManager,
 		validationID,
 	)
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidatorRemovalInitialized,
+		acp99Manager.ParseInitiatedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1118,7 +1137,7 @@ func InitializeAndCompleteEndInitialPoSValidation(
 	// Check that the validator is has been delisted from the staking contract
 	validationEndedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodEnded,
+		acp99Manager.ParseCompletedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validationEndedEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1167,9 +1186,11 @@ func InitializeAndCompleteEndPoSValidation(
 		)
 	}
 
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidatorRemovalInitialized,
+		acp99Manager.ParseInitiatedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1215,7 +1236,7 @@ func InitializeAndCompleteEndPoSValidation(
 	// Check that the validator is has been delisted from the staking contract
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodEnded,
+		acp99Manager.ParseCompletedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1245,9 +1266,11 @@ func InitializeAndCompleteEndInitialPoAValidation(
 		stakingManager,
 		validationID,
 	)
+	acp99Manager, err := acp99manager.NewACP99Manager(stakingManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidatorRemovalInitialized,
+		acp99Manager.ParseInitiatedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1293,7 +1316,7 @@ func InitializeAndCompleteEndInitialPoAValidation(
 	// Check that the validator is has been delisted from the staking contract
 	validationEndedEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		stakingManager.ParseValidationPeriodEnded,
+		acp99Manager.ParseCompletedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validationEndedEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1320,9 +1343,11 @@ func InitializeAndCompleteEndPoAValidation(
 		validatorManager,
 		validationID,
 	)
+	acp99Manager, err := acp99manager.NewACP99Manager(validatorManagerAddress, l1Info.RPCClient)
+	Expect(err).Should(BeNil())
 	validatorRemovalEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		validatorManager.ParseValidatorRemovalInitialized,
+		acp99Manager.ParseInitiatedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(validatorRemovalEvent.ValidationID[:]).Should(Equal(validationID[:]))
@@ -1360,7 +1385,7 @@ func InitializeAndCompleteEndPoAValidation(
 	// Check that the validator is has been delisted from the staking contract
 	registrationEvent, err := GetEventFromLogs(
 		receipt.Logs,
-		validatorManager.ParseValidationPeriodEnded,
+		acp99Manager.ParseCompletedValidatorRemoval,
 	)
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))

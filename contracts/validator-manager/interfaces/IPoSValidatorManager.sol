@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {IValidatorManager, ValidatorManagerSettings} from "./IValidatorManager.sol";
+import {ValidatorManagerSettings} from "../ValidatorManager.sol";
 import {IRewardCalculator} from "./IRewardCalculator.sol";
 
 /**
@@ -20,7 +20,7 @@ enum DelegatorStatus {
 
 /**
  * @notice PoS Validator Manager settings, used to initialize the PoS Validator Manager
- * @notice baseSettings specified the base settings for the Validator Manager. See {IValidatorManager-ValidatorManagerSettings}
+ * @notice baseSettings specified the base settings for the Validator Manager. See {ValidatorManager-ValidatorManagerSettings}
  * @notice minimumStakeAmount is the minimum amount of stake required to stake to a validator
  * @notice maximumStakeAmount is the maximum amount of stake that can be staked to a validator
  * @notice minimumStakeDuration is the minimum duration that validators must stake for
@@ -52,13 +52,13 @@ struct Delegator {
     address owner;
     bytes32 validationID;
     uint64 weight;
-    uint64 startedAt;
+    uint64 startTime;
     uint64 startingNonce;
     uint64 endingNonce;
 }
 
 /**
- * @dev Describes the active state of a PoS Validator in addition the information in {IValidatorManager-Validator}
+ * @dev Describes the active state of a PoS Validator in addition the information in {ValidatorManager-Validator}
  */
 struct PoSValidatorInfo {
     address owner;
@@ -70,7 +70,7 @@ struct PoSValidatorInfo {
 /**
  * @notice Interface for Proof of Stake Validator Managers
  */
-interface IPoSValidatorManager is IValidatorManager {
+interface IPoSValidatorManager {
     /**
      * @notice Event emitted when a delegator registration is initiated
      * @param delegationID The ID of the delegation
@@ -81,7 +81,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param delegatorWeight The weight of the delegator
      * @param setWeightMessageID The ID of the ICM message that updates the validator's weight on the P-Chain
      */
-    event DelegatorAdded(
+    event InitiatedDelegatorRegistration(
         bytes32 indexed delegationID,
         bytes32 indexed validationID,
         address indexed delegatorAddress,
@@ -97,7 +97,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param validationID The ID of the validation period
      * @param startTime The time at which the registration was completed
      */
-    event DelegatorRegistered(
+    event CompletedDelegatorRegistration(
         bytes32 indexed delegationID, bytes32 indexed validationID, uint256 startTime
     );
 
@@ -106,7 +106,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param delegationID The ID of the delegation
      * @param validationID The ID of the validation period the delegator was staked to
      */
-    event DelegatorRemovalInitialized(bytes32 indexed delegationID, bytes32 indexed validationID);
+    event InitiatedDelegatorRemoval(bytes32 indexed delegationID, bytes32 indexed validationID);
 
     /**
      * @notice Event emitted when delegator removal is completed
@@ -115,7 +115,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param rewards The rewards given to the delegator
      * @param fees The portion of the delegator's rewards paid to the validator
      */
-    event DelegationEnded(
+    event CompletedDelegatorRemoval(
         bytes32 indexed delegationID, bytes32 indexed validationID, uint256 rewards, uint256 fees
     );
 
@@ -145,17 +145,17 @@ interface IPoSValidatorManager is IValidatorManager {
      * the latest known uptime will be used.
      * @param messageIndex The index of the ICM message to be received providing the uptime proof.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndValidation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-initiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the validator.
      */
-    function initializeEndValidation(
+    function initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -173,17 +173,17 @@ interface IPoSValidatorManager is IValidatorManager {
      * the latest known uptime will be used.
      * @param messageIndex The index of the ICM message to be received providing the uptime proof.
      */
-    function forceInitializeEndValidation(
+    function forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndValidation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-forceInitiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress Address to receive the rewards.
      */
-    function forceInitializeEndValidation(
+    function forceInitiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -193,7 +193,7 @@ interface IPoSValidatorManager is IValidatorManager {
     /**
      * @notice Completes the delegator registration process by submitting an acknowledgement of the registration of a
      * validationID from the P-Chain. After this function is called, the validator's weight is updated in the contract state.
-     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initialize registration of the
+     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate registration of the
      * delegator is valid, as long as that nonce has been sent by the contract. For the purposes of computing delegation rewards,
      * the delegation is considered active after this function is completed.
      * Note: Only the specified delegation will be marked as registered, even if the validator weight update
@@ -218,17 +218,17 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param messageIndex If {includeUptimeProof} is true, the index of the ICM message to be received providing the
      * uptime proof.
      */
-    function initializeEndDelegation(
+    function initiateDelegatorRemoval(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initializeEndDelegation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-initiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the delegator.
      */
-    function initializeEndDelegation(
+    function initiateDelegatorRemoval(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -249,17 +249,17 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param messageIndex If {includeUptimeProof} is true, the index of the ICM message to be received providing the
      * uptime proof.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateDelegatorRemoval(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitializeEndDelegation} for details of the first three parameters
+     * @notice See {IPoSValidatorManager-forceInitiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards.
      */
-    function forceInitializeEndDelegation(
+    function forceInitiateDelegatorRemoval(
         bytes32 delegationID,
         bool includeUptimeProof,
         uint32 messageIndex,
@@ -271,12 +271,12 @@ interface IPoSValidatorManager is IValidatorManager {
      * Only necessary if the original message can't be delivered due to validator churn.
      * @param delegationID The ID of the delegation.
      */
-    function resendUpdateDelegation(bytes32 delegationID) external;
+    function resendUpdateDelegator(bytes32 delegationID) external;
 
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
      * After this function is called, the validator's weight is updated in the contract state.
-     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initialize the end of the
+     * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate the end of the
      * delegator's delegation is valid, as long as that nonce has been sent by the contract. This is because the validator
      * weight change pertaining to the delegation ending is included in any subsequent validator weight update messages.
      * Note: Only the specified delegation will be marked as completed, even if the validator weight update
@@ -284,7 +284,7 @@ interface IPoSValidatorManager is IValidatorManager {
      * @param delegationID The ID of the delegation being removed.
      * @param messageIndex The index of the ICM message to be received providing the acknowledgement.
      */
-    function completeEndDelegation(bytes32 delegationID, uint32 messageIndex) external;
+    function completeDelegatorRemoval(bytes32 delegationID, uint32 messageIndex) external;
 
     /**
      * @notice Withdraws the delegation fees from completed delegations to the owner of the validator.
@@ -300,7 +300,7 @@ interface IPoSValidatorManager is IValidatorManager {
     function changeValidatorRewardRecipient(bytes32 validationID, address recipient) external;
 
     /**
-     * @notice Changes the address of the recipient of the delegator's rewards for a delegation period. This method can be called any time before {completeEndDelegation}.
+     * @notice Changes the address of the recipient of the delegator's rewards for a delegation period. This method can be called any time before {completeDelegatorRemoval}.
      * @param delegationID The ID of the validation period being ended.
      * @param recipient The address to receive the rewards.
      */

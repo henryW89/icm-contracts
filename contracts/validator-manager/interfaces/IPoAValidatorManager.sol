@@ -5,19 +5,27 @@
 
 pragma solidity 0.8.25;
 
-import {IValidatorManager, ValidatorRegistrationInput} from "./IValidatorManager.sol";
+import {PChainOwner} from "../ACP99Manager.sol";
 
 /**
  * @notice Interface for Proof of Authority Validator Manager contracts
  */
-interface IPoAValidatorManager is IValidatorManager {
+interface IPoAValidatorManager {
     /**
      * @notice Begins the validator registration process, and sets the {weight} of the validator.
-     * @param registrationInput The inputs for a validator registration.
+     * @param nodeID The ID of the node to add to the L1.
+     * @param blsPublicKey The BLS public key of the validator.
+     * @param registrationExpiry The time after which this message is invalid.
+     * @param remainingBalanceOwner The remaining balance owner of the validator.
+     * @param disableOwner The disable owner of the validator.
      * @param weight The weight of the validator being registered.
      */
-    function initializeValidatorRegistration(
-        ValidatorRegistrationInput calldata registrationInput,
+    function initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) external returns (bytes32 validationID);
 
@@ -26,5 +34,5 @@ interface IPoAValidatorManager is IValidatorManager {
      * started by a successful call to {completeValidatorRegistration} with the given validationID.
      * @param validationID The ID of the validation period being ended.
      */
-    function initializeEndValidation(bytes32 validationID) external;
+    function initiateValidatorRemoval(bytes32 validationID) external;
 }

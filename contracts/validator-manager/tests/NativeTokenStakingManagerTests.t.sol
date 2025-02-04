@@ -9,13 +9,13 @@ import {Test} from "@forge-std/Test.sol";
 import {PoSValidatorManagerTest} from "./PoSValidatorManagerTests.t.sol";
 import {NativeTokenStakingManager} from "../NativeTokenStakingManager.sol";
 import {PoSValidatorManager, PoSValidatorManagerSettings} from "../PoSValidatorManager.sol";
-import {ValidatorRegistrationInput, IValidatorManager} from "../interfaces/IValidatorManager.sol";
 import {ExampleRewardCalculator} from "../ExampleRewardCalculator.sol";
 import {ICMInitializable} from "../../utilities/ICMInitializable.sol";
 import {INativeMinter} from
     "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/INativeMinter.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
+import {ACP99Manager, PChainOwner} from "../ACP99Manager.sol";
 
 contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
     NativeTokenStakingManager public app;
@@ -126,27 +126,47 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
     }
 
     // Helpers
-    function _initializeValidatorRegistration(
-        ValidatorRegistrationInput memory registrationInput,
+    function _initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration{value: stakeAmount}(
-            registrationInput, delegationFeeBips, minStakeDuration
-        );
+        return app.initiateValidatorRegistration{value: stakeAmount}({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: delegationFeeBips,
+            minStakeDuration: minStakeDuration
+        });
     }
 
-    function _initializeValidatorRegistration(
-        ValidatorRegistrationInput memory input,
+    function _initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override returns (bytes32) {
-        return app.initializeValidatorRegistration{value: _weightToValue(weight)}(
-            input, DEFAULT_DELEGATION_FEE_BIPS, DEFAULT_MINIMUM_STAKE_DURATION
-        );
+        return app.initiateValidatorRegistration{value: _weightToValue(weight)}({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
+            minStakeDuration: DEFAULT_MINIMUM_STAKE_DURATION
+        });
     }
 
-    function _initializeDelegatorRegistration(
+    function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
         uint64 weight
@@ -154,7 +174,7 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
         uint256 value = _weightToValue(weight);
         vm.prank(delegatorAddress);
         vm.deal(delegatorAddress, value);
-        return app.initializeDelegatorRegistration{value: value}(validationID);
+        return app.initiateDelegatorRegistration{value: value}(validationID);
     }
 
     // solhint-disable no-empty-blocks
@@ -175,7 +195,7 @@ contract NativeTokenStakingManagerTest is PoSValidatorManagerTest {
         vm.expectCall(nativeMinter, callData);
     }
 
-    function _setUp() internal override returns (IValidatorManager) {
+    function _setUp() internal override returns (ACP99Manager) {
         // Construct the object under test
         app = new TestableNativeTokenStakingManager(ICMInitializable.Allowed);
         rewardCalculator = new ExampleRewardCalculator(DEFAULT_REWARD_RATE);
