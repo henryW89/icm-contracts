@@ -6,8 +6,10 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	goLog "log"
+	"net"
 	"os"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/ava-labs/avalanchego/api/info"
@@ -317,6 +319,8 @@ func (n *LocalNetwork) ConvertSubnet(
 		Expect(err).Should(BeNil())
 		for _, node := range n.Network.Nodes {
 			if node.NodeID == vdr.NodeID {
+				port := getTmpnetNodePort(node)
+				node.Flags[config.HTTPPortKey] = port
 				goLog.Println("Restarting bootstrap node", node.NodeID)
 				n.Network.RestartNode(ctx, n.logger, node)
 			}
@@ -547,6 +551,15 @@ func (n *LocalNetwork) SetChainConfigs(chainConfigs map[string]string) {
 		}
 	}
 
+	// Apply node config flags to explicitly set ports to their existing values
+	// Otherwise nodes might start up with dynamic ports making existing clients and bound contracts
+	// unusable
+	// TODO: remove once tmpnet supports static port option across restarts
+	for _, tmpnetNode := range n.Network.Nodes {
+		port := getTmpnetNodePort(tmpnetNode)
+		tmpnetNode.Flags[config.HTTPPortKey] = port
+	}
+
 	// Restart the network to apply the new chain configs
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(60*len(n.Network.Nodes))*time.Second)
 	defer cancel()
@@ -588,4 +601,13 @@ func (n *LocalNetwork) GetTwoL1s() (
 	l1s := n.GetL1Infos()
 	Expect(len(l1s)).Should(BeNumerically(">=", 2))
 	return l1s[0], l1s[1]
+}
+
+// TODO: once tmpnet supports static port option across restarts, remove this function
+func getTmpnetNodePort(node *tmpnet.Node) string {
+	hostPort := strings.TrimPrefix(node.URI, "http://")
+	Expect(hostPort).ShouldNot(BeEmpty())
+	_, port, err := net.SplitHostPort(hostPort)
+	Expect(err).Should(BeNil())
+	return port
 }
