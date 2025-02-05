@@ -69,6 +69,7 @@ abstract contract StakingManager is
         mapping(bytes32 delegationID => address) _delegatorRewardRecipients;
         /// @notice Maps the validation ID to its pending staking rewards.
         mapping(bytes32 validationID => uint256) _redeemableValidatorRewards;
+        /// @notice Maps the validation ID to its reward recipient.
         mapping(bytes32 validationID => address) _rewardRecipients;
     }
     // solhint-enable private-vars-leading-underscore
@@ -483,7 +484,6 @@ abstract contract StakingManager is
     /**
      * @notice Initiates validator registration. Extends the functionality of {ACP99Manager-_initiateValidatorRegistration}
      * by locking stake and setting staking and delegation parameters.
-     *
      * @param delegationFeeBips The delegation fee in basis points.
      * @param minStakeDuration The minimum stake duration in seconds.
      * @param stakeAmount The amount of stake to lock.

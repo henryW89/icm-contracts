@@ -37,9 +37,9 @@ struct ValidatorChurnPeriod {
 
 /**
  * @notice Validator Manager settings, used to initialize the Validator Manager
- * @notice The subnetID is the ID of the L1 that the Validator Manager is managing
- * @notice The churnPeriodSeconds is the duration of the churn period in seconds
- * @notice The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
+ * @param The subnetID is the ID of the L1 that the Validator Manager is managing
+ * @param The churnPeriodSeconds is the duration of the churn period in seconds
+ * @param The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
  */
 struct ValidatorManagerSettings {
     address admin;
@@ -56,7 +56,6 @@ struct ValidatorManagerSettings {
 contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
-
     struct ValidatorManagerStorage {
         /// @notice The subnetID associated with this validator manager.
         bytes32 _subnetID;

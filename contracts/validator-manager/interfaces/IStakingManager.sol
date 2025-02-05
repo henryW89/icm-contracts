@@ -135,7 +135,7 @@ interface IStakingManager {
     function submitUptimeProof(bytes32 validationID, uint32 messageIndex) external;
 
     /**
-     * Completes validator registration by dispatching to the ValidatorManager to update the validator status,
+     * @notice Completes validator registration by dispatching to the ValidatorManager to update the validator status,
      * and locking stake.
      *
      * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
@@ -201,7 +201,7 @@ interface IStakingManager {
     ) external;
 
     /**
-     * Completes validator removal by dispatching to the ValidatorManager to update the validator status,
+     * @notice Completes validator removal by dispatching to the ValidatorManager to update the validator status,
      * and unlocking stake.
      *
      * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
