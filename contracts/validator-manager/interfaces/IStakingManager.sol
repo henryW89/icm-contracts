@@ -5,7 +5,7 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManagerSettings} from "../ValidatorManager.sol";
+import {ValidatorManager} from "../ValidatorManager.sol";
 import {IRewardCalculator} from "./IRewardCalculator.sol";
 
 /**
@@ -32,8 +32,8 @@ enum DelegatorStatus {
  * @notice uptimeBlockchainID is the ID of the blockchain that submits uptime proofs.
  * This must be a blockchain validated by the subnetID that this contract manages.
  */
-struct PoSValidatorManagerSettings {
-    ValidatorManagerSettings baseSettings;
+struct StakingManagerSettings {
+    ValidatorManager manager;
     uint256 minimumStakeAmount;
     uint256 maximumStakeAmount;
     uint64 minimumStakeDuration;
@@ -70,7 +70,7 @@ struct PoSValidatorInfo {
 /**
  * @notice Interface for Proof of Stake Validator Managers
  */
-interface IPoSValidatorManager {
+interface IStakingManager {
     /**
      * @notice Event emitted when a delegator registration is initiated
      * @param delegationID The ID of the delegation
@@ -135,6 +135,16 @@ interface IPoSValidatorManager {
     function submitUptimeProof(bytes32 validationID, uint32 messageIndex) external;
 
     /**
+     * @notice Completes validator registration by dispatching to the ValidatorManager to update the validator status,
+     * and locking stake.
+     *
+     * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
+     * This is forwarded to the ValidatorManager to be parsed.
+     * @return The ID of the validator that was registered.
+     */
+    function completeValidatorRegistration(uint32 messageIndex) external returns (bytes32);
+
+    /**
      * @notice Begins the process of ending an active validation period, and reverts if the validation period is not eligible
      * for uptime-based rewards. This function is used to exit the validator set when rewards are expected.
      * The validation period must have been previously started by a successful call to {completeValidatorRegistration} with the given validationID.
@@ -152,7 +162,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initiateValidatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-initiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the validator.
      */
     function initiateValidatorRemoval(
@@ -180,7 +190,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateValidatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-forceInitiateValidatorRemoval} for details of the first three parameters
      * @param recipientAddress Address to receive the rewards.
      */
     function forceInitiateValidatorRemoval(
@@ -191,8 +201,18 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
+     * @notice Completes validator removal by dispatching to the ValidatorManager to update the validator status,
+     * and unlocking stake.
+     *
+     * @param messageIndex The index of the ICM message to be received providing the acknowledgement from the P-Chain.
+     * This is forwarded to the ValidatorManager to be parsed.
+     * @return The ID of the validator that was removed.
+     */
+    function completeValidatorRemoval(uint32 messageIndex) external returns (bytes32);
+
+    /**
      * @notice Completes the delegator registration process by submitting an acknowledgement of the registration of a
-     * validationID from the P-Chain. After this function is called, the validator's weight is updated in the contract state.
+     * validationID from the P-Chain.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate registration of the
      * delegator is valid, as long as that nonce has been sent by the contract. For the purposes of computing delegation rewards,
      * the delegation is considered active after this function is completed.
@@ -225,7 +245,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-initiateDelegatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-initiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards. If the 0-address is provided, the rewards will be sent to the delegator.
      */
     function initiateDelegatorRemoval(
@@ -256,7 +276,7 @@ interface IPoSValidatorManager {
     ) external;
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateDelegatorRemoval} for details of the first three parameters
+     * @notice See {IStakingManager-forceInitiateDelegatorRemoval} for details of the first three parameters
      * @param recipientAddress The address to receive the rewards.
      */
     function forceInitiateDelegatorRemoval(
@@ -275,7 +295,6 @@ interface IPoSValidatorManager {
 
     /**
      * @notice Completes the process of ending a delegation by receiving an acknowledgement from the P-Chain.
-     * After this function is called, the validator's weight is updated in the contract state.
      * Any P-Chain acknowledgement with a nonce greater than or equal to the nonce used to initiate the end of the
      * delegator's delegation is valid, as long as that nonce has been sent by the contract. This is because the validator
      * weight change pertaining to the delegation ending is included in any subsequent validator weight update messages.

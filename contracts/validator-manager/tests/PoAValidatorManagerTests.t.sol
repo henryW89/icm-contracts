@@ -5,17 +5,18 @@
 
 pragma solidity 0.8.25;
 
-import {PoAValidatorManager} from "../PoAValidatorManager.sol";
-import {ValidatorManager, ValidatorManagerSettings} from "../ValidatorManager.sol";
+import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
-import {ACP99Manager, PChainOwner} from "../ACP99Manager.sol";
+import {ACP99Manager, PChainOwner, ConversionData} from "../ACP99Manager.sol";
+import {ValidatorManager} from "../ValidatorManager.sol";
+import {ValidatorMessages} from "../ValidatorMessages.sol";
 
 contract PoAValidatorManagerTest is ValidatorManagerTest {
-    PoAValidatorManager public app;
+    ValidatorManager public app;
 
     address public constant DEFAULT_OWNER = address(0x1);
 
@@ -24,21 +25,17 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
 
         _setUp();
         _mockGetBlockchainID();
-        _mockInitializeValidatorSet();
-        app.initializeValidatorSet(_defaultConversionData(), 0);
+
+        ConversionData memory conversion = _defaultConversionData();
+        bytes32 conversionID = sha256(ValidatorMessages.packConversionData(conversion));
+        _mockInitializeValidatorSet(conversionID);
+        validatorManager.initializeValidatorSet(conversion, 0);
     }
 
     function testDisableInitialization() public {
-        app = new PoAValidatorManager(ICMInitializable.Disallowed);
+        app = new ValidatorManager(ICMInitializable.Disallowed);
         vm.expectRevert(abi.encodeWithSelector(Initializable.InvalidInitialization.selector));
-        app.initialize(
-            ValidatorManagerSettings({
-                subnetID: DEFAULT_SUBNET_ID,
-                churnPeriodSeconds: DEFAULT_CHURN_PERIOD,
-                maximumChurnPercentage: DEFAULT_MAXIMUM_CHURN_PERCENTAGE
-            }),
-            address(this)
-        );
+        app.initialize(_defaultSettings(address(this)));
     }
 
     function testInvalidOwnerRegistration() public {
@@ -59,7 +56,7 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     }
 
     // This test applies to all ValidatorManagers, but we test it here to avoid
-    // having to source UINT64MAX funds for PoSValidatorManagers.
+    // having to source UINT64MAX funds for StakingManagers.
     function testTotalWeightOverflow() public {
         uint64 weight = type(uint64).max;
 
@@ -96,6 +93,15 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         });
     }
 
+    function _completeValidatorRegistration(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return app.completeValidatorRegistration(messageIndex);
+    }
+
     function _initiateValidatorRemoval(
         bytes32 validationID,
         bool,
@@ -112,19 +118,22 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         return app.initiateValidatorRemoval(validationID);
     }
 
-    function _setUp() internal override returns (ACP99Manager) {
-        app = new PoAValidatorManager(ICMInitializable.Allowed);
-        app.initialize(
-            ValidatorManagerSettings({
-                subnetID: DEFAULT_SUBNET_ID,
-                churnPeriodSeconds: DEFAULT_CHURN_PERIOD,
-                maximumChurnPercentage: DEFAULT_MAXIMUM_CHURN_PERCENTAGE
-            }),
-            address(this)
-        );
-        validatorManager = app;
+    function _completeValidatorRemoval(uint32 messageIndex)
+        internal
+        virtual
+        override
+        returns (bytes32)
+    {
+        return app.completeValidatorRemoval(messageIndex);
+    }
 
-        return app;
+    function _setUp() internal override returns (ACP99Manager) {
+        validatorManager = new ValidatorManager(ICMInitializable.Allowed);
+        app = validatorManager;
+
+        validatorManager.initialize(_defaultSettings(address(this)));
+
+        return validatorManager;
     }
 
     // solhint-disable-next-line no-empty-blocks

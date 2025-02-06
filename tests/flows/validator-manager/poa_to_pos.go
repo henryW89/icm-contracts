@@ -7,9 +7,10 @@ import (
 
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/ava-labs/avalanchego/utils/units"
+	ownableupgradeable "github.com/ava-labs/icm-contracts/abi-bindings/go/OwnableUpgradeable"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
-	poavalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/PoAValidatorManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -28,9 +29,9 @@ import (
  * - Initialize and complete PoA validator registration
  *
  * Migrates the proxy to a PoS validator manager. The steps are as follows:
- * - Deploy the PoSValidatorManager contract
- * - Upgrade the TransparentUpgradeableProxy to point to the PoSValidatorManager
- * - Call initialize on the PoSValidatorManager through the proxy
+ * - Deploy the StakingManager contract
+ * - Upgrade the TransparentUpgradeableProxy to point to the StakingManager
+ * - Call initialize on the StakingManager through the proxy
  * - Check that previous validator is still active
  * - Initialize and complete PoS validator registration
  * - Attempt to delist previous PoA validator with wrong owner and check that it fails
@@ -60,8 +61,8 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		fundAmount,
 	)
 
-	// Deploy PoAValidatorManager contract with a proxy
-	nodes, initialValidationIDs, proxyAdmin := network.ConvertSubnet(
+	// Deploy ValidatorManager as PoA
+	nodes, initialValidationIDs := network.ConvertSubnet(
 		ctx,
 		l1AInfo,
 		utils.PoAValidatorManager,
@@ -69,8 +70,8 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		ownerKey,
 		true,
 	)
-	proxyAddress := network.GetValidatorManager(l1AInfo.SubnetID)
-	poaValidatorManager, err := poavalidatormanager.NewPoAValidatorManager(proxyAddress, l1AInfo.RPCClient)
+	validatorManagerProxy, _ := network.GetValidatorManager(l1AInfo.SubnetID)
+	validatorManager, err := validatormanager.NewValidatorManager(validatorManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
 
 	signatureAggregator := utils.NewSignatureAggregator(
@@ -84,15 +85,14 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	utils.InitializeAndCompleteEndInitialPoAValidation(
+	utils.InitiateAndCompleteEndInitialPoAValidation(
 		ctx,
 		signatureAggregator,
 		ownerKey,
-		fundedKey,
 		l1AInfo,
 		pChainInfo,
-		poaValidatorManager,
-		proxyAddress,
+		validatorManager,
+		validatorManagerProxy.Address,
 		initialValidationIDs[0],
 		0,
 		nodes[0].Weight,
@@ -104,13 +104,13 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	opts, err := bind.NewKeyedTransactorWithChainID(fundedKey, l1AInfo.EVMChainID)
 	Expect(err).Should(BeNil())
 
-	_, err = poaValidatorManager.InitiateValidatorRegistration(
+	_, err = validatorManager.InitiateValidatorRegistration(
 		opts,
 		nodes[0].NodeID[:],
 		nodes[0].NodePoP.PublicKey[:],
 		uint64(time.Now().Add(24*time.Hour).Unix()),
-		poavalidatormanager.PChainOwner{},
-		poavalidatormanager.PChainOwner{},
+		validatormanager.PChainOwner{},
+		validatormanager.PChainOwner{},
 		nodes[0].Weight,
 	)
 	Expect(err).ShouldNot(BeNil())
@@ -119,100 +119,77 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	// Re-register the validator as a SoV validator
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	poaValidationID := utils.InitializeAndCompletePoAValidatorRegistration(
+	poaValidationID := utils.InitiateAndCompletePoAValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		ownerKey,
-		fundedKey,
 		l1AInfo,
 		pChainInfo,
-		poaValidatorManager,
-		proxyAddress,
+		validatorManager,
+		validatorManagerProxy.Address,
 		expiry,
 		nodes[0],
 		network.GetPChainWallet(),
 		network.GetNetworkID(),
 	)
-	poaValidator, err := poaValidatorManager.GetValidator(&bind.CallOpts{}, poaValidationID)
+
+	poaValidator, err := validatorManager.GetValidator(&bind.CallOpts{}, poaValidationID)
 	Expect(err).Should(BeNil())
 	poaNodeID := poaValidator.NodeID
 
 	/*
 	 ******************
-	 * Migrate PoAValidatorManager to PoSValidatorManager
+	 * Migrate PoAValidatorManager to StakingManager
 	 ******************
 	 */
 
-	// Deploy PoSValidatorManager contract
-	newImplAddress, _ := utils.DeployValidatorManager(
+	// Deploy StakingManager contract
+	stakingManagerAddress, _ := utils.DeployAndInitializeValidatorManagerSpecialization(
 		ctx,
-		fundedKey,
+		ownerKey,
 		l1AInfo,
+		validatorManagerProxy.Address,
 		utils.NativeTokenStakingManager,
+		false,
 	)
 
-	// Upgrade the TransparentUpgradeableProxy contract to use the new logic contract
-	opts, err = bind.NewKeyedTransactorWithChainID(ownerKey, l1AInfo.EVMChainID)
-	Expect(err).Should(BeNil())
-	tx, err := proxyAdmin.UpgradeAndCall(opts, proxyAddress, newImplAddress, []byte{})
-	Expect(err).Should(BeNil())
-	utils.WaitForTransactionSuccess(ctx, l1AInfo, tx.Hash())
+	utils.AddNativeMinterAdmin(ctx, l1AInfo, fundedKey, stakingManagerAddress)
 
-	// Change the proxy contract type to NativeTokenStakingManager and initialize it
 	nativeStakingManager, err := nativetokenstakingmanager.NewNativeTokenStakingManager(
-		proxyAddress,
+		stakingManagerAddress,
 		l1AInfo.RPCClient,
 	)
 	Expect(err).Should(BeNil())
 
-	utils.AddNativeMinterAdmin(ctx, l1AInfo, fundedKey, proxyAddress)
+	// Transfer ownership from PoA -> the new staking manager
+	ownable, err := ownableupgradeable.NewOwnableUpgradeable(validatorManagerProxy.Address, l1AInfo.RPCClient)
+	Expect(err).Should(BeNil())
 
-	rewardCalculatorAddress, _ := utils.DeployExampleRewardCalculator(
-		ctx,
-		fundedKey,
-		l1AInfo,
-		uint64(10),
-	)
-
-	tx, err = nativeStakingManager.Initialize(
-		opts,
-		nativetokenstakingmanager.PoSValidatorManagerSettings{
-			BaseSettings: nativetokenstakingmanager.ValidatorManagerSettings{
-				SubnetID:               l1AInfo.SubnetID,
-				ChurnPeriodSeconds:     utils.DefaultChurnPeriodSeconds,
-				MaximumChurnPercentage: utils.DefaultMaxChurnPercentage,
-			},
-			MinimumStakeAmount:       big.NewInt(0).SetUint64(utils.DefaultMinStakeAmount),
-			MaximumStakeAmount:       big.NewInt(0).SetUint64(utils.DefaultMaxStakeAmount),
-			MinimumStakeDuration:     utils.DefaultMinStakeDurationSeconds,
-			MinimumDelegationFeeBips: utils.DefaultMinDelegateFeeBips,
-			MaximumStakeMultiplier:   utils.DefaultMaxStakeMultiplier,
-			WeightToValueFactor:      big.NewInt(0).SetUint64(utils.DefaultWeightToValueFactor),
-			RewardCalculator:         rewardCalculatorAddress,
-			UptimeBlockchainID:       l1AInfo.BlockchainID,
-		},
-	)
+	opts, err = bind.NewKeyedTransactorWithChainID(ownerKey, l1AInfo.EVMChainID)
+	Expect(err).Should(BeNil())
+	tx, err := ownable.TransferOwnership(opts, stakingManagerAddress)
 	Expect(err).Should(BeNil())
 	utils.WaitForTransactionSuccess(context.Background(), l1AInfo, tx.Hash())
 
 	// Check that previous validator is still registered
-	validationID, err := nativeStakingManager.RegisteredValidators(&bind.CallOpts{}, poaNodeID)
+	validationID, err := validatorManager.RegisteredValidators(&bind.CallOpts{}, poaNodeID)
 	Expect(err).Should(BeNil())
 	Expect(validationID[:]).Should(Equal(poaValidationID[:]))
 
 	//
 	// Remove the PoA validator and re-register as a PoS validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(proxyAddress, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerAddress, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		ownerKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		proxyAddress,
+		stakingManagerAddress,
+		validatorManagerProxy.Address,
 		poaValidationID,
 		expiry,
 		nodes[0],
@@ -224,14 +201,15 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	)
 
 	expiry2 := uint64(time.Now().Add(24 * time.Hour).Unix())
-	posValidationID := utils.InitializeAndCompleteNativeValidatorRegistration(
+	posValidationID := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		nativeStakingManager,
-		proxyAddress,
+		stakingManagerAddress,
+		validatorManagerProxy.Address,
 		expiry2,
 		nodes[0],
 		network.GetPChainWallet(),
@@ -240,14 +218,15 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	validatorStartTime := time.Now()
 
 	// Delist the PoS validator
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		proxyAddress,
+		stakingManagerAddress,
+		validatorManagerProxy.Address,
 		posValidationID,
 		expiry2,
 		nodes[0],

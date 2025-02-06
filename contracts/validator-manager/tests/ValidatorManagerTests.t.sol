@@ -6,13 +6,15 @@
 pragma solidity 0.8.25;
 
 import {Test} from "@forge-std/Test.sol";
-import {ValidatorManager} from "../ValidatorManager.sol";
+import {ValidatorManager, ValidatorManagerSettings} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
     IWarpMessenger
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
 import {ACP99Manager, ConversionData, InitialValidator, PChainOwner} from "../ACP99Manager.sol";
+import {OwnableUpgradeable} from
+    "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 
 // TODO: Remove this once all unit tests implemented
 // solhint-disable no-empty-blocks
@@ -30,7 +32,7 @@ abstract contract ValidatorManagerTest is Test {
     bytes32 public constant DEFAULT_SOURCE_BLOCKCHAIN_ID =
         bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
     bytes32 public constant DEFAULT_SUBNET_CONVERSION_ID =
-        bytes32(hex"4223c0d9f9d49acd29e1e3121d1399105c2bd7ff670874c6e71de373cdbb4463");
+        bytes32(hex"67e8531265d8e97bd5c23534a37f4ea42d41934ddf8fe2c77c27fac9ef89f973");
     address public constant WARP_PRECOMPILE_ADDRESS = 0x0200000000000000000000000000000000000005;
 
     uint64 public constant DEFAULT_WEIGHT = 1e6;
@@ -274,7 +276,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRemoval(validationID);
 
-        validatorManager.completeValidatorRemoval(0);
+        _completeValidatorRemoval(0);
     }
 
     function testCompleteInvalidatedValidation() public {
@@ -293,11 +295,11 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRemoval(validationID);
 
-        validatorManager.completeValidatorRemoval(0);
+        _completeValidatorRemoval(0);
     }
 
     function testInitialWeightsTooLow() public {
-        vm.prank(address(123));
+        vm.prank(address(0x123));
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
@@ -307,17 +309,15 @@ abstract contract ValidatorManagerTest is Test {
 
     function testRemoveValidatorTotalWeight5() public {
         // Use prank here, because otherwise each test will end up with a different contract address, leading to a different subnet conversion hash.
-        vm.prank(address(123));
+        vm.prank(address(0x123));
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
-        _mockGetPChainWarpMessage(
-            ValidatorMessages.packSubnetToL1ConversionMessage(
-                bytes32(hex"0a2c50bd11652e39fadea9448d2d67fa27d5d8ef493600e9bbb9531bc7f12306")
-            ),
-            true
-        );
-        manager.initializeValidatorSet(_defaultConversionDataTotalWeight5(), 0);
+
+        ConversionData memory conversion = _defaultConversionDataTotalWeight5();
+        bytes32 id = sha256(ValidatorMessages.packConversionData(conversion));
+        _mockGetPChainWarpMessage(ValidatorMessages.packSubnetToL1ConversionMessage(id), true);
+        manager.initializeValidatorSet(conversion, 0);
 
         bytes32 validationID = sha256(abi.encodePacked(DEFAULT_SUBNET_ID, uint32(0)));
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
@@ -394,6 +394,73 @@ abstract contract ValidatorManagerTest is Test {
         );
 
         _initiateValidatorRemoval(validationID, false, address(0));
+    }
+
+    function testInitiateValidatorRegistrationUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            registrationExpiry: DEFAULT_EXPIRY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
+    function testCompleteValidatorRegistrationUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.completeValidatorRegistration(0);
+    }
+
+    function testInitiateValidatorWeightUpdateUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
+    }
+
+    function testCompleteValidatorWeightUpdateUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.completeValidatorWeightUpdate(0);
+    }
+
+    function testInitiateValidatorRemovalUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.initiateValidatorRemoval(bytes32(0));
+    }
+
+    function testCompleteValidatorRemovalUnauthorizedCaller() public {
+        vm.prank(address(0x123));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(0x123)
+            )
+        );
+        validatorManager.completeValidatorRemoval(0);
     }
 
     function testValidatorManagerStorageSlot() public view {
@@ -479,7 +546,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorRegistration(validationID, weight);
 
-        validatorManager.completeValidatorRegistration(0);
+        _completeValidatorRegistration(0);
     }
 
     function _initiateValidatorRemoval(
@@ -598,9 +665,9 @@ abstract contract ValidatorManagerTest is Test {
         );
     }
 
-    function _mockInitializeValidatorSet() internal {
+    function _mockInitializeValidatorSet(bytes32 conversionID) internal {
         _mockGetPChainWarpMessage(
-            ValidatorMessages.packSubnetToL1ConversionMessage(DEFAULT_SUBNET_CONVERSION_ID), true
+            ValidatorMessages.packSubnetToL1ConversionMessage(conversionID), true
         );
     }
 
@@ -613,6 +680,11 @@ abstract contract ValidatorManagerTest is Test {
         uint64 weight
     ) internal virtual returns (bytes32);
 
+    function _completeValidatorRegistration(uint32 messageIndex)
+        internal
+        virtual
+        returns (bytes32);
+
     function _initiateValidatorRemoval(
         bytes32 validationID,
         bool includeUptime,
@@ -624,6 +696,8 @@ abstract contract ValidatorManagerTest is Test {
         bool includeUptime,
         address rewardRecipient
     ) internal virtual;
+
+    function _completeValidatorRemoval(uint32 messageIndex) internal virtual returns (bytes32);
 
     function _setUp() internal virtual returns (ACP99Manager);
 
@@ -716,6 +790,19 @@ abstract contract ValidatorManagerTest is Test {
     // These are okay to use for PoA as well, because they're just used for conversions inside the tests.
     function _weightToValue(uint64 weight) internal pure returns (uint256) {
         return uint256(weight) * 1e12;
+    }
+
+    function _defaultSettings(address admin)
+        internal
+        pure
+        returns (ValidatorManagerSettings memory)
+    {
+        return ValidatorManagerSettings({
+            admin: admin,
+            subnetID: DEFAULT_SUBNET_ID,
+            churnPeriodSeconds: DEFAULT_CHURN_PERIOD,
+            maximumChurnPercentage: DEFAULT_MAXIMUM_CHURN_PERCENTAGE
+        });
     }
 
     function _erc7201StorageSlot(bytes memory storageName) internal pure returns (bytes32) {

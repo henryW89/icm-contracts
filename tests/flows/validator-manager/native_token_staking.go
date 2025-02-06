@@ -9,7 +9,7 @@ import (
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/ava-labs/avalanchego/utils/units"
 	nativetokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/NativeTokenStakingManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -41,7 +41,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 
 	ctx := context.Background()
 
-	nodes, initialValidationIDs, _ := network.ConvertSubnet(
+	nodes, initialValidationIDs := network.ConvertSubnet(
 		ctx,
 		l1AInfo,
 		utils.NativeTokenStakingManager,
@@ -49,13 +49,13 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		fundedKey,
 		false,
 	)
-	stakingManagerAddress := network.GetValidatorManager(l1AInfo.SubnetID)
+	validatorManagerProxy, stakingManagerProxy := network.GetValidatorManager(l1AInfo.SubnetID)
 	nativeStakingManager, err := nativetokenstakingmanager.NewNativeTokenStakingManager(
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
 		l1AInfo.RPCClient,
 	)
 	Expect(err).Should(BeNil())
-	utils.AddNativeMinterAdmin(ctx, l1AInfo, fundedKey, stakingManagerAddress)
+	utils.AddNativeMinterAdmin(ctx, l1AInfo, fundedKey, stakingManagerProxy.Address)
 
 	signatureAggregator := utils.NewSignatureAggregator(
 		cChainInfo.NodeURIs[0],
@@ -68,16 +68,17 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerAddress, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndInitialPoSValidation(
+	utils.InitiateAndCompleteEndInitialPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		initialValidationIDs[0],
 		0,
 		nodes[0].Weight,
@@ -89,14 +90,15 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	// Register the validator as PoS
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	validationID := utils.InitializeAndCompleteNativeValidatorRegistration(
+	validationID := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		nativeStakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		expiry,
 		nodes[0],
 		network.GetPChainWallet(),
@@ -125,13 +127,12 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 
 		nonce := uint64(1)
 
-		receipt := utils.InitializeNativeDelegatorRegistration(
+		receipt := utils.InitiateNativeDelegatorRegistration(
 			ctx,
 			fundedKey,
 			l1AInfo,
 			validationID,
 			delegatorStake,
-			stakingManagerAddress,
 			nativeStakingManager,
 		)
 		initRegistrationEvent, err := utils.GetEventFromLogs(
@@ -173,7 +174,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 			fundedKey,
 			delegationID,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			registrationSignedMessage,
 		)
 		// Check that the validator is registered in the staking contract
@@ -191,11 +192,11 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	{
 		log.Println("Delisting delegator")
 		nonce := uint64(2)
-		receipt := utils.InitializeEndDelegation(
+		receipt := utils.InitiateEndDelegation(
 			ctx,
 			fundedKey,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			delegationID,
 		)
 		delegatorRemovalEvent, err := utils.GetEventFromLogs(
@@ -240,7 +241,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 			fundedKey,
 			delegationID,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			signedMessage,
 		)
 
@@ -257,14 +258,15 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist the validator
 	//
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		validationID,
 		expiry,
 		nodes[0],

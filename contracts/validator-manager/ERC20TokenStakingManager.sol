@@ -5,8 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {PoSValidatorManager} from "./PoSValidatorManager.sol";
-import {PoSValidatorManagerSettings} from "./interfaces/IPoSValidatorManager.sol";
+import {StakingManager} from "./StakingManager.sol";
+import {StakingManagerSettings} from "./interfaces/IStakingManager.sol";
 import {IERC20TokenStakingManager, PChainOwner} from "./interfaces/IERC20TokenStakingManager.sol";
 import {IERC20Mintable} from "./interfaces/IERC20Mintable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
@@ -20,11 +20,7 @@ import {SafeERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/utils/SafeERC
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-contract ERC20TokenStakingManager is
-    Initializable,
-    PoSValidatorManager,
-    IERC20TokenStakingManager
-{
+contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenStakingManager {
     using SafeERC20 for IERC20Mintable;
     using SafeERC20TransferFrom for IERC20Mintable;
 
@@ -67,7 +63,7 @@ contract ERC20TokenStakingManager is
      * @param token The ERC20 token to be staked
      */
     function initialize(
-        PoSValidatorManagerSettings calldata settings,
+        StakingManagerSettings calldata settings,
         IERC20Mintable token
     ) external reinitializer(2) {
         __ERC20TokenStakingManager_init(settings, token);
@@ -75,10 +71,10 @@ contract ERC20TokenStakingManager is
 
     // solhint-disable-next-line func-name-mixedcase
     function __ERC20TokenStakingManager_init(
-        PoSValidatorManagerSettings calldata settings,
+        StakingManagerSettings calldata settings,
         IERC20Mintable token
     ) internal onlyInitializing {
-        __POS_Validator_Manager_init(settings);
+        __StakingManager_init(settings);
         __ERC20TokenStakingManager_init_unchained(token);
     }
 
@@ -137,7 +133,7 @@ contract ERC20TokenStakingManager is
     }
 
     /**
-     * @notice See {PoSValidatorManager-_lock}
+     * @notice See {StakingManager-_lock}
      * Note: Must be guarded with reentrancy guard for safe transfer from.
      */
     function _lock(uint256 value) internal virtual override returns (uint256) {
@@ -145,7 +141,7 @@ contract ERC20TokenStakingManager is
     }
 
     /**
-     * @notice See {PoSValidatorManager-_unlock}
+     * @notice See {StakingManager-_unlock}
      * Note: Must be guarded with reentrancy guard for safe transfer.
      */
     function _unlock(address to, uint256 value) internal virtual override {
@@ -153,7 +149,7 @@ contract ERC20TokenStakingManager is
     }
 
     /**
-     * @notice See {PoSValidatorManager-_reward}
+     * @notice See {StakingManager-_reward}
      */
     function _reward(address account, uint256 amount) internal virtual override {
         ERC20TokenStakingManagerStorage storage $ = _getERC20StakingManagerStorage();

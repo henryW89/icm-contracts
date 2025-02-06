@@ -10,30 +10,35 @@ import {ValidatorMessages} from "./ValidatorMessages.sol";
 import {
     Delegator,
     DelegatorStatus,
-    IPoSValidatorManager,
+    IStakingManager,
     PoSValidatorInfo,
-    PoSValidatorManagerSettings
-} from "./interfaces/IPoSValidatorManager.sol";
+    StakingManagerSettings
+} from "./interfaces/IStakingManager.sol";
 import {Validator, ValidatorStatus, PChainOwner} from "./ACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
-import {WarpMessage} from
-    "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+import {
+    IWarpMessenger,
+    WarpMessage
+} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
 import {ReentrancyGuardUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/utils/ReentrancyGuardUpgradeable.sol";
+import {ContextUpgradeable} from
+    "@openzeppelin/contracts-upgradeable@5.0.2/utils/ContextUpgradeable.sol";
 
 /**
- * @dev Implementation of the {IPoSValidatorManager} interface.
+ * @dev Implementation of the {IStakingManager} interface.
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-abstract contract PoSValidatorManager is
-    IPoSValidatorManager,
-    ValidatorManager,
+abstract contract StakingManager is
+    IStakingManager,
+    ContextUpgradeable,
     ReentrancyGuardUpgradeable
 {
     // solhint-disable private-vars-leading-underscore
-    /// @custom:storage-location erc7201:avalanche-icm.storage.PoSValidatorManager
-    struct PoSValidatorManagerStorage {
+    /// @custom:storage-location erc7201:avalanche-icm.storage.StakingManager
+    struct StakingManagerStorage {
+        ValidatorManager _manager;
         /// @notice The minimum amount of stake required to be a validator.
         uint256 _minimumStakeAmount;
         /// @notice The maximum amount of stake allowed to be a validator.
@@ -64,19 +69,25 @@ abstract contract PoSValidatorManager is
         mapping(bytes32 delegationID => address) _delegatorRewardRecipients;
         /// @notice Maps the validation ID to its pending staking rewards.
         mapping(bytes32 validationID => uint256) _redeemableValidatorRewards;
+        /// @notice Maps the validation ID to its reward recipient.
         mapping(bytes32 validationID => address) _rewardRecipients;
     }
     // solhint-enable private-vars-leading-underscore
 
-    // keccak256(abi.encode(uint256(keccak256("avalanche-icm.storage.PoSValidatorManager")) - 1)) & ~bytes32(uint256(0xff));
-    bytes32 public constant POS_VALIDATOR_MANAGER_STORAGE_LOCATION =
-        0x4317713f7ecbdddd4bc99e95d903adedaa883b2e7c2551610bd13e2c7e473d00;
+    // keccak256(abi.encode(uint256(keccak256("avalanche-icm.storage.StakingManager")) - 1)) & ~bytes32(uint256(0xff));
+    bytes32 public constant STAKING_MANAGER_STORAGE_LOCATION =
+        0xafe6c4731b852fc2be89a0896ae43d22d8b24989064d841b2a1586b4d39ab600;
 
     uint8 public constant MAXIMUM_STAKE_MULTIPLIER_LIMIT = 10;
 
     uint16 public constant MAXIMUM_DELEGATION_FEE_BIPS = 10000;
 
     uint16 public constant BIPS_CONVERSION_FACTOR = 10000;
+
+    bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
+
+    IWarpMessenger public constant WARP_MESSENGER =
+        IWarpMessenger(0x0200000000000000000000000000000000000005);
 
     error InvalidDelegationFee(uint16 delegationFeeBips);
     error InvalidDelegationID(bytes32 delegationID);
@@ -94,31 +105,34 @@ abstract contract PoSValidatorManager is
     error ZeroWeightToValueFactor();
     error InvalidUptimeBlockchainID(bytes32 uptimeBlockchainID);
 
+    error InvalidWarpOriginSenderAddress(address senderAddress);
+    error InvalidWarpSourceChainID(bytes32 sourceChainID);
+    error UnexpectedValidationID(bytes32 validationID, bytes32 expectedValidationID);
+    error InvalidValidatorStatus(ValidatorStatus status);
+    error InvalidNonce(uint64 nonce);
+    error InvalidWarpMessage();
+
     // solhint-disable ordering
     /**
      * @dev This storage is visible to child contracts for convenience.
      *      External getters would be better practice, but code size limitations are preventing this.
      *      Child contracts should probably never write to this storage.
      */
-    function _getPoSValidatorManagerStorage()
-        internal
-        pure
-        returns (PoSValidatorManagerStorage storage $)
-    {
+    function _getStakingManagerStorage() internal pure returns (StakingManagerStorage storage $) {
         // solhint-disable-next-line no-inline-assembly
         assembly {
-            $.slot := POS_VALIDATOR_MANAGER_STORAGE_LOCATION
+            $.slot := STAKING_MANAGER_STORAGE_LOCATION
         }
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __POS_Validator_Manager_init(PoSValidatorManagerSettings calldata settings)
+    function __StakingManager_init(StakingManagerSettings calldata settings)
         internal
         onlyInitializing
     {
-        __ValidatorManager_init(settings.baseSettings);
         __ReentrancyGuard_init();
-        __POS_Validator_Manager_init_unchained({
+        __StakingManager_init_unchained({
+            manager: settings.manager,
             minimumStakeAmount: settings.minimumStakeAmount,
             maximumStakeAmount: settings.maximumStakeAmount,
             minimumStakeDuration: settings.minimumStakeDuration,
@@ -131,7 +145,8 @@ abstract contract PoSValidatorManager is
     }
 
     // solhint-disable-next-line func-name-mixedcase
-    function __POS_Validator_Manager_init_unchained(
+    function __StakingManager_init_unchained(
+        ValidatorManager manager,
         uint256 minimumStakeAmount,
         uint256 maximumStakeAmount,
         uint64 minimumStakeDuration,
@@ -141,7 +156,7 @@ abstract contract PoSValidatorManager is
         IRewardCalculator rewardCalculator,
         bytes32 uptimeBlockchainID
     ) internal onlyInitializing {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         if (minimumDelegationFeeBips == 0 || minimumDelegationFeeBips > MAXIMUM_DELEGATION_FEE_BIPS)
         {
             revert InvalidDelegationFee(minimumDelegationFeeBips);
@@ -154,7 +169,7 @@ abstract contract PoSValidatorManager is
             revert InvalidStakeMultiplier(maximumStakeMultiplier);
         }
         // Minimum stake duration should be at least one churn period in order to prevent churn tracker abuse.
-        if (minimumStakeDuration < _getChurnPeriodSeconds()) {
+        if (minimumStakeDuration < manager.getChurnPeriodSeconds()) {
             revert InvalidMinStakeDuration(minimumStakeDuration);
         }
         if (weightToValueFactor == 0) {
@@ -164,6 +179,7 @@ abstract contract PoSValidatorManager is
             revert InvalidUptimeBlockchainID(uptimeBlockchainID);
         }
 
+        $._manager = manager;
         $._minimumStakeAmount = minimumStakeAmount;
         $._maximumStakeAmount = maximumStakeAmount;
         $._minimumStakeDuration = minimumStakeDuration;
@@ -175,13 +191,14 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-submitUptimeProof}.
+     * @notice See {IStakingManager-submitUptimeProof}.
      */
     function submitUptimeProof(bytes32 validationID, uint32 messageIndex) external {
         if (!_isPoSValidator(validationID)) {
             revert ValidatorNotPoS(validationID);
         }
-        ValidatorStatus status = getValidator(validationID).status;
+        ValidatorStatus status =
+            _getStakingManagerStorage()._manager.getValidator(validationID).status;
         if (status != ValidatorStatus.Active) {
             revert InvalidValidatorStatus(status);
         }
@@ -191,12 +208,12 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-claimDelegationFees}.
+     * @notice See {IStakingManager-claimDelegationFees}.
      */
     function claimDelegationFees(bytes32 validationID) external {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
-        ValidatorStatus status = getValidator(validationID).status;
+        ValidatorStatus status = $._manager.getValidator(validationID).status;
         if (status != ValidatorStatus.Completed) {
             revert InvalidValidatorStatus(status);
         }
@@ -209,7 +226,8 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initiateValidatorRemoval}.
+     * @notice See {IStakingManager-initiateValidatorRemoval}.
+     * Extends the functionality of {ACP99Manager-initiateValidatorRemoval} updating staker state.
      */
     function initiateValidatorRemoval(
         bytes32 validationID,
@@ -222,7 +240,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initiateValidatorRemoval}.
+     * @notice See {IStakingManager-initiateValidatorRemoval}.
      */
     function initiateValidatorRemoval(
         bytes32 validationID,
@@ -251,7 +269,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateValidatorRemoval}.
+     * @notice See {IStakingManager-forceInitiateValidatorRemoval}.
      */
     function forceInitiateValidatorRemoval(
         bytes32 validationID,
@@ -263,7 +281,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateValidatorRemoval}.
+     * @notice See {IStakingManager-forceInitiateValidatorRemoval}.
      */
     function forceInitiateValidatorRemoval(
         bytes32 validationID,
@@ -277,11 +295,14 @@ abstract contract PoSValidatorManager is
         );
     }
 
+    /**
+     * @notice See {IStakingManager-changeValidatorRewardRecipient}.
+     */
     function changeValidatorRewardRecipient(
         bytes32 validationID,
         address rewardRecipient
     ) external {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         if (rewardRecipient == address(0)) {
             revert InvalidRewardRecipient(rewardRecipient);
@@ -294,6 +315,9 @@ abstract contract PoSValidatorManager is
         $._rewardRecipients[validationID] = rewardRecipient;
     }
 
+    /**
+     * @notice See {IStakingManager-changeDelegatorRewardRecipient}.
+     */
     function changeDelegatorRewardRecipient(
         bytes32 delegationID,
         address rewardRecipient
@@ -302,7 +326,7 @@ abstract contract PoSValidatorManager is
             revert InvalidRewardRecipient(rewardRecipient);
         }
 
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         if ($._delegatorStakes[delegationID].owner != _msgSender()) {
             revert UnauthorizedOwner(_msgSender());
@@ -322,13 +346,13 @@ abstract contract PoSValidatorManager is
         uint32 messageIndex,
         address rewardRecipient
     ) internal returns (bool) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
-        _initiateValidatorRemoval(validationID);
+        $._manager.initiateValidatorRemoval(validationID);
 
         // The validator must be fetched after the removal has been initiated, since the above call modifies
         // the validator's state.
-        Validator memory validator = getValidator(validationID);
+        Validator memory validator = $._manager.getValidator(validationID);
 
         // Non-PoS validators are required to boostrap the network, but are not eligible for rewards.
         if (!_isPoSValidator(validationID)) {
@@ -375,18 +399,19 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRemoval}.
+     * @notice See {IStakingManager-completeValidatorRemoval}.
+     * Extends the functionality of {ACP99Manager-completeValidatorRemoval} by unlocking staking rewards.
      */
     function completeValidatorRemoval(uint32 messageIndex)
-        public
-        virtual
-        override
+        external
         nonReentrant
         returns (bytes32)
     {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
-        (bytes32 validationID, Validator memory validator) = _completeValidatorRemoval(messageIndex);
+        // Check if the validator has been already been removed from the validator manager.
+        bytes32 validationID = $._manager.completeValidatorRemoval(messageIndex);
+        Validator memory validator = $._manager.getValidator(validationID);
 
         // Return now if this was originally a PoA validator that was later migrated to this PoS manager,
         // or the validator was part of the initial validator set.
@@ -425,7 +450,7 @@ abstract contract PoSValidatorManager is
             revert InvalidWarpMessage();
         }
 
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         // The uptime proof must be from the specifed uptime blockchain
         if (warpMessage.sourceChainID != $._uptimeBlockchainID) {
             revert InvalidWarpSourceChainID(warpMessage.sourceChainID);
@@ -456,6 +481,13 @@ abstract contract PoSValidatorManager is
         return uptime;
     }
 
+    /**
+     * @notice Initiates validator registration. Extends the functionality of {ACP99Manager-_initiateValidatorRegistration}
+     * by locking stake and setting staking and delegation parameters.
+     * @param delegationFeeBips The delegation fee in basis points.
+     * @param minStakeDuration The minimum stake duration in seconds.
+     * @param stakeAmount The amount of stake to lock.
+     */
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
@@ -466,7 +498,7 @@ abstract contract PoSValidatorManager is
         uint64 minStakeDuration,
         uint256 stakeAmount
     ) internal virtual returns (bytes32) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         // Validate and save the validator requirements
         if (
             delegationFeeBips < $._minimumDelegationFeeBips
@@ -488,7 +520,7 @@ abstract contract PoSValidatorManager is
         uint256 lockedValue = _lock(stakeAmount);
 
         uint64 weight = valueToWeight(lockedValue);
-        bytes32 validationID = _initiateValidatorRegistration({
+        bytes32 validationID = $._manager.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
             registrationExpiry: registrationExpiry,
@@ -509,11 +541,18 @@ abstract contract PoSValidatorManager is
     }
 
     /**
+     * @notice See {IStakingManager-completeValidatorRegistration}.
+     */
+    function completeValidatorRegistration(uint32 messageIndex) external returns (bytes32) {
+        return _getStakingManagerStorage()._manager.completeValidatorRegistration(messageIndex);
+    }
+
+    /**
      * @notice Converts a token value to a weight.
      * @param value Token value to convert.
      */
     function valueToWeight(uint256 value) public view returns (uint64) {
-        uint256 weight = value / _getPoSValidatorManagerStorage()._weightToValueFactor;
+        uint256 weight = value / _getStakingManagerStorage()._weightToValueFactor;
         if (weight == 0 || weight > type(uint64).max) {
             revert InvalidStakeAmount(value);
         }
@@ -525,7 +564,7 @@ abstract contract PoSValidatorManager is
      * @param weight weight to convert.
      */
     function weightToValue(uint64 weight) public view returns (uint256) {
-        return uint256(weight) * _getPoSValidatorManagerStorage()._weightToValueFactor;
+        return uint256(weight) * _getStakingManagerStorage()._weightToValueFactor;
     }
 
     /**
@@ -541,16 +580,23 @@ abstract contract PoSValidatorManager is
      */
     function _unlock(address to, uint256 value) internal virtual;
 
+    /**
+     * @notice Initiates delegator registration by updating the validator's weight and storing the delegation information.
+     * Extends the functionality of {ACP99Manager-initiateValidatorWeightUpdate} by locking delegation stake.
+     * @param validationID The ID of the validator to delegate to.
+     * @param delegatorAddress The address of the delegator.
+     * @param delegationAmount The amount of stake to delegate.
+     */
     function _initiateDelegatorRegistration(
         bytes32 validationID,
         address delegatorAddress,
         uint256 delegationAmount
     ) internal returns (bytes32) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         uint64 weight = valueToWeight(_lock(delegationAmount));
 
         // Ensure the validation period is active
-        Validator memory validator = getValidator(validationID);
+        Validator memory validator = $._manager.getValidator(validationID);
         // Check that the validation ID is a PoS validator
         if (!_isPoSValidator(validationID)) {
             revert ValidatorNotPoS(validationID);
@@ -566,7 +612,7 @@ abstract contract PoSValidatorManager is
         }
 
         (uint64 nonce, bytes32 messageID) =
-            _initiateValidatorWeightUpdate(validationID, newValidatorWeight);
+            $._manager.initiateValidatorWeightUpdate(validationID, newValidatorWeight);
 
         bytes32 delegationID = keccak256(abi.encodePacked(validationID, nonce));
 
@@ -594,14 +640,15 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-completeDelegatorRegistration}.
+     * @notice See {IStakingManager-completeDelegatorRegistration}.
+     * Extends the functionality of {ACP99Manager-completeValidatorWeightUpdate} by updating the delegation status.
      */
     function completeDelegatorRegistration(bytes32 delegationID, uint32 messageIndex) external {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         Delegator memory delegator = $._delegatorStakes[delegationID];
         bytes32 validationID = delegator.validationID;
-        Validator memory validator = getValidator(validationID);
+        Validator memory validator = $._manager.getValidator(validationID);
 
         // Ensure the delegator is pending added. Since anybody can call this function once
         // delegator registration has been initiated, we need to make sure that this function is only
@@ -620,7 +667,7 @@ abstract contract PoSValidatorManager is
         // then there's no requirement to include an ICM message in this function call.
         if (validator.receivedNonce < delegator.startingNonce) {
             (bytes32 messageValidationID, uint64 nonce) =
-                completeValidatorWeightUpdate(messageIndex);
+                $._manager.completeValidatorWeightUpdate(messageIndex);
 
             if (validationID != messageValidationID) {
                 revert UnexpectedValidationID(messageValidationID, validationID);
@@ -642,7 +689,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initiateDelegatorRemoval}.
+     * @notice See {IStakingManager-initiateDelegatorRemoval}.
      */
     function initiateDelegatorRemoval(
         bytes32 delegationID,
@@ -655,7 +702,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-initiateDelegatorRemoval}.
+     * @notice See {IStakingManager-initiateDelegatorRemoval}.
      */
     function initiateDelegatorRemoval(
         bytes32 delegationID,
@@ -684,7 +731,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateDelegatorRemoval}.
+     * @notice See {IStakingManager-forceInitiateDelegatorRemoval}.
      */
     function forceInitiateDelegatorRemoval(
         bytes32 delegationID,
@@ -696,7 +743,7 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-forceInitiateDelegatorRemoval}.
+     * @notice See {IStakingManager-forceInitiateDelegatorRemoval}.
      */
     function forceInitiateDelegatorRemoval(
         bytes32 delegationID,
@@ -719,11 +766,11 @@ abstract contract PoSValidatorManager is
         uint32 messageIndex,
         address rewardRecipient
     ) internal returns (bool) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         Delegator memory delegator = $._delegatorStakes[delegationID];
         bytes32 validationID = delegator.validationID;
-        Validator memory validator = getValidator(validationID);
+        Validator memory validator = $._manager.getValidator(validationID);
 
         // Ensure the delegator is active
         if (delegator.status != DelegatorStatus.Active) {
@@ -761,8 +808,9 @@ abstract contract PoSValidatorManager is
             // initiate the removal.
             $._delegatorStakes[delegationID].status = DelegatorStatus.PendingRemoved;
 
-            ($._delegatorStakes[delegationID].endingNonce,) =
-                _initiateValidatorWeightUpdate(validationID, validator.weight - delegator.weight);
+            ($._delegatorStakes[delegationID].endingNonce,) = $
+                ._manager
+                .initiateValidatorWeightUpdate(validationID, validator.weight - delegator.weight);
 
             uint256 reward =
                 _calculateAndSetDelegationReward(delegator, rewardRecipient, delegationID);
@@ -780,16 +828,18 @@ abstract contract PoSValidatorManager is
         }
     }
 
-    /// @dev Calculates the reward owed to the delegator based on the state of the delegator and its corresponding validator.
-    /// then set the reward and reward recipient in the storage.
+    /**
+     * @dev Calculates the reward owed to the delegator based on the state of the delegator and its corresponding validator.
+     * then set the reward and reward recipient in the storage.
+     */
     function _calculateAndSetDelegationReward(
         Delegator memory delegator,
         address rewardRecipient,
         bytes32 delegationID
     ) private returns (uint256) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
-        Validator memory validator = getValidator(delegator.validationID);
+        Validator memory validator = $._manager.getValidator(delegator.validationID);
 
         uint64 delegationEndTime;
         if (
@@ -828,12 +878,12 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-resendUpdateDelegator}.
+     * @notice See {IStakingManager-resendUpdateDelegator}.
      * @dev Resending the latest validator weight with the latest nonce is safe because all weight changes are
      * cumulative, so the latest weight change will always include the weight change for any added delegators.
      */
     function resendUpdateDelegator(bytes32 delegationID) external {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         Delegator memory delegator = $._delegatorStakes[delegationID];
         if (
             delegator.status != DelegatorStatus.PendingAdded
@@ -842,7 +892,7 @@ abstract contract PoSValidatorManager is
             revert InvalidDelegatorStatus(delegator.status);
         }
 
-        Validator memory validator = getValidator(delegator.validationID);
+        Validator memory validator = $._manager.getValidator(delegator.validationID);
         if (validator.sentNonce == 0) {
             // Should be unreachable.
             revert InvalidDelegationID(delegationID);
@@ -857,13 +907,14 @@ abstract contract PoSValidatorManager is
     }
 
     /**
-     * @notice See {IPoSValidatorManager-completeDelegatorRemoval}.
+     * @notice See {IStakingManager-completeDelegatorRemoval}.
+     * Extends the functionality of {ACP99Manager-completeValidatorWeightUpdate} by updating the delegation status and unlocking delegation rewards.
      */
     function completeDelegatorRemoval(
         bytes32 delegationID,
         uint32 messageIndex
     ) external nonReentrant {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         Delegator memory delegator = $._delegatorStakes[delegationID];
 
         // Ensure the delegator is pending removed. Since anybody can call this function once
@@ -872,14 +923,15 @@ abstract contract PoSValidatorManager is
         if (delegator.status != DelegatorStatus.PendingRemoved) {
             revert InvalidDelegatorStatus(delegator.status);
         }
-        Validator memory validator = getValidator(delegator.validationID);
+        Validator memory validator = $._manager.getValidator(delegator.validationID);
 
         // We only expect an ICM message if we haven't received a weight update with a nonce greater than the delegation's ending nonce
         if (
-            getValidator(delegator.validationID).status != ValidatorStatus.Completed
+            $._manager.getValidator(delegator.validationID).status != ValidatorStatus.Completed
                 && validator.receivedNonce < delegator.endingNonce
         ) {
-            (bytes32 validationID, uint64 nonce) = completeValidatorWeightUpdate(messageIndex);
+            (bytes32 validationID, uint64 nonce) =
+                $._manager.completeValidatorWeightUpdate(messageIndex);
             if (delegator.validationID != validationID) {
                 revert UnexpectedValidationID(validationID, delegator.validationID);
             }
@@ -897,14 +949,14 @@ abstract contract PoSValidatorManager is
     }
 
     function _completeDelegatorRemoval(bytes32 delegationID) internal {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         Delegator memory delegator = $._delegatorStakes[delegationID];
         bytes32 validationID = delegator.validationID;
 
         // To prevent churn tracker abuse, check that one full churn period has passed,
         // so a delegator may not stake twice in the same churn period.
-        if (block.timestamp < delegator.startTime + _getChurnPeriodSeconds()) {
+        if (block.timestamp < delegator.startTime + $._manager.getChurnPeriodSeconds()) {
             revert MinStakeDurationNotPassed(uint64(block.timestamp));
         }
 
@@ -937,12 +989,12 @@ abstract contract PoSValidatorManager is
      * validator that was later migrated to this PoS manager, or the validator was part of the initial validator set.
      */
     function _isPoSValidator(bytes32 validationID) internal view returns (bool) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
         return $._posValidatorInfo[validationID].owner != address(0);
     }
 
     function _withdrawValidationRewards(address rewardRecipient, bytes32 validationID) internal {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         uint256 rewards = $._redeemableValidatorRewards[validationID];
         delete $._redeemableValidatorRewards[validationID];
@@ -955,7 +1007,7 @@ abstract contract PoSValidatorManager is
         bytes32 delegationID,
         bytes32 validationID
     ) internal returns (uint256, uint256) {
-        PoSValidatorManagerStorage storage $ = _getPoSValidatorManagerStorage();
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
 
         uint256 delegationRewards;
         uint256 validatorFees;

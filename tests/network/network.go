@@ -27,9 +27,12 @@ import (
 	"github.com/ava-labs/avalanchego/vms/secp256k1fx"
 	pwallet "github.com/ava-labs/avalanchego/wallet/chain/p/wallet"
 	"github.com/ava-labs/avalanchego/wallet/subnet/primary"
+	ownableupgradeable "github.com/ava-labs/icm-contracts/abi-bindings/go/OwnableUpgradeable"
 	proxyadmin "github.com/ava-labs/icm-contracts/abi-bindings/go/ProxyAdmin"
+	validatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ValidatorManager"
 	"github.com/ava-labs/icm-contracts/tests/interfaces"
 	"github.com/ava-labs/icm-contracts/tests/utils"
+	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
 	"github.com/ava-labs/subnet-evm/ethclient"
 	subnetEvmTestUtils "github.com/ava-labs/subnet-evm/tests/utils"
 
@@ -39,16 +42,22 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+type ProxyAddress struct {
+	common.Address
+	*proxyadmin.ProxyAdmin
+}
+
 // Implements Network, pointing to the network setup in local_network_setup.go
 type LocalNetwork struct {
 	tmpnet.Network
 
-	extraNodes               []*tmpnet.Node // to add as more L1 validators in the tests
-	primaryNetworkValidators []*tmpnet.Node
-	globalFundedKey          *secp256k1.PrivateKey
-	validatorManagers        map[ids.ID]common.Address
-	logger                   logging.Logger
-	deployedL1Specs          map[string]L1Spec
+	extraNodes                      []*tmpnet.Node // to add as more L1 validators in the tests
+	primaryNetworkValidators        []*tmpnet.Node
+	globalFundedKey                 *secp256k1.PrivateKey
+	validatorManagers               map[ids.ID]ProxyAddress
+	validatorManagerSpecializations map[ids.ID]ProxyAddress
+	logger                          logging.Logger
+	deployedL1Specs                 map[string]L1Spec
 }
 
 const (
@@ -166,13 +175,14 @@ func NewLocalNetwork(
 	primaryNetworkValidators = append(primaryNetworkValidators, network.Nodes...)
 
 	localNetwork := &LocalNetwork{
-		Network:                  *network,
-		extraNodes:               extraNodes,
-		globalFundedKey:          globalFundedKey,
-		primaryNetworkValidators: primaryNetworkValidators,
-		validatorManagers:        make(map[ids.ID]common.Address),
-		logger:                   logger,
-		deployedL1Specs:          deployedL1Specs,
+		Network:                         *network,
+		extraNodes:                      extraNodes,
+		globalFundedKey:                 globalFundedKey,
+		primaryNetworkValidators:        primaryNetworkValidators,
+		validatorManagers:               make(map[ids.ID]ProxyAddress),
+		validatorManagerSpecializations: make(map[ids.ID]ProxyAddress),
+		logger:                          logger,
+		deployedL1Specs:                 deployedL1Specs,
 	}
 
 	return localNetwork
@@ -185,21 +195,63 @@ func (n *LocalNetwork) ConvertSubnet(
 	weights []uint64,
 	senderKey *ecdsa.PrivateKey,
 	proxy bool,
-) ([]utils.Node, []ids.ID, *proxyadmin.ProxyAdmin) {
+) ([]utils.Node, []ids.ID) {
 	goLog.Println("Converting l1", l1.SubnetID)
 	cChainInfo := n.GetPrimaryNetworkInfo()
 	pClient := platformvm.NewClient(cChainInfo.NodeURIs[0])
 	currentValidators, err := pClient.GetCurrentValidators(ctx, l1.SubnetID, nil)
 	Expect(err).Should(BeNil())
 
-	vdrManagerAddress, proxyAdmin := utils.DeployAndInitializeValidatorManager(
+	vdrManagerAddress, vdrManagerProxyAdmin := utils.DeployValidatorManager(
 		ctx,
 		senderKey,
 		l1,
-		managerType,
 		proxy,
 	)
-	n.validatorManagers[l1.SubnetID] = vdrManagerAddress
+
+	validatorManager, err := validatormanager.NewValidatorManager(vdrManagerAddress, l1.RPCClient)
+	Expect(err).Should(BeNil())
+
+	sender := utils.PrivateKeyToAddress(senderKey)
+
+	utils.InitializeValidatorManager(
+		ctx,
+		senderKey,
+		l1,
+		validatorManager,
+		sender,
+	)
+
+	n.validatorManagers[l1.SubnetID] = ProxyAddress{
+		Address:    vdrManagerAddress,
+		ProxyAdmin: vdrManagerProxyAdmin,
+	}
+
+	if managerType != utils.PoAValidatorManager {
+		specializationAddress, specializationProxyAdmin := utils.DeployAndInitializeValidatorManagerSpecialization(
+			ctx,
+			senderKey,
+			l1,
+			vdrManagerAddress,
+			managerType,
+			proxy,
+		)
+
+		ownable, err := ownableupgradeable.NewOwnableUpgradeable(vdrManagerAddress, l1.RPCClient)
+		Expect(err).Should(BeNil())
+
+		opts, err := bind.NewKeyedTransactorWithChainID(senderKey, l1.EVMChainID)
+		Expect(err).Should(BeNil())
+
+		tx, err := ownable.TransferOwnership(opts, specializationAddress)
+		Expect(err).Should(BeNil())
+		utils.WaitForTransactionSuccess(context.Background(), l1, tx.Hash())
+
+		n.validatorManagerSpecializations[l1.SubnetID] = ProxyAddress{
+			Address:    specializationAddress,
+			ProxyAdmin: specializationProxyAdmin,
+		}
+	}
 
 	tmpnetNodes := n.GetExtraNodes(len(weights))
 	sort.Slice(tmpnetNodes, func(i, j int) bool {
@@ -277,7 +329,7 @@ func (n *LocalNetwork) ConvertSubnet(
 	utils.PChainProposerVMWorkaround(pChainWallet)
 	utils.AdvanceProposerVM(ctx, l1, senderKey, 5)
 
-	return nodes, validationIDs, proxyAdmin
+	return nodes, validationIDs
 }
 
 func (n *LocalNetwork) AddSubnetValidators(
@@ -319,8 +371,8 @@ func (n *LocalNetwork) AddSubnetValidators(
 	return n.GetL1Info(l1.SubnetID)
 }
 
-func (n *LocalNetwork) GetValidatorManager(subnetID ids.ID) common.Address {
-	return n.validatorManagers[subnetID]
+func (n *LocalNetwork) GetValidatorManager(subnetID ids.ID) (ProxyAddress, ProxyAddress) {
+	return n.validatorManagers[subnetID], n.validatorManagerSpecializations[subnetID]
 }
 
 func (n *LocalNetwork) GetSignatureAggregator() *utils.SignatureAggregator {

@@ -10,7 +10,7 @@ import (
 	"github.com/ava-labs/avalanchego/utils/units"
 	exampleerc20 "github.com/ava-labs/icm-contracts/abi-bindings/go/mocks/ExampleERC20"
 	erc20tokenstakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/ERC20TokenStakingManager"
-	iposvalidatormanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IPoSValidatorManager"
+	istakingmanager "github.com/ava-labs/icm-contracts/abi-bindings/go/validator-manager/interfaces/IStakingManager"
 	localnetwork "github.com/ava-labs/icm-contracts/tests/network"
 	"github.com/ava-labs/icm-contracts/tests/utils"
 	"github.com/ava-labs/subnet-evm/accounts/abi/bind"
@@ -42,7 +42,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 
 	ctx := context.Background()
 
-	nodes, initialValidationIDs, _ := network.ConvertSubnet(
+	nodes, initialValidationIDs := network.ConvertSubnet(
 		ctx,
 		l1AInfo,
 		utils.ERC20TokenStakingManager,
@@ -50,9 +50,9 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		fundedKey,
 		false,
 	)
-	stakingManagerAddress := network.GetValidatorManager(l1AInfo.SubnetID)
+	validatorManagerProxy, stakingManagerProxy := network.GetValidatorManager(l1AInfo.SubnetID)
 	erc20StakingManager, err := erc20tokenstakingmanager.NewERC20TokenStakingManager(
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
 		l1AInfo.RPCClient,
 	)
 	Expect(err).Should(BeNil())
@@ -72,16 +72,17 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist one initial validator
 	//
-	posStakingManager, err := iposvalidatormanager.NewIPoSValidatorManager(stakingManagerAddress, l1AInfo.RPCClient)
+	posStakingManager, err := istakingmanager.NewIStakingManager(stakingManagerProxy.Address, l1AInfo.RPCClient)
 	Expect(err).Should(BeNil())
-	utils.InitializeAndCompleteEndInitialPoSValidation(
+	utils.InitiateAndCompleteEndInitialPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		initialValidationIDs[0],
 		0,
 		nodes[0].Weight,
@@ -93,14 +94,15 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	// Register the validator as PoS
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	validationID := utils.InitializeAndCompleteERC20ValidatorRegistration(
+	validationID := utils.InitiateAndCompleteERC20ValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		erc20StakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		erc20,
 		expiry,
 		nodes[0],
@@ -130,14 +132,14 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 
 		nonce := uint64(1)
 
-		receipt := utils.InitializeERC20DelegatorRegistration(
+		receipt := utils.InitiateERC20DelegatorRegistration(
 			ctx,
 			fundedKey,
 			l1AInfo,
 			validationID,
 			delegatorStake,
 			erc20,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			erc20StakingManager,
 		)
 		initRegistrationEvent, err := utils.GetEventFromLogs(
@@ -179,7 +181,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 			fundedKey,
 			delegationID,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			registrationSignedMessage,
 		)
 		// Check that the validator is registered in the staking contract
@@ -198,11 +200,11 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	{
 		log.Println("Delisting delegator")
 		nonce := uint64(2)
-		receipt := utils.InitializeEndDelegation(
+		receipt := utils.InitiateEndDelegation(
 			ctx,
 			fundedKey,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			delegationID,
 		)
 		delegatorRemovalEvent, err := utils.GetEventFromLogs(
@@ -247,7 +249,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 			fundedKey,
 			delegationID,
 			l1AInfo,
-			stakingManagerAddress,
+			stakingManagerProxy.Address,
 			signedMessage,
 		)
 
@@ -264,14 +266,15 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Delist the validator
 	//
-	utils.InitializeAndCompleteEndPoSValidation(
+	utils.InitiateAndCompleteEndPoSValidation(
 		ctx,
 		signatureAggregator,
 		fundedKey,
 		l1AInfo,
 		pChainInfo,
 		posStakingManager,
-		stakingManagerAddress,
+		stakingManagerProxy.Address,
+		validatorManagerProxy.Address,
 		validationID,
 		expiry,
 		nodes[0],

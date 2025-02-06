@@ -19,10 +19,11 @@ import {
     IWarpMessenger,
     WarpMessage
 } from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
-import {ContextUpgradeable} from
-    "@openzeppelin/contracts-upgradeable@5.0.2/utils/ContextUpgradeable.sol";
+import {OwnableUpgradeable} from
+    "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/proxy/utils/Initializable.sol";
+import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 
 /**
  * @dev Describes the current churn period
@@ -36,11 +37,12 @@ struct ValidatorChurnPeriod {
 
 /**
  * @notice Validator Manager settings, used to initialize the Validator Manager
- * @notice The subnetID is the ID of the L1 that the Validator Manager is managing
- * @notice The churnPeriodSeconds is the duration of the churn period in seconds
- * @notice The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
+ * @param The subnetID is the ID of the L1 that the Validator Manager is managing
+ * @param The churnPeriodSeconds is the duration of the churn period in seconds
+ * @param The maximumChurnPercentage is the maximum percentage of the total weight that can be added or removed in a single churn period
  */
 struct ValidatorManagerSettings {
+    address admin;
     bytes32 subnetID;
     uint64 churnPeriodSeconds;
     uint8 maximumChurnPercentage;
@@ -51,10 +53,9 @@ struct ValidatorManagerSettings {
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Manager {
+contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
-
     struct ValidatorManagerStorage {
         /// @notice The subnetID associated with this validator manager.
         bytes32 _subnetID;
@@ -97,7 +98,6 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     error InvalidNodeID(bytes nodeID);
     error InvalidConversionID(bytes32 encodedConversionID, bytes32 expectedConversionID);
     error InvalidTotalWeight(uint64 weight);
-    error UnexpectedValidationID(bytes32 validationID, bytes32 expectedValidationID);
     error InvalidValidationID(bytes32 validationID);
     error InvalidValidatorStatus(ValidatorStatus status);
     error InvalidNonce(uint64 nonce);
@@ -107,6 +107,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     error UnexpectedRegistrationStatus(bool validRegistration);
     error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
     error PChainOwnerAddressesNotSorted();
+    error UnauthorizedCaller(address caller);
 
     // solhint-disable ordering
     /**
@@ -131,12 +132,22 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     IWarpMessenger public constant WARP_MESSENGER =
         IWarpMessenger(0x0200000000000000000000000000000000000005);
 
+    constructor(ICMInitializable init) {
+        if (init == ICMInitializable.Disallowed) {
+            _disableInitializers();
+        }
+    }
+
+    function initialize(ValidatorManagerSettings calldata settings) external initializer {
+        __ValidatorManager_init(settings);
+    }
+
     // solhint-disable-next-line func-name-mixedcase
     function __ValidatorManager_init(ValidatorManagerSettings calldata settings)
         internal
         onlyInitializing
     {
-        __Context_init();
+        __Ownable_init(settings.admin);
         __ValidatorManager_init_unchained(settings);
     }
 
@@ -256,6 +267,24 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         }
     }
 
+    function initiateValidatorRegistration(
+        bytes memory nodeID,
+        bytes memory blsPublicKey,
+        uint64 registrationExpiry,
+        PChainOwner memory remainingBalanceOwner,
+        PChainOwner memory disableOwner,
+        uint64 weight
+    ) public onlyOwner returns (bytes32) {
+        return _initiateValidatorRegistration({
+            nodeID: nodeID,
+            blsPublicKey: blsPublicKey,
+            registrationExpiry: registrationExpiry,
+            remainingBalanceOwner: remainingBalanceOwner,
+            disableOwner: disableOwner,
+            weight: weight
+        });
+    }
+
     /**
      * @notice See {ACP99Manager-_initiateValidatorRegistration}.
      * @dev This function modifies the validator's state. Callers should ensure that any references are updated.
@@ -358,6 +387,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         public
         virtual
         override
+        onlyOwner
         returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -427,6 +457,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         public
         virtual
         override
+        onlyOwner
         returns (bytes32, uint64)
     {
         WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
@@ -446,6 +477,10 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         emit CompletedValidatorWeightUpdate(validationID, nonce, weight);
 
         return (validationID, nonce);
+    }
+
+    function initiateValidatorRemoval(bytes32 validationID) public onlyOwner {
+        _initiateValidatorRemoval(validationID);
     }
 
     /**
@@ -501,16 +536,14 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
     }
 
     /**
-     * @notice Completes the process of ending a validation period by receiving an acknowledgement from the P-Chain
-     * that the validation ID is not active and will never be active in the future.
-     * Note: that this function can be used for successful validation periods that have been explicitly
-     * ended by calling {_initiateValidatorRemoval} or for validation periods that never began on the P-Chain due to the
-     * {registrationExpiry} being reached.
-     * @return (Validation ID, Validator instance) representing the completed validation period.
+     * @notice See {ACP99Manager-completeValidatorRemoval}.
      */
-    function _completeValidatorRemoval(uint32 messageIndex)
-        internal
-        returns (bytes32, Validator memory)
+    function completeValidatorRemoval(uint32 messageIndex)
+        public
+        virtual
+        override
+        onlyOwner
+        returns (bytes32)
     {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
@@ -547,7 +580,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         // Emit event.
         emit CompletedValidatorRemoval(validationID);
 
-        return (validationID, validator);
+        return validationID;
     }
 
     function _incrementSentNonce(bytes32 validationID) internal returns (uint64) {
@@ -574,6 +607,13 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         }
 
         return warpMessage;
+    }
+
+    function initiateValidatorWeightUpdate(
+        bytes32 validationID,
+        uint64 newWeight
+    ) public onlyOwner returns (uint64, bytes32) {
+        return _initiateValidatorWeightUpdate(validationID, newWeight);
     }
 
     /**
@@ -609,7 +649,7 @@ abstract contract ValidatorManager is Initializable, ContextUpgradeable, ACP99Ma
         return (nonce, messageID);
     }
 
-    function _getChurnPeriodSeconds() internal view returns (uint64) {
+    function getChurnPeriodSeconds() public view returns (uint64) {
         return _getValidatorManagerStorage()._churnPeriodSeconds;
     }
 
