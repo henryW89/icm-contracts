@@ -1,6 +1,6 @@
 module github.com/ava-labs/icm-contracts
 
-go 1.22.10
+go 1.23.6
 
 require (
 	github.com/ava-labs/avalanchego v1.12.2
