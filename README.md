@@ -21,7 +21,7 @@ For help getting started with building ICM contracts, refer to [the avalanche-st
 ### Dependencies
 
 - [Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) for running the end-to-end tests.
-- [Foundry](https://book.getfoundry.sh/) Use `./scripts/install_foundry.sh` to install the Ava Labs [fork](https://github.com/ava-labs/foundry) for building contracts.
+- [Foundry](https://book.getfoundry.sh/) Use `./scripts/install_foundry.sh` to install foundry for building contracts.
 
 ## Structure
 
