@@ -16,4 +16,5 @@ sed "s/\/foundry-rs\/foundry\/master\/foundryup/\/foundry-rs\/foundry\/${FOUNDRY
 bash < /tmp/foundry-install-script
 
 export PATH=$PATH:$HOME/.foundry/bin:$HOME/.foundry:$HOME/.cargo/bin
+
 foundryup

@@ -9,6 +9,7 @@ import {Test} from "@forge-std/Test.sol";
 import {ReceiptQueue} from "../ReceiptQueue.sol";
 import {TeleporterMessageReceipt} from "../ITeleporterMessenger.sol";
 
+/// forge-config: default.allow_internal_expect_revert = true
 contract ReceiptQueueTest is Test {
     using ReceiptQueue for ReceiptQueue.TeleporterMessageReceiptQueue;
     // The state of the contract gets reset before each
