@@ -178,8 +178,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         });
 
         // Set the legacy status to unknown to disallow future migrations.
-        legacy.status = ValidatorStatus.Unknown;
-        $._validationPeriodsLegacy[validationID] = legacy;
+        $._validationPeriodsLegacy[validationID].status = ValidatorStatus.Unknown;
     }
 
     function initialize(ValidatorManagerSettings calldata settings) external initializer {
