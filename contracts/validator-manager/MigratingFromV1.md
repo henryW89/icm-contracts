@@ -11,7 +11,6 @@ In the V2 contracts, Proof-of-Authority validator management is implemented full
 
 Some notes on this process:
 - `migrateFromV1` may only be called once per `validationID`. Any active validators will not be able to be removed until they are migrated.
-- `migrateFromV1` is callable only by the contract owner. Otherwise, the owner may encounter unexpected reverts if they attempt to migrate a validator that has already been migrated by somebody else.
 - It is up to the contract owner to track all of the `validationID`s to be migrated. This is because Solidity mappings are not iterable, so there is no getter to retreive all `validationID`s as a batch.
 
 ## Migrating Proof-of-Stake

@@ -156,7 +156,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
      * @param validationID The ID of the validation period to migrate.
      * @param receivedNonce The latest nonce received from the P-Chain.
      */
-    function migrateFromV1(bytes32 validationID, uint32 receivedNonce) external onlyOwner {
+    function migrateFromV1(bytes32 validationID, uint32 receivedNonce) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         ValidatorLegacy storage legacy = $._validationPeriodsLegacy[validationID];
         if (legacy.status == ValidatorStatus.Unknown) {
