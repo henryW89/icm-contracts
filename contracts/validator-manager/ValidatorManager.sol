@@ -94,7 +94,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         0xe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb00;
 
     uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
-    uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 2 days;
+    uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 1 days;
     uint32 public constant ADDRESS_LENGTH = 20; // This is only used as a packed uint32
     uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
@@ -104,7 +104,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     error InvalidWarpOriginSenderAddress(address senderAddress);
     error InvalidValidatorManagerBlockchainID(bytes32 blockchainID);
     error InvalidWarpSourceChainID(bytes32 sourceChainID);
-    error InvalidRegistrationExpiry(uint64 registrationExpiry);
     error InvalidInitializationStatus();
     error InvalidMaximumChurnPercentage(uint8 maximumChurnPercentage);
     error InvalidBLSKeyLength(uint256 length);
@@ -317,7 +316,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -325,7 +323,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             weight: weight
@@ -339,19 +336,11 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override initializedValidatorSet returns (bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
-
-        if (
-            registrationExpiry <= block.timestamp
-                || registrationExpiry >= block.timestamp + MAXIMUM_REGISTRATION_EXPIRY_LENGTH
-        ) {
-            revert InvalidRegistrationExpiry(registrationExpiry);
-        }
 
         // Ensure the new validator doesn't overflow the total weight
         if (uint256(weight) + uint256($._churnTracker.totalWeight) > type(uint64).max) {
@@ -376,6 +365,8 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         // Check that adding this validator would not exceed the maximum churn rate.
         _checkAndUpdateChurnTracker(weight, 0);
 
+        uint64 registrationExpiry = uint64(block.timestamp) + MAXIMUM_REGISTRATION_EXPIRY_LENGTH;
+
         (bytes32 validationID, bytes memory registerL1ValidatorMessage) = ValidatorMessages
             .packRegisterL1ValidatorMessage(
             ValidatorMessages.ValidationPeriod({
@@ -388,6 +379,12 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
                 weight: weight
             })
         );
+
+        // Ensure that this validation ID has not been used before to prevent replays
+        if ($._validationPeriods[validationID].status != ValidatorStatus.Unknown) {
+            revert InvalidValidatorStatus($._validationPeriods[validationID].status);
+        }
+
         $._pendingRegisterValidationMessages[validationID] = registerL1ValidatorMessage;
         $._registeredValidators[nodeID] = validationID;
 

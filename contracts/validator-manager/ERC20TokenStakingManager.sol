@@ -97,7 +97,6 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -107,7 +106,6 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: delegationFeeBips,
