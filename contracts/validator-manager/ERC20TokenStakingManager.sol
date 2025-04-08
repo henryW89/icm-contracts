@@ -103,7 +103,7 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
         uint16 delegationFeeBips,
         uint64 minStakeDuration,
         uint256 stakeAmount
-    ) external nonReentrant returns (bytes32 validationID) {
+    ) external nonReentrant returns (bytes32) {
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
