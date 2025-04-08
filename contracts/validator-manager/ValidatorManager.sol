@@ -120,7 +120,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     error UnexpectedRegistrationStatus(bool validRegistration);
     error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
     error PChainOwnerAddressesNotSorted();
-    error UnauthorizedCaller(address caller);
 
     // solhint-disable ordering
     /**
