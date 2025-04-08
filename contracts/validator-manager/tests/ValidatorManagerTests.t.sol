@@ -251,7 +251,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory setValidatorWeightPayload =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         _mockSendWarpMessage(setValidatorWeightPayload, bytes32(0));
-        validatorManager.resendEndValidatorMessage(validationID);
+        validatorManager.resendValidatorRemovalMessage(validationID);
     }
 
     function testCompleteEndValidation() public virtual {
