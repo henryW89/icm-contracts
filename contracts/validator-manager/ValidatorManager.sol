@@ -654,6 +654,11 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         bytes32 validationID,
         uint64 newWeight
     ) public onlyOwner returns (uint64, bytes32) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        if ($._validationPeriods[validationID].status != ValidatorStatus.Active) {
+            revert InvalidValidatorStatus($._validationPeriods[validationID].status);
+        }
+
         return _initiateValidatorWeightUpdate(validationID, newWeight);
     }
 

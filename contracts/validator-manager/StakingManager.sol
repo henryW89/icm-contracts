@@ -607,17 +607,13 @@ abstract contract StakingManager is
         StakingManagerStorage storage $ = _getStakingManagerStorage();
         uint64 weight = valueToWeight(_lock(delegationAmount));
 
-        // Ensure the validation period is active
-        Validator memory validator = $._manager.getValidator(validationID);
         // Check that the validation ID is a PoS validator
         if (!_isPoSValidator(validationID)) {
             revert ValidatorNotPoS(validationID);
         }
-        if (validator.status != ValidatorStatus.Active) {
-            revert InvalidValidatorStatus(validator.status);
-        }
 
         // Update the validator weight
+        Validator memory validator = $._manager.getValidator(validationID);
         uint64 newValidatorWeight = validator.weight + weight;
         if (newValidatorWeight > validator.startingWeight * $._maximumStakeMultiplier) {
             revert MaxWeightExceeded(newValidatorWeight);
