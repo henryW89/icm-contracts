@@ -111,6 +111,7 @@ abstract contract StakingManager is
     error InvalidValidatorStatus(ValidatorStatus status);
     error InvalidNonce(uint64 nonce);
     error InvalidWarpMessage();
+    error ZeroAddress();
 
     // solhint-disable ordering
     /**
@@ -167,6 +168,13 @@ abstract contract StakingManager is
         {
             revert InvalidStakeMultiplier(maximumStakeMultiplier);
         }
+        if (address(manager) == address(0)) {
+            revert ZeroAddress();
+        }
+        if (address(rewardCalculator) == address(0)) {
+            revert ZeroAddress();
+        }
+
         // Minimum stake duration should be at least one churn period in order to prevent churn tracker abuse.
         if (minimumStakeDuration < manager.getChurnPeriodSeconds()) {
             revert InvalidMinStakeDuration(minimumStakeDuration);
@@ -457,9 +465,6 @@ abstract contract StakingManager is
 
         // The sender is required to be the zero address so that we know the validator node
         // signed the proof directly, rather than as an arbitrary on-chain message
-        if (warpMessage.originSenderAddress != address(0)) {
-            revert InvalidWarpOriginSenderAddress(warpMessage.originSenderAddress);
-        }
         if (warpMessage.originSenderAddress != address(0)) {
             revert InvalidWarpOriginSenderAddress(warpMessage.originSenderAddress);
         }
