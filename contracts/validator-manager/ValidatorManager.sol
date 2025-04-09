@@ -493,31 +493,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         return _getValidatorManagerStorage()._subnetID;
     }
 
-    /**
-     * @notice See {ACP99Manager-completeValidatorWeightUpdate}.
-     */
-    function completeValidatorWeightUpdate(
-        uint32 messageIndex
-    ) public virtual override onlyOwner returns (bytes32, uint64) {
-        WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
-        (bytes32 validationID, uint64 nonce, uint64 weight) =
-            ValidatorMessages.unpackL1ValidatorWeightMessage(warpMessage.payload);
-
-        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
-
-        // The received nonce should be no greater than the highest sent nonce to ensure
-        // that weight changes are only initiated by this contract.
-        if ($._validationPeriods[validationID].sentNonce < nonce) {
-            revert InvalidNonce(nonce);
-        }
-
-        $._validationPeriods[validationID].receivedNonce = nonce;
-
-        emit CompletedValidatorWeightUpdate(validationID, nonce, weight);
-
-        return (validationID, nonce);
-    }
-
     function initiateValidatorRemoval(
         bytes32 validationID
     ) public onlyOwner {
@@ -564,7 +539,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
      * Only necessary if the original message can't be delivered due to validator churn.
      * @param validationID The ID of the validation period being ended.
      */
-    function resendEndValidatorMessage(
+    function resendValidatorRemovalMessage(
         bytes32 validationID
     ) external {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -688,6 +663,31 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         });
 
         return (nonce, messageID);
+    }
+
+    /**
+     * @notice See {ACP99Manager-completeValidatorWeightUpdate}.
+     */
+    function completeValidatorWeightUpdate(
+        uint32 messageIndex
+    ) public virtual override onlyOwner returns (bytes32, uint64) {
+        WarpMessage memory warpMessage = _getPChainWarpMessage(messageIndex);
+        (bytes32 validationID, uint64 nonce, uint64 weight) =
+            ValidatorMessages.unpackL1ValidatorWeightMessage(warpMessage.payload);
+
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+
+        // The received nonce should be no greater than the highest sent nonce to ensure
+        // that weight changes are only initiated by this contract.
+        if ($._validationPeriods[validationID].sentNonce < nonce) {
+            revert InvalidNonce(nonce);
+        }
+
+        $._validationPeriods[validationID].receivedNonce = nonce;
+
+        emit CompletedValidatorWeightUpdate(validationID, nonce, weight);
+
+        return (validationID, nonce);
     }
 
     function getChurnPeriodSeconds() public view returns (uint64) {
