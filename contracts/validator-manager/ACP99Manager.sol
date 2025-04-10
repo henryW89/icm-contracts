@@ -151,7 +151,7 @@ abstract contract ACP99Manager {
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
-    ) internal virtual returns (bytes32);
+    ) internal virtual returns (bytes32 validationID);
 
     /**
      * @notice Completes the validator registration process by returning an acknowledgement of the registration of a

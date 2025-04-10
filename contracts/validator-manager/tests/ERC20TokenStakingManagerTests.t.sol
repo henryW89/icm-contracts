@@ -49,20 +49,36 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         app.initialize(defaultPoSSettings, token);
     }
 
     function testZeroTokenAddress() public {
         app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                ERC20TokenStakingManager.InvalidTokenAddress.selector, address(0)
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(StakingManager.ZeroAddress.selector));
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         app.initialize(defaultPoSSettings, IERC20Mintable(address(0)));
+    }
+
+    function testZeroRewardCalculatorAddress() public {
+        app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
+        vm.expectRevert(abi.encodeWithSelector(StakingManager.ZeroAddress.selector));
+
+        StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
+        defaultPoSSettings.manager = validatorManager;
+        app.initialize(defaultPoSSettings, token);
+    }
+
+    function testZeroManagerddress() public {
+        app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
+        vm.expectRevert(abi.encodeWithSelector(StakingManager.ZeroAddress.selector));
+
+        StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
+        app.initialize(defaultPoSSettings, token);
     }
 
     function testZeroMinimumDelegationFee() public {
@@ -71,6 +87,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumDelegationFeeBips = 0;
         app.initialize(defaultPoSSettings, token);
     }
@@ -86,6 +103,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumDelegationFeeBips = minimumDelegationFeeBips;
         app.initialize(defaultPoSSettings, token);
     }
@@ -100,6 +118,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumStakeAmount = DEFAULT_MAXIMUM_STAKE_AMOUNT;
         defaultPoSSettings.maximumStakeAmount = DEFAULT_MINIMUM_STAKE_AMOUNT;
         app.initialize(defaultPoSSettings, token);
@@ -111,6 +130,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.maximumStakeMultiplier = 0;
         app.initialize(defaultPoSSettings, token);
     }
@@ -126,6 +146,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumStakeDuration = minimumStakeDuration;
         app.initialize(defaultPoSSettings, token);
     }
@@ -141,6 +162,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.maximumStakeMultiplier = maximumStakeMultiplier;
         app.initialize(defaultPoSSettings, token);
     }
@@ -151,6 +173,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.weightToValueFactor = 0;
         app.initialize(defaultPoSSettings, token);
     }
