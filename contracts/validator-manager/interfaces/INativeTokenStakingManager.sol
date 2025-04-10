@@ -21,6 +21,7 @@ interface INativeTokenStakingManager is IStakingManager {
      * @param disableOwner The disable owner of the validator.
      * @param delegationFeeBips The fee that delegators must pay to delegate to this validator.
      * @param minStakeDuration The minimum amount of time this validator must be staked for in seconds.
+     * @return validationID The ID of the registered validator.
      */
     function initiateValidatorRegistration(
         bytes memory nodeID,
@@ -30,11 +31,12 @@ interface INativeTokenStakingManager is IStakingManager {
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
         uint64 minStakeDuration
-    ) external payable returns (bytes32 validationID);
+    ) external payable returns (bytes32);
 
     /**
      * @notice Begins the delegator registration process. Locks the provided native asset in the contract as the stake.
      * @param validationID The ID of the validator to stake to.
+     * @return delegationID The ID of the registered delegator.
      */
     function initiateDelegatorRegistration(
         bytes32 validationID
