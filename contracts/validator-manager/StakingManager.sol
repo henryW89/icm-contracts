@@ -111,6 +111,7 @@ abstract contract StakingManager is
     error InvalidValidatorStatus(ValidatorStatus status);
     error InvalidNonce(uint64 nonce);
     error InvalidWarpMessage();
+    error ZeroAddress();
 
     // solhint-disable ordering
     /**
@@ -167,6 +168,13 @@ abstract contract StakingManager is
         {
             revert InvalidStakeMultiplier(maximumStakeMultiplier);
         }
+        if (address(manager) == address(0)) {
+            revert ZeroAddress();
+        }
+        if (address(rewardCalculator) == address(0)) {
+            revert ZeroAddress();
+        }
+
         // Minimum stake duration should be at least one churn period in order to prevent churn tracker abuse.
         if (minimumStakeDuration < manager.getChurnPeriodSeconds()) {
             revert InvalidMinStakeDuration(minimumStakeDuration);
@@ -460,9 +468,6 @@ abstract contract StakingManager is
         if (warpMessage.originSenderAddress != address(0)) {
             revert InvalidWarpOriginSenderAddress(warpMessage.originSenderAddress);
         }
-        if (warpMessage.originSenderAddress != address(0)) {
-            revert InvalidWarpOriginSenderAddress(warpMessage.originSenderAddress);
-        }
 
         (bytes32 uptimeValidationID, uint64 uptime) =
             ValidatorMessages.unpackValidationUptimeMessage(warpMessage.payload);
@@ -602,17 +607,13 @@ abstract contract StakingManager is
         StakingManagerStorage storage $ = _getStakingManagerStorage();
         uint64 weight = valueToWeight(_lock(delegationAmount));
 
-        // Ensure the validation period is active
-        Validator memory validator = $._manager.getValidator(validationID);
         // Check that the validation ID is a PoS validator
         if (!_isPoSValidator(validationID)) {
             revert ValidatorNotPoS(validationID);
         }
-        if (validator.status != ValidatorStatus.Active) {
-            revert InvalidValidatorStatus(validator.status);
-        }
 
         // Update the validator weight
+        Validator memory validator = $._manager.getValidator(validationID);
         uint64 newValidatorWeight = validator.weight + weight;
         if (newValidatorWeight > validator.startingWeight * $._maximumStakeMultiplier) {
             revert MaxWeightExceeded(newValidatorWeight);
