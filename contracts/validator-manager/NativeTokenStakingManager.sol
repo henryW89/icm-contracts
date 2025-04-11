@@ -7,11 +7,10 @@ pragma solidity 0.8.25;
 
 import {StakingManager} from "./StakingManager.sol";
 import {StakingManagerSettings} from "./interfaces/IStakingManager.sol";
-import {
-    INativeTokenStakingManager, PChainOwner
-} from "./interfaces/INativeTokenStakingManager.sol";
+import {PChainOwner} from "./ACP99Manager.sol";
+import {INativeTokenStakingManager} from "./interfaces/INativeTokenStakingManager.sol";
 import {INativeMinter} from
-    "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/INativeMinter.sol";
+    "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/INativeMinter.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {Address} from "@openzeppelin/contracts@5.0.2/utils/Address.sol";
 import {Initializable} from

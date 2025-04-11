@@ -19,7 +19,7 @@ import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {
     IWarpMessenger,
     WarpMessage
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {ReentrancyGuardUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/utils/ReentrancyGuardUpgradeable.sol";
 import {ContextUpgradeable} from

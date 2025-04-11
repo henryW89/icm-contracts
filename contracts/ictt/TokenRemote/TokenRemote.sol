@@ -21,7 +21,7 @@ import {TeleporterMessageInput, TeleporterFeeInfo} from "@teleporter/ITeleporter
 import {TeleporterRegistryOwnableAppUpgradeable} from
     "@teleporter/registry/TeleporterRegistryOwnableAppUpgradeable.sol";
 import {IWarpMessenger} from
-    "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+    "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {SendReentrancyGuardUpgradeable} from "@utilities/SendReentrancyGuardUpgradeable.sol";
 import {TokenScalingUtils} from "@utilities/TokenScalingUtils.sol";
 
