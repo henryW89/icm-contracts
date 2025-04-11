@@ -194,6 +194,24 @@ abstract contract ValidatorManagerTest is Test {
         });
     }
 
+    function testInitiateValidatorRegistrationPChainOwnerZeroAddress() public {
+        // Addresses not sorted
+        address[] memory addresses = new address[](1);
+        addresses[0] = address(0);
+        PChainOwner memory invalidPChainOwner1 = PChainOwner({threshold: 1, addresses: addresses});
+
+        _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.ZeroAddress.selector));
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
     // The following tests call functions that are  implemented in ValidatorManager, but access state that's
     // only set in NativeTokenValidatorManager. Therefore we call them via the concrete type, rather than a
     // reference to the abstract type.
