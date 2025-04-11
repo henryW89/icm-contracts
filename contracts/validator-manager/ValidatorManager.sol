@@ -120,6 +120,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     error UnexpectedRegistrationStatus(bool validRegistration);
     error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
     error PChainOwnerAddressesNotSorted();
+    error ZeroAddress();
 
     // solhint-disable ordering
     /**
@@ -303,6 +304,10 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         // Threshold must be less than or equal to the number of addresses.
         if (pChainOwner.threshold > pChainOwner.addresses.length) {
             revert InvalidPChainOwnerThreshold(pChainOwner.threshold, pChainOwner.addresses.length);
+        }
+        // Zero address is invalid. Because we require addresses to be sorted, we only need to check if the first is 0
+        if (pChainOwner.threshold != 0 && pChainOwner.addresses[0] == address(0)) {
+            revert ZeroAddress();
         }
         // Addresses must be sorted in ascending order
         for (uint256 i = 1; i < pChainOwner.addresses.length; i++) {
