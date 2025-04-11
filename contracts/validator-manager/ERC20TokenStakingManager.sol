@@ -28,7 +28,6 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
     /// @custom:storage-location erc7201:avalanche-icm.storage.ERC20TokenStakingManager
     struct ERC20TokenStakingManagerStorage {
         IERC20Mintable _token;
-        uint8 _tokenDecimals;
     }
     // solhint-enable private-vars-leading-underscore
 

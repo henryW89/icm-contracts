@@ -84,8 +84,6 @@ abstract contract StakingManager is
 
     uint16 public constant BIPS_CONVERSION_FACTOR = 10000;
 
-    bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
-
     IWarpMessenger public constant WARP_MESSENGER =
         IWarpMessenger(0x0200000000000000000000000000000000000005);
 

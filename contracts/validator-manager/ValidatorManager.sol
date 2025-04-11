@@ -95,7 +95,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
 
     uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
     uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 2 days;
-    uint32 public constant ADDRESS_LENGTH = 20; // This is only used as a packed uint32
     uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
     bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
