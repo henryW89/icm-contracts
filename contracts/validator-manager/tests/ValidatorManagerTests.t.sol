@@ -201,9 +201,7 @@ abstract contract ValidatorManagerTest is Test {
         PChainOwner memory invalidPChainOwner1 = PChainOwner({threshold: 1, addresses: addresses});
 
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
-        vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.ZeroAddress.selector)
-        );
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.ZeroAddress.selector));
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
