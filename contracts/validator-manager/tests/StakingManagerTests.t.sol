@@ -63,6 +63,22 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
     event UptimeUpdated(bytes32 indexed validationID, uint64 uptime);
 
+    event ValidatorRewardClaimed(
+        bytes32 indexed validationID, address indexed recipient, uint256 amount
+    );
+
+    event ValidatorRewardRecipientChanged(
+        bytes32 indexed validationID, address indexed recipient, address indexed oldRecipient
+    );
+
+    event DelegatorRewardClaimed(
+        bytes32 indexed delegationID, address indexed recipient, uint256 amount
+    );
+
+    event DelegatorRewardRecipientChanged(
+        bytes32 indexed delegationID, address indexed recipient, address indexed oldRecipient
+    );
+
     function testDelegationFeeBipsTooLow() public {
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -672,9 +688,11 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         });
 
-        _expectRewardIssuance(
-            address(this), expectedTotalReward * DEFAULT_DELEGATION_FEE_BIPS / 10000
-        );
+        uint256 expectedDelegationFee = expectedTotalReward * DEFAULT_DELEGATION_FEE_BIPS / 10000;
+
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardClaimed(validationID, address(this), expectedDelegationFee);
+        _expectRewardIssuance(address(this), expectedDelegationFee);
         stakingManager.claimDelegationFees(validationID);
     }
 
@@ -797,6 +815,10 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
 
         vm.prank(DEFAULT_DELEGATOR_ADDRESS);
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit DelegatorRewardRecipientChanged(
+            delegationID, DEFAULT_DELEGATOR_ADDRESS, rewardRecipient
+        );
 
         stakingManager.changeDelegatorRewardRecipient(delegationID, DEFAULT_DELEGATOR_ADDRESS);
 
@@ -846,6 +868,8 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
 
         vm.prank(DEFAULT_DELEGATOR_ADDRESS);
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit DelegatorRewardRecipientChanged(delegationID, newRewardRecipient, rewardRecipient);
         stakingManager.changeDelegatorRewardRecipient(delegationID, newRewardRecipient);
 
         uint256 expectedTotalReward = rewardCalculator.calculateReward({
@@ -1385,6 +1409,8 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             recipientAddress: rewardRecipient
         });
 
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardRecipientChanged(validationID, newRecipient, rewardRecipient);
         stakingManager.changeValidatorRewardRecipient(validationID, newRecipient);
 
         uint256 expectedReward = rewardCalculator.calculateReward({
@@ -1424,6 +1450,8 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             recipientAddress: rewardRecipient
         });
 
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardRecipientChanged(validationID, newRecipient, rewardRecipient);
         stakingManager.changeValidatorRewardRecipient(validationID, newRecipient);
 
         uint256 expectedReward = rewardCalculator.calculateReward({
@@ -2354,6 +2382,9 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         uint256 rewardRecipientBalanceBefore = _getStakeAssetBalance(rewardRecipient);
 
         _expectStakeUnlock(validatorOwner, _weightToValue(validatorWeight));
+
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardClaimed(validationID, rewardRecipient, expectedReward);
         _expectRewardIssuance(rewardRecipient, expectedReward);
 
         _completeEndValidation(l1ValidatorRegistrationMessage);
@@ -2400,6 +2431,9 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         );
         vm.expectEmit(true, true, true, true, address(validatorManager));
         emit CompletedValidatorWeightUpdate(validationID, expectedNonce, validatorWeight);
+
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit DelegatorRewardClaimed(delegationID, rewardRecipient, expectedDelegatorReward);
 
         vm.expectEmit(true, true, true, true, address(stakingManager));
         emit CompletedDelegatorRemoval(
