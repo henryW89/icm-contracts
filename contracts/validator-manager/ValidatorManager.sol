@@ -305,7 +305,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             revert InvalidPChainOwnerThreshold(pChainOwner.threshold, pChainOwner.addresses.length);
         }
         // Zero address is invalid. Because we require addresses to be sorted, we only need to check if the first is 0
-        if (pChainOwner.addresses.length >= 0 && pChainOwner.addresses[0] == address(0)) {
+        if (pChainOwner.addresses.length > 0 && pChainOwner.addresses[0] == address(0)) {
             revert ZeroAddress();
         }
         // Addresses must be sorted in ascending order
