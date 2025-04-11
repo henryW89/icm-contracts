@@ -283,21 +283,18 @@ abstract contract ValidatorManagerTest is Test {
 
         _completeValidatorRemoval(0);
 
-        vm.warp(DEFAULT_EXPIRY - 1);
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+        l1ValidatorRegistrationMessage =
+            ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, true);
+
+        _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
+                ValidatorManager.InvalidValidationID.selector, validationID
             )
         );
-        _initiateValidatorRegistration({
-            nodeID: DEFAULT_NODE_ID,
-            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-            disableOwner: DEFAULT_P_CHAIN_OWNER,
-            weight: DEFAULT_WEIGHT
-        });
+        _completeValidatorRegistration(0);
     }
 
     function testCompleteInvalidatedValidation() public {
@@ -389,6 +386,8 @@ abstract contract ValidatorManagerTest is Test {
         uint64 churnThreshold =
             uint64(DEFAULT_STARTING_TOTAL_WEIGHT) * DEFAULT_MAXIMUM_CHURN_PERCENTAGE / 100;
         _beforeSend(_weightToValue(churnThreshold), address(this));
+
+        vm.warp(block.timestamp + 1 days + 1);
 
         // Registration should succeed
         _registerValidator({
@@ -524,7 +523,6 @@ abstract contract ValidatorManagerTest is Test {
         );
 
         bytes20 fixedID = _fixedNodeID(nodeID);
-        vm.warp(registrationExpiry - 1);
         _mockSendWarpMessage(registerL1ValidatorMessage, bytes32(0));
 
         _beforeSend(_weightToValue(weight), address(this));

@@ -1356,21 +1356,18 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             rewardRecipient: validatorOwner
         });
 
-        vm.warp(DEFAULT_EXPIRY - 1);
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+        bytes memory l1ValidatorRegistrationMessage =
+            ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, true);
+
+        _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
+                ValidatorManager.InvalidValidationID.selector, validationID
             )
         );
-        _initiateValidatorRegistration({
-            nodeID: DEFAULT_NODE_ID,
-            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
-            disableOwner: DEFAULT_P_CHAIN_OWNER,
-            weight: DEFAULT_WEIGHT
-        });
+        _completeValidatorRegistration(0);
     }
 
     function testCompleteEndValidationWithNonValidatorRewardRecipient() public virtual {
