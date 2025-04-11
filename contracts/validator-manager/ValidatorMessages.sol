@@ -260,7 +260,7 @@ library ValidatorMessages {
     function unpackRegisterL1ValidatorMessage(
         bytes memory input
     ) external pure returns (ValidationPeriod memory) {
-        uint32 index = 0;
+        uint32 index;
         ValidationPeriod memory validation;
 
         // Unpack the codec ID

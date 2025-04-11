@@ -45,6 +45,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         app.initialize(defaultPoSSettings);
     }
 
@@ -54,6 +55,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumDelegationFeeBips = 0;
         app.initialize(defaultPoSSettings);
     }
@@ -69,6 +71,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumDelegationFeeBips = minimumDelegationFeeBips;
         app.initialize(defaultPoSSettings);
     }
@@ -83,6 +86,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumStakeAmount = DEFAULT_MAXIMUM_STAKE_AMOUNT;
         defaultPoSSettings.maximumStakeAmount = DEFAULT_MINIMUM_STAKE_AMOUNT;
         app.initialize(defaultPoSSettings);
@@ -94,6 +98,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.maximumStakeMultiplier = 0;
         app.initialize(defaultPoSSettings);
     }
@@ -109,6 +114,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.maximumStakeMultiplier = maximumStakeMultiplier;
         app.initialize(defaultPoSSettings);
     }
@@ -119,6 +125,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.weightToValueFactor = 0;
         app.initialize(defaultPoSSettings);
     }
@@ -134,6 +141,7 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
 
         StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
         defaultPoSSettings.manager = validatorManager;
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
         defaultPoSSettings.minimumStakeDuration = minStakeDuration;
         app.initialize(defaultPoSSettings);
     }
@@ -150,11 +158,22 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
         app.initialize(settings);
     }
 
-    function testUnsetValidatorManager() public {
+    function testZeroRewardCalculatorAddress() public {
         app = new NativeTokenStakingManager(ICMInitializable.Allowed);
-        vm.expectRevert();
+        vm.expectRevert(abi.encodeWithSelector(StakingManager.ZeroAddress.selector));
 
-        app.initialize(_defaultPoSSettings()); // settings.manager is not set
+        StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
+        defaultPoSSettings.manager = validatorManager;
+        app.initialize(defaultPoSSettings);
+    }
+
+    function testZeroManagerddress() public {
+        app = new NativeTokenStakingManager(ICMInitializable.Allowed);
+        vm.expectRevert(abi.encodeWithSelector(StakingManager.ZeroAddress.selector));
+
+        StakingManagerSettings memory defaultPoSSettings = _defaultPoSSettings();
+        defaultPoSSettings.rewardCalculator = rewardCalculator;
+        app.initialize(defaultPoSSettings);
     }
 
     // Helpers

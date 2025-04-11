@@ -109,7 +109,7 @@ abstract contract ValidatorManagerTest is Test {
         DEFAULT_P_CHAIN_OWNER = PChainOwner({threshold: 1, addresses: addresses});
     }
 
-    function testInitializeValidatorRegistrationSuccess() public {
+    function testInitiateValidatorRegistrationSuccess() public {
         _setUpInitializeValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
@@ -118,23 +118,23 @@ abstract contract ValidatorManagerTest is Test {
         );
     }
 
-    function testInitializeValidatorRegistrationExcessiveChurn() public {
+    function testInitiateValidatorRegistrationExcessiveChurn() public {
         // TODO: implement
     }
 
-    function testInitializeValidatorRegistrationInsufficientStake() public {
+    function testInitiateValidatorRegistrationInsufficientStake() public {
         // TODO: implement
     }
 
-    function testInitializeValidatorRegistrationExcessiveStake() public {
+    function testInitiateValidatorRegistrationExcessiveStake() public {
         // TODO: implement
     }
 
-    function testInitializeValidatorRegistrationInsufficientDuration() public {
+    function testInitiateValidatorRegistrationInsufficientDuration() public {
         // TODO: implement
     }
 
-    function testInitializeValidatorRegistrationPChainOwnerThresholdTooLarge() public {
+    function testInitiateValidatorRegistrationPChainOwnerThresholdTooLarge() public {
         // Threshold too large
         address[] memory addresses = new address[](1);
         addresses[0] = 0x1234567812345678123456781234567812345678;
@@ -152,7 +152,7 @@ abstract contract ValidatorManagerTest is Test {
         });
     }
 
-    function testInitializeValidatorRegistrationZeroPChainOwnerThreshold() public {
+    function testInitiateValidatorRegistrationZeroPChainOwnerThreshold() public {
         // Zero threshold for non-zero address
         address[] memory addresses = new address[](1);
         addresses[0] = 0x1234567812345678123456781234567812345678;
@@ -170,7 +170,7 @@ abstract contract ValidatorManagerTest is Test {
         });
     }
 
-    function testInitializeValidatorRegistrationPChainOwnerAddressesUnsorted() public {
+    function testInitiateValidatorRegistrationPChainOwnerAddressesUnsorted() public {
         // Addresses not sorted
         address[] memory addresses = new address[](2);
         addresses[0] = 0x1234567812345678123456781234567812345678;
@@ -220,7 +220,7 @@ abstract contract ValidatorManagerTest is Test {
         _registerDefaultValidator();
     }
 
-    function testInitializeEndValidation() public virtual {
+    function testInitiateEndValidation() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -252,32 +252,11 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory setValidatorWeightPayload =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         _mockSendWarpMessage(setValidatorWeightPayload, bytes32(0));
-        validatorManager.resendEndValidatorMessage(validationID);
+        validatorManager.resendValidatorRemovalMessage(validationID);
     }
 
     function testCompleteEndValidation() public virtual {
-        bytes32 validationID = _registerDefaultValidator();
-        bytes memory setWeightMessage =
-            ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
-        bytes memory uptimeMessage;
-        _initiateValidatorRemoval({
-            validationID: validationID,
-            completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
-            setWeightMessage: setWeightMessage,
-            includeUptime: false,
-            uptimeMessage: uptimeMessage,
-            force: false
-        });
-
-        bytes memory l1ValidatorRegistrationMessage =
-            ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
-
-        _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
-
-        vm.expectEmit(true, true, true, true, address(validatorManager));
-        emit CompletedValidatorRemoval(validationID);
-
-        _completeValidatorRemoval(0);
+        _registerAndCompleteDefaultValidator();
     }
 
     function testReplayValidatorRegistration() public virtual {
@@ -469,6 +448,17 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.initiateValidatorWeightUpdate(bytes32(0), 0);
     }
 
+    function initiateValidatorWeightUpdateInactiveValidator() public {
+        bytes32 validationID = _registerAndCompleteDefaultValidator();
+
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
+            )
+        );
+        validatorManager.initiateValidatorWeightUpdate(validationID, 100);
+    }
+
     function testCompleteValidatorWeightUpdateUnauthorizedCaller() public {
         vm.prank(address(0x123));
         vm.expectRevert(
@@ -627,6 +617,31 @@ abstract contract ValidatorManagerTest is Test {
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
             registrationTimestamp: DEFAULT_REGISTRATION_TIMESTAMP
         });
+    }
+
+    function _registerAndCompleteDefaultValidator() internal returns (bytes32 validationID) {
+        validationID = _registerDefaultValidator();
+        bytes memory setWeightMessage =
+            ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
+        bytes memory uptimeMessage;
+        _initiateValidatorRemoval({
+            validationID: validationID,
+            completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
+            setWeightMessage: setWeightMessage,
+            includeUptime: false,
+            uptimeMessage: uptimeMessage,
+            force: false
+        });
+
+        bytes memory l1ValidatorRegistrationMessage =
+            ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
+
+        _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
+
+        vm.expectEmit(true, true, true, true, address(validatorManager));
+        emit CompletedValidatorRemoval(validationID);
+
+        _completeValidatorRemoval(0);
     }
 
     function _mockSendWarpMessage(bytes memory payload, bytes32 expectedMessageID) internal {
