@@ -28,7 +28,7 @@ Once ownership is transferred, PoA validators may be removed by *anyone* as long
 
 #### Permissionless Removal of PoA Validators
 
-Existing PoA validators are able to be removed by anybody, whereas PoS validators are only able to be removed by the validator owner. This is done in order to enable a sharp, step transition from PoS to PoA in which PoA validators are expected to be removed quickly, so long as churn limits aren't violated.
+Existing PoA validators can be removed by anybody, whereas PoS validators can only be removed by the validator owner. This is done in order to enable a sharp, step transition from PoS to PoA in which PoA validators are expected to be removed quickly, so long as churn limits aren't violated.
 
 To better understand this design choice, consider an alternative implementation in which only the former PoA `admin` is able to remove PoA validators. If the PoA validator becomes inactive but remains in the validator set, then their validator weight would persist, potentially causing stability issues on the L1. The L1 would require action on the part of the `admin`, who contrary to a PoS validator, does not have any staked value in bond.
 
