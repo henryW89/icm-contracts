@@ -306,6 +306,11 @@ abstract contract ValidatorManagerTest is Test {
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
+
+        ConversionData memory conversionData = _defaultConversionDataWeightsTooLow();
+        bytes32 id = sha256(ValidatorMessages.packConversionData(conversionData));
+
+        _mockGetPChainWarpMessage(ValidatorMessages.packSubnetToL1ConversionMessage(id), true);
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
         manager.initializeValidatorSet(_defaultConversionDataWeightsTooLow(), 0);
     }

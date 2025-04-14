@@ -232,6 +232,15 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             revert InvalidInitializationStatus();
         }
 
+        // Check that the blockchainID and validator manager address in the ConversionData correspond to this contract.
+        // Other validation checks are done by the P-Chain when converting the L1, so are not required here.
+        if (conversionData.validatorManagerBlockchainID != WARP_MESSENGER.getBlockchainID()) {
+            revert InvalidValidatorManagerBlockchainID(conversionData.validatorManagerBlockchainID);
+        }
+        if (address(conversionData.validatorManagerAddress) != address(this)) {
+            revert InvalidValidatorManagerAddress(address(conversionData.validatorManagerAddress));
+        }
+
         // Verify that the sha256 hash of the L1 conversion data matches with the Warp message's conversionID.
         bytes32 conversionID = ValidatorMessages.unpackSubnetToL1ConversionMessage(
             _getPChainWarpMessage(messageIndex).payload
@@ -240,15 +249,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         bytes32 encodedConversionID = sha256(encodedConversion);
         if (encodedConversionID != conversionID) {
             revert InvalidConversionID(encodedConversionID, conversionID);
-        }
-
-        // Check that the blockchainID and validator manager address in the ConversionData correspond to this contract.
-        // Other validation checks are done by the P-Chain when converting the L1, so are not required here.
-        if (conversionData.validatorManagerBlockchainID != WARP_MESSENGER.getBlockchainID()) {
-            revert InvalidValidatorManagerBlockchainID(conversionData.validatorManagerBlockchainID);
-        }
-        if (address(conversionData.validatorManagerAddress) != address(this)) {
-            revert InvalidValidatorManagerAddress(address(conversionData.validatorManagerAddress));
         }
 
         uint256 numInitialValidators = conversionData.initialValidators.length;
