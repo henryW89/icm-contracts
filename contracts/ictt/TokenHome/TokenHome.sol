@@ -24,7 +24,7 @@ import {SendReentrancyGuardUpgradeable} from "@utilities/SendReentrancyGuardUpgr
 import {TokenScalingUtils} from "@utilities/TokenScalingUtils.sol";
 import {SafeERC20TransferFrom} from "@utilities/SafeERC20TransferFrom.sol";
 import {IWarpMessenger} from
-    "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+    "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {IERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/ERC20.sol";
 
 /**
