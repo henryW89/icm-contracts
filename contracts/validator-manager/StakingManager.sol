@@ -231,8 +231,6 @@ abstract contract StakingManager is
 
         address owner = $._posValidatorInfo[validationID].owner;
         address rewardRecipient = $._rewardRecipients[validationID];
-        // This is safe to delete here since validator removal is complete.
-        delete $._rewardRecipients[validationID];
 
         if (rewardRecipient == address(0)) {
             rewardRecipient = owner;
