@@ -7,7 +7,8 @@ pragma solidity 0.8.25;
 
 import {StakingManager} from "./StakingManager.sol";
 import {StakingManagerSettings} from "./interfaces/IStakingManager.sol";
-import {IERC20TokenStakingManager, PChainOwner} from "./interfaces/IERC20TokenStakingManager.sol";
+import {PChainOwner} from "./ACP99Manager.sol";
+import {IERC20TokenStakingManager} from "./interfaces/IERC20TokenStakingManager.sol";
 import {IERC20Mintable} from "./interfaces/IERC20Mintable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {SafeERC20TransferFrom} from "@utilities/SafeERC20TransferFrom.sol";
@@ -28,7 +29,6 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
     /// @custom:storage-location erc7201:avalanche-icm.storage.ERC20TokenStakingManager
     struct ERC20TokenStakingManagerStorage {
         IERC20Mintable _token;
-        uint8 _tokenDecimals;
     }
     // solhint-enable private-vars-leading-underscore
 
@@ -58,14 +58,13 @@ contract ERC20TokenStakingManager is Initializable, StakingManager, IERC20TokenS
 
     /**
      * @notice Initialize the ERC20 token staking manager
-     * @dev Uses reinitializer(2) on the PoS staking contracts to make sure after migration from PoA, the PoS contracts can reinitialize with its needed values.
      * @param settings Initial settings for the PoS validator manager
      * @param token The ERC20 token to be staked
      */
     function initialize(
         StakingManagerSettings calldata settings,
         IERC20Mintable token
-    ) external reinitializer(2) {
+    ) external initializer {
         __ERC20TokenStakingManager_init(settings, token);
     }
 

@@ -9,7 +9,7 @@ import {ITeleporterMessenger} from "@teleporter/ITeleporterMessenger.sol";
 import {
     IWarpMessenger,
     WarpMessage
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 
 // Registry entry that represents a mapping between protocolAddress and Teleporter version.
 struct ProtocolRegistryEntry {
