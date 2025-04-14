@@ -229,7 +229,16 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
-        _withdrawValidationRewards($._posValidatorInfo[validationID].owner, validationID);
+        address owner = $._posValidatorInfo[validationID].owner;
+        address rewardRecipient = $._rewardRecipients[validationID];
+        // This is safe to delete here since validator removal is complete.
+        delete $._rewardRecipients[validationID];
+
+        if (rewardRecipient == address(0)) {
+            rewardRecipient = owner;
+        }
+
+        _withdrawValidationRewards(rewardRecipient, validationID);
     }
 
     /**
@@ -432,7 +441,6 @@ abstract contract StakingManager is
 
         address owner = $._posValidatorInfo[validationID].owner;
         address rewardRecipient = $._rewardRecipients[validationID];
-        delete $._rewardRecipients[validationID];
 
         // the reward-recipient should always be set, but just in case it isn't, we won't burn the reward
         if (rewardRecipient == address(0)) {
