@@ -19,7 +19,7 @@ import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {
     IWarpMessenger,
     WarpMessage
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {ReentrancyGuardUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/utils/ReentrancyGuardUpgradeable.sol";
 import {ContextUpgradeable} from
@@ -319,7 +319,10 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
+        address currentRecipient = $._rewardRecipients[validationID];
         $._rewardRecipients[validationID] = rewardRecipient;
+
+        emit ValidatorRewardRecipientChanged(validationID, rewardRecipient, currentRecipient);
     }
 
     /**
@@ -339,7 +342,10 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
+        address currentRecipient = $._delegatorRewardRecipients[delegationID];
         $._delegatorRewardRecipients[delegationID] = rewardRecipient;
+
+        emit DelegatorRewardRecipientChanged(delegationID, rewardRecipient, currentRecipient);
     }
 
     /**
@@ -1012,6 +1018,8 @@ abstract contract StakingManager is
         delete $._redeemableValidatorRewards[validationID];
 
         _reward(rewardRecipient, rewards);
+
+        emit ValidatorRewardClaimed(validationID, rewardRecipient, rewards);
     }
 
     function _withdrawDelegationRewards(
@@ -1025,9 +1033,10 @@ abstract contract StakingManager is
         uint256 validatorFees;
 
         uint256 rewards = $._redeemableDelegatorRewards[delegationID];
-        delete $._redeemableDelegatorRewards[delegationID];
 
         if (rewards > 0) {
+            delete $._redeemableDelegatorRewards[delegationID];
+
             validatorFees = (rewards * $._posValidatorInfo[validationID].delegationFeeBips)
                 / BIPS_CONVERSION_FACTOR;
 
@@ -1037,6 +1046,8 @@ abstract contract StakingManager is
             // Reward the remaining tokens to the delegator.
             delegationRewards = rewards - validatorFees;
             _reward(rewardRecipient, delegationRewards);
+
+            emit DelegatorRewardClaimed(delegationID, rewardRecipient, delegationRewards);
         }
 
         return (delegationRewards, validatorFees);

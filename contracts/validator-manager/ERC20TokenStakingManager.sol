@@ -7,7 +7,8 @@ pragma solidity 0.8.25;
 
 import {StakingManager} from "./StakingManager.sol";
 import {StakingManagerSettings} from "./interfaces/IStakingManager.sol";
-import {IERC20TokenStakingManager, PChainOwner} from "./interfaces/IERC20TokenStakingManager.sol";
+import {PChainOwner} from "./ACP99Manager.sol";
+import {IERC20TokenStakingManager} from "./interfaces/IERC20TokenStakingManager.sol";
 import {IERC20Mintable} from "./interfaces/IERC20Mintable.sol";
 import {ICMInitializable} from "@utilities/ICMInitializable.sol";
 import {SafeERC20TransferFrom} from "@utilities/SafeERC20TransferFrom.sol";
