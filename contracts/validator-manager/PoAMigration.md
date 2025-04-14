@@ -8,7 +8,7 @@ Migrating from PoA to PoS consists of the following steps:
 
 ### 1. Deploy `ValidatorManager` as PoA, setting the `admin` address in the constructor.
 
-`ValidatorManager` is `Ownable`, which restricts initiation of validator set changes to the current owner, or `admin`. For PoA L1s, the `admin` provides the L1's validator set security.
+`ValidatorManager` is `Ownable`, which restricts initiation of validator set changes to the current owner, or `admin`. For PoA L1s, the `admin` has the exclusive ability to manage the validator set.
 
 After the `ValidatorManager` is deployed, the desired PoA validators may be registered. See [below](#selecting-weights) for details on how to select the PoA validator weights.
 
@@ -40,4 +40,6 @@ When migrating from PoA to PoS, the ratio between the total weight of the PoA va
 
 > Note: Since PoA validators may be removed by [anyone](#permissionless-removal-of-poa-validators), in practice only the weight of the smallest PoA validator is relevant to the PoA to PoS weight ratio. Following the same math as above, in order to remove the final PoA validator, the total weight of the PoS validators must be at least 4x the PoA validator's weight.
 
-To implement the desired PoA to PoS transition dynamics, this ratio should be tuned against the PoA validator set's weight **ahead of migration**. This may be done by selecting a `weightToValueFactor` and asset denomination such that the staking asset's total supply translates to a total available weight that is aligned to the PoA validator set's weight in the desired ratio. Similarly, the PoA validator weights may also be changed ahead of migration. After migration, PoA validator weights may not be changed.
+To implement the desired PoA to PoS transition dynamics, this ratio should be tuned against the PoA validator set's weight **ahead of migration**. This should be done by selecting the `weightToValueFactor` such that the total supply of the staked asset has an equivalent weight that is in the desired ratio to the PoA validator set's weight. Similarly, the PoA validator weights may also be changed ahead of migration. After migration, PoA validator weights may not be changed.
+
+Extending our above example of 5 PoA validators each with weight 100, suppose the total supply of the staking asset at migration time is `1000`, and `weightToValueFactor=10`. Then, the maximum PoS weight available is `1000/10 = 100`, yielding a PoA to PoS weight ratio of 5 to 1.
