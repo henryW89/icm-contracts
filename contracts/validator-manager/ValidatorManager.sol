@@ -6,7 +6,6 @@
 pragma solidity 0.8.25;
 
 import {ValidatorMessages} from "./ValidatorMessages.sol";
-import {ValidatorChurnPeriod, ValidatorManagerSettings} from "./ValidatorManager.sol";
 import {
     ACP99Manager,
     InitialValidator,
@@ -18,7 +17,7 @@ import {
 import {
     IWarpMessenger,
     WarpMessage
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {OwnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {Initializable} from

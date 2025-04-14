@@ -10,7 +10,7 @@ import {SafeERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/utils/SafeERC
 import {
     WarpMessage,
     IWarpMessenger
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {
     TeleporterMessageReceipt,
     TeleporterMessageInput,

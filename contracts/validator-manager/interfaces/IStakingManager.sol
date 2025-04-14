@@ -127,6 +127,46 @@ interface IStakingManager {
     event UptimeUpdated(bytes32 indexed validationID, uint64 uptime);
 
     /**
+     * @notice Event emitted when a validator claims rewards. Emitted when validation rewards and delegation fees are claimed.
+     * @param validationID The ID of the validation period
+     * @param recipient The address of the recipient of the rewards
+     * @param amount The amount of rewards claimed
+     */
+    event ValidatorRewardClaimed(
+        bytes32 indexed validationID, address indexed recipient, uint256 amount
+    );
+
+    /**
+     * @notice Event emitted when the recipient of a validator's rewards is changed.
+     * @param validationID The ID of the validation period
+     * @param recipient The address of the new recipient of the rewards
+     * @param oldRecipient The address of the old recipient of the rewards
+     */
+    event ValidatorRewardRecipientChanged(
+        bytes32 indexed validationID, address indexed recipient, address indexed oldRecipient
+    );
+
+    /**
+     * @notice Event emitted when a delegator claims rewards.
+     * @param delegationID The ID of the delegation
+     * @param recipient The address of the recipient of the rewards
+     * @param amount The amount of rewards claimed
+     */
+    event DelegatorRewardClaimed(
+        bytes32 indexed delegationID, address indexed recipient, uint256 amount
+    );
+
+    /**
+     * @notice Event emitted when the recipient of a delegator's rewards is changed.
+     * @param delegationID The ID of the validation period
+     * @param recipient The address of the new recipient of the rewards
+     * @param oldRecipient The address of the old recipient of the rewards
+     */
+    event DelegatorRewardRecipientChanged(
+        bytes32 indexed delegationID, address indexed recipient, address indexed oldRecipient
+    );
+
+    /**
      * @notice Updates the uptime of the validationID if the submitted proof is greated than the stored uptime.
      * Anybody may call this function to ensure the stored uptime is accurate. Callable only when the validation period is active.
      * @param validationID The ID of the validation period

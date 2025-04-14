@@ -11,7 +11,7 @@ import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
     IWarpMessenger
-} from "@avalabs/subnet-evm-contracts@1.2.0/contracts/interfaces/IWarpMessenger.sol";
+} from "@avalabs/subnet-evm-contracts@1.2.2/contracts/interfaces/IWarpMessenger.sol";
 import {
     ACP99Manager,
     ConversionData,
