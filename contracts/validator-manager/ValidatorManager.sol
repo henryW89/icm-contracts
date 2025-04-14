@@ -231,6 +231,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if ($._initializedValidatorSet) {
             revert InvalidInitializationStatus();
         }
+
         // Check that the blockchainID and validator manager address in the ConversionData correspond to this contract.
         // Other validation checks are done by the P-Chain when converting the L1, so are not required here.
         if (conversionData.validatorManagerBlockchainID != WARP_MESSENGER.getBlockchainID()) {
@@ -238,6 +239,16 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         }
         if (address(conversionData.validatorManagerAddress) != address(this)) {
             revert InvalidValidatorManagerAddress(address(conversionData.validatorManagerAddress));
+        }
+
+        // Verify that the sha256 hash of the L1 conversion data matches with the Warp message's conversionID.
+        bytes32 conversionID = ValidatorMessages.unpackSubnetToL1ConversionMessage(
+            _getPChainWarpMessage(messageIndex).payload
+        );
+        bytes memory encodedConversion = ValidatorMessages.packConversionData(conversionData);
+        bytes32 encodedConversionID = sha256(encodedConversion);
+        if (encodedConversionID != conversionID) {
+            revert InvalidConversionID(encodedConversionID, conversionID);
         }
 
         uint256 numInitialValidators = conversionData.initialValidators.length;
@@ -277,16 +288,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         // Total weight must be above this value in order to not trigger churn limits with an added/removed weight of 1.
         if (totalWeight * $._maximumChurnPercentage < 100) {
             revert InvalidTotalWeight(totalWeight);
-        }
-
-        // Verify that the sha256 hash of the L1 conversion data matches with the Warp message's conversionID.
-        bytes32 conversionID = ValidatorMessages.unpackSubnetToL1ConversionMessage(
-            _getPChainWarpMessage(messageIndex).payload
-        );
-        bytes memory encodedConversion = ValidatorMessages.packConversionData(conversionData);
-        bytes32 encodedConversionID = sha256(encodedConversion);
-        if (encodedConversionID != conversionID) {
-            revert InvalidConversionID(encodedConversionID, conversionID);
         }
 
         $._initializedValidatorSet = true;
