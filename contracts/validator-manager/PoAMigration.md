@@ -16,7 +16,7 @@ After the `ValidatorManager` is deployed, the desired PoA validators may be regi
 
 The `StakingManager` is deployed as a standlone contract, separate from `ValidatorManager`. The `ValidatorManager` is provided as a constructor argument to the `StakingManager`, however they will not be able to interact until step 3 below is completed.
 
-The `StakingManager` constructor also takes as an argument the `weightToValueFactor` used to convert between the valud of the staked asset and the corresponding validator weight. See [below](#selecting-weights) for details on how to select this factor.
+The `StakingManager` constructor also takes as an argument the `weightToValueFactor` used to convert between the value of the staked asset and the corresponding validator weight. See [below](#selecting-weights) for details on how to select this factor.
 
 ### 3. Transfer ownership of `ValidatorManager` to the `StakingManager`'s address.
 
