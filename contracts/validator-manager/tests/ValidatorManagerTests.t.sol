@@ -312,7 +312,7 @@ abstract contract ValidatorManagerTest is Test {
 
         _mockGetPChainWarpMessage(ValidatorMessages.packSubnetToL1ConversionMessage(id), true);
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
-        manager.initializeValidatorSet(_defaultConversionDataWeightsTooLow(), 0);
+        manager.initializeValidatorSet(conversionData, 0);
     }
 
     function testRemoveValidatorTotalWeight5() public {
