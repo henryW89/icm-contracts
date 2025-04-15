@@ -1044,7 +1044,7 @@ func CompleteDelegatorRegistration(
 	)
 }
 
-func InitiateEndDelegation(
+func InitiateDelegatorRemoval(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	l1 interfaces.L1TestInfo,
@@ -1066,7 +1066,7 @@ func InitiateEndDelegation(
 	return WaitForTransactionSuccess(ctx, l1, tx.Hash())
 }
 
-func CompleteEndDelegation(
+func CompleteDelegatorRemoval(
 	ctx context.Context,
 	senderKey *ecdsa.PrivateKey,
 	delegationID ids.ID,

@@ -360,7 +360,7 @@ interface IStakingManager {
     ) external;
 
     /**
-     * @notice Changes the address of the recipient of the validator's rewards for a validation period. This method can be called any time before {completeEndValidation}.
+     * @notice Changes the address of the recipient of the validator's rewards for a validation period. This method can be called any time before {completeValidatorRemoval}.
      * @param validationID The ID of the validation period being ended.
      * @param recipient The address to receive the rewards.
      */
