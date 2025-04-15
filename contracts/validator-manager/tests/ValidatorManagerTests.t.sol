@@ -176,7 +176,28 @@ abstract contract ValidatorManagerTest is Test {
 
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.PChainOwnerAddressesNotSorted.selector)
+            abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerAddresses.selector)
+        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
+    function testInitiateValidatorRegistrationDuplicatePChainOwnerAddress() public {
+        // Addresses not sorted
+        address[] memory addresses = new address[](2);
+        addresses[0] = 0x1234567812345678123456781234567812345678;
+        addresses[1] = 0x1234567812345678123456781234567812345678;
+        PChainOwner memory invalidPChainOwner1 = PChainOwner({threshold: 1, addresses: addresses});
+
+        _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerAddresses.selector)
         );
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
@@ -327,8 +348,13 @@ abstract contract ValidatorManagerTest is Test {
         ACP99Manager manager = _setUp();
 
         _mockGetBlockchainID();
+
+        ConversionData memory conversionData = _defaultConversionDataWeightsTooLow();
+        bytes32 id = sha256(ValidatorMessages.packConversionData(conversionData));
+
+        _mockGetPChainWarpMessage(ValidatorMessages.packSubnetToL1ConversionMessage(id), true);
         vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidTotalWeight.selector, 4));
-        manager.initializeValidatorSet(_defaultConversionDataWeightsTooLow(), 0);
+        manager.initializeValidatorSet(conversionData, 0);
     }
 
     function testRemoveValidatorTotalWeight5() public {
