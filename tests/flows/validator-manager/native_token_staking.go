@@ -89,7 +89,6 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	//
 	// Register the validator as PoS
 	//
-	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
 	registrationInitiatedEvent := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
@@ -268,7 +267,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		stakingManagerProxy.Address,
 		validatorManagerProxy.Address,
 		validationID,
-		expiry,
+		registrationInitiatedEvent.RegistrationExpiry,
 		nodes[0],
 		1,
 		true,

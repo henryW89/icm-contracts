@@ -460,7 +460,7 @@ func InitiatePoAValidatorRegistration(
 	node Node,
 	validatorManager *validatormanager.ValidatorManager,
 	validatorManagerAddress common.Address,
-) (*types.Receipt, ids.ID) {
+) (*types.Receipt, *acp99manager.ACP99ManagerInitiatedValidatorRegistration) {
 	opts, err := bind.NewKeyedTransactorWithChainID(ownerKey, l1.EVMChainID)
 	Expect(err).Should(BeNil())
 
@@ -482,7 +482,7 @@ func InitiatePoAValidatorRegistration(
 	)
 	Expect(err).Should(BeNil())
 	Expect(ids.NodeID(registrationInitiatedEvent.NodeID)).Should(Equal(node.NodeID))
-	return receipt, ids.ID(registrationInitiatedEvent.ValidationID)
+	return receipt, registrationInitiatedEvent
 }
 
 func CompleteValidatorRegistration(
@@ -703,9 +703,9 @@ func InitiateAndCompletePoAValidatorRegistration(
 	node Node,
 	pchainWallet pwallet.Wallet,
 	networkID uint32,
-) ids.ID {
+) *acp99manager.ACP99ManagerInitiatedValidatorRegistration {
 	// Initiate validator registration
-	receipt, validationID := InitiatePoAValidatorRegistration(
+	receipt, registrationInitiatedEvent := InitiatePoAValidatorRegistration(
 		ctx,
 		ownerKey,
 		l1Info,
@@ -713,6 +713,7 @@ func InitiateAndCompletePoAValidatorRegistration(
 		validatorManager,
 		validatorManagerAddress,
 	)
+	validationID := registrationInitiatedEvent.ValidationID
 
 	// Gather subnet-evm Warp signatures for the RegisterL1ValidatorMessage & relay to the P-Chain
 	signedWarpMessage := ConstructSignedWarpMessage(ctx, receipt, l1Info, pChainInfo, nil, signatureAggregator)
@@ -757,7 +758,7 @@ func InitiateAndCompletePoAValidatorRegistration(
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
 
-	return validationID
+	return registrationInitiatedEvent
 }
 
 func InitiateEndPoSValidation(
