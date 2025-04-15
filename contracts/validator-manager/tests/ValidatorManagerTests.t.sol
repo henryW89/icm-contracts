@@ -50,12 +50,12 @@ abstract contract ValidatorManagerTest is Test {
     uint256 public constant DEFAULT_MAXIMUM_STAKE_AMOUNT = 1e22;
     uint64 public constant DEFAULT_CHURN_PERIOD = 1 hours;
     uint8 public constant DEFAULT_MAXIMUM_CHURN_PERCENTAGE = 20;
-    uint64 public constant DEFAULT_EXPIRY = 1000;
     uint8 public constant DEFAULT_MAXIMUM_HOURLY_CHURN = 0;
     uint64 public constant DEFAULT_REGISTRATION_TIMESTAMP = 1000;
     uint256 public constant DEFAULT_STARTING_TOTAL_WEIGHT = 1e10 + DEFAULT_WEIGHT;
     uint64 public constant DEFAULT_MINIMUM_VALIDATION_DURATION = 24 hours;
     uint64 public constant DEFAULT_COMPLETION_TIMESTAMP = 100_000;
+    uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
     // solhint-disable-next-line var-name-mixedcase
     PChainOwner public DEFAULT_P_CHAIN_OWNER;
 
@@ -111,11 +111,7 @@ abstract contract ValidatorManagerTest is Test {
 
     function testInitiateValidatorRegistrationSuccess() public {
         _setUpInitiateValidatorRegistration(
-            DEFAULT_NODE_ID,
-            DEFAULT_SUBNET_ID,
-            DEFAULT_WEIGHT,
-            DEFAULT_EXPIRY,
-            DEFAULT_BLS_PUBLIC_KEY
+            DEFAULT_NODE_ID, DEFAULT_SUBNET_ID, DEFAULT_WEIGHT, DEFAULT_BLS_PUBLIC_KEY
         );
     }
 
