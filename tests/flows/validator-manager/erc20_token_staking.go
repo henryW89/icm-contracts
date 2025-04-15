@@ -199,7 +199,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 	{
 		log.Println("Delisting delegator")
 		nonce := uint64(2)
-		receipt := utils.InitiateEndDelegation(
+		receipt := utils.InitiateDelegatorRemoval(
 			ctx,
 			fundedKey,
 			l1AInfo,
@@ -243,7 +243,7 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		)
 
 		// Deliver the Warp message to the L1
-		receipt = utils.CompleteEndDelegation(
+		receipt = utils.CompleteDelegatorRemoval(
 			ctx,
 			fundedKey,
 			delegationID,

@@ -1,7 +1,7 @@
 // (c) 2024, Ava Labs, Inc. All rights reserved.
 // See the file LICENSE for licensing terms.
 
-// SPDX-License-Identifier: Ecosystem
+// SPDX-License-Identifier: LicenseRef-Ecosystem
 
 pragma solidity 0.8.25;
 
@@ -229,7 +229,13 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
-        _withdrawValidationRewards($._posValidatorInfo[validationID].owner, validationID);
+        address rewardRecipient = $._rewardRecipients[validationID];
+
+        if (rewardRecipient == address(0)) {
+            rewardRecipient = $._posValidatorInfo[validationID].owner;
+        }
+
+        _withdrawValidationRewards(rewardRecipient, validationID);
     }
 
     /**
@@ -432,7 +438,6 @@ abstract contract StakingManager is
 
         address owner = $._posValidatorInfo[validationID].owner;
         address rewardRecipient = $._rewardRecipients[validationID];
-        delete $._rewardRecipients[validationID];
 
         // the reward-recipient should always be set, but just in case it isn't, we won't burn the reward
         if (rewardRecipient == address(0)) {

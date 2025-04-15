@@ -1,7 +1,7 @@
 // (c) 2025, Ava Labs, Inc. All rights reserved.
 // See the file LICENSE for licensing terms.
 
-// SPDX-License-Identifier: Ecosystem
+// SPDX-License-Identifier: LicenseRef-Ecosystem
 
 pragma solidity 0.8.25;
 
@@ -122,12 +122,12 @@ abstract contract ACP99Manager {
      * Emits a {RegisteredInitialValidator} event for each initial validator in {conversionData}.
      *
      * @param conversionData The Subnet conversion message data used to recompute and verify against the ConversionID.
-     * @param messsageIndex The index that contains the SubnetToL1ConversionMessage ICM message containing the
+     * @param messageIndex The index that contains the SubnetToL1ConversionMessage ICM message containing the
      * ConversionID to be verified against the provided {conversionData}.
      */
     function initializeValidatorSet(
         ConversionData calldata conversionData,
-        uint32 messsageIndex
+        uint32 messageIndex
     ) public virtual;
 
     /**
