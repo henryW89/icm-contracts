@@ -90,7 +90,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 	// Register the validator as PoS
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	validationID := utils.InitiateAndCompleteNativeValidatorRegistration(
+	registrationInitiatedEvent := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -104,6 +104,7 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		network.GetNetworkID(),
 	)
 	validatorStartTime := time.Now()
+	validationID := ids.ID(registrationInitiatedEvent.ValidationID)
 
 	//
 	// Register a delegator

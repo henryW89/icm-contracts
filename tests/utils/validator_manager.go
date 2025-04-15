@@ -545,7 +545,7 @@ func InitiateAndCompleteNativeValidatorRegistration(
 	node Node,
 	pchainWallet pwallet.Wallet,
 	networkID uint32,
-) ids.ID {
+) *acp99manager.ACP99ManagerInitiatedValidatorRegistration {
 	stakeAmount, err := stakingManager.WeightToValue(
 		&bind.CallOpts{},
 		node.Weight,
@@ -607,7 +607,7 @@ func InitiateAndCompleteNativeValidatorRegistration(
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
 
-	return validationID
+	return registrationInitiatedEvent
 }
 
 func InitiateAndCompleteERC20ValidatorRegistration(
@@ -623,7 +623,7 @@ func InitiateAndCompleteERC20ValidatorRegistration(
 	node Node,
 	pchainWallet pwallet.Wallet,
 	networkID uint32,
-) ids.ID {
+) *acp99manager.ACP99ManagerInitiatedValidatorRegistration {
 	stakeAmount, err := stakingManager.WeightToValue(
 		&bind.CallOpts{},
 		node.Weight,
@@ -688,7 +688,7 @@ func InitiateAndCompleteERC20ValidatorRegistration(
 	Expect(err).Should(BeNil())
 	Expect(registrationEvent.ValidationID[:]).Should(Equal(validationID[:]))
 
-	return validationID
+	return registrationInitiatedEvent
 }
 
 func InitiateAndCompletePoAValidatorRegistration(
