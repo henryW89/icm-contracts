@@ -110,7 +110,7 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testInitiateValidatorRegistrationSuccess() public {
-        _setUpInitializeValidatorRegistration(
+        _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -237,7 +237,7 @@ abstract contract ValidatorManagerTest is Test {
     // only set in NativeTokenValidatorManager. Therefore we call them via the concrete type, rather than a
     // reference to the abstract type.
     function testResendRegisterValidatorMessage() public {
-        bytes32 validationID = _setUpInitializeValidatorRegistration(
+        bytes32 validationID = _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -264,7 +264,7 @@ abstract contract ValidatorManagerTest is Test {
         _registerDefaultValidator();
     }
 
-    function testInitiateEndValidation() public virtual {
+    function testInitiateValidatorRemoval() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -304,7 +304,7 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testCompleteInvalidatedValidation() public {
-        bytes32 validationID = _setUpInitializeValidatorRegistration(
+        bytes32 validationID = _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -516,7 +516,7 @@ abstract contract ValidatorManagerTest is Test {
         return abi.encodePacked(bytes20(sha256(new bytes(nodeIDCounter))));
     }
 
-    function _setUpInitializeValidatorRegistration(
+    function _setUpInitiateValidatorRegistration(
         bytes memory nodeID,
         bytes32 subnetID,
         uint64 weight,
@@ -574,7 +574,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory blsPublicKey,
         uint64 registrationTimestamp
     ) internal returns (bytes32 validationID) {
-        validationID = _setUpInitializeValidatorRegistration(
+        validationID = _setUpInitiateValidatorRegistration(
             nodeID, subnetID, weight, registrationExpiry, blsPublicKey
         );
         bytes memory l1ValidatorRegistrationMessage =
