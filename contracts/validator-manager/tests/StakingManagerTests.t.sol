@@ -1412,7 +1412,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
