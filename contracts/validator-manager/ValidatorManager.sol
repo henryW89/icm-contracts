@@ -264,7 +264,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             }
 
             // Validation ID of the initial validators is the sha256 hash of the
-            // convert subnet to L1 tx ID and the index of the initial validator.
+            // subnet ID and the index of the initial validator.
             bytes32 validationID = sha256(abi.encodePacked(conversionData.subnetID, i));
 
             // Save the initial validator as an active validator.
