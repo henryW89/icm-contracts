@@ -229,11 +229,10 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
-        address owner = $._posValidatorInfo[validationID].owner;
         address rewardRecipient = $._rewardRecipients[validationID];
 
         if (rewardRecipient == address(0)) {
-            rewardRecipient = owner;
+            rewardRecipient = $._posValidatorInfo[validationID].owner;
         }
 
         _withdrawValidationRewards(rewardRecipient, validationID);
