@@ -285,7 +285,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1316,7 +1316,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testCompleteEndValidation() public virtual override {
+    function testCompleteValidatorRemoval() public virtual override {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1342,7 +1342,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1351,7 +1351,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testCompleteEndValidationWithNonValidatorRewardRecipient() public virtual {
+    function testCompleteValidatorRemovalWithNonValidatorRewardRecipient() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1380,7 +1380,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1421,7 +1421,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: address(this),
             expectedReward: expectedReward,
@@ -1464,7 +1464,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1846,7 +1846,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: address(this),
             expectedReward: expectedReward,
@@ -2357,7 +2357,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: completionTimestamp - completeRegistrationTimestamp
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -2366,7 +2366,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function _completeEndValidationWithChecks(
+    function _completeValidatorRemovalWithChecks(
         bytes32 validationID,
         address validatorOwner,
         uint256 expectedReward,
@@ -2387,7 +2387,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         emit ValidatorRewardClaimed(validationID, rewardRecipient, expectedReward);
         _expectRewardIssuance(rewardRecipient, expectedReward);
 
-        _completeEndValidation(l1ValidatorRegistrationMessage);
+        _completeValidatorRemoval(l1ValidatorRegistrationMessage);
 
         if (rewardRecipient == validatorOwner) {
             assertEq(
@@ -2407,7 +2407,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         }
     }
 
-    function _completeEndValidation(
+    function _completeValidatorRemoval(
         bytes memory l1ValidatorRegistrationMessage
     ) internal {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);

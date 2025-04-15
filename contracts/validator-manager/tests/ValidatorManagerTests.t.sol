@@ -299,7 +299,7 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.resendValidatorRemovalMessage(validationID);
     }
 
-    function testCompleteEndValidation() public virtual {
+    function testCompleteValidatorRemoval() public virtual {
         _registerAndCompleteDefaultValidator();
     }
 
