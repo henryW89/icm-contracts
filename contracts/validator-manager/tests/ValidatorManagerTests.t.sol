@@ -183,7 +183,6 @@ abstract contract ValidatorManagerTest is Test {
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
             remainingBalanceOwner: invalidPChainOwner1,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
-            registrationExpiry: DEFAULT_EXPIRY,
             weight: DEFAULT_WEIGHT
         });
     }
@@ -221,7 +220,6 @@ abstract contract ValidatorManagerTest is Test {
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
             remainingBalanceOwner: invalidPChainOwner1,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
-            registrationExpiry: DEFAULT_EXPIRY,
             weight: DEFAULT_WEIGHT
         });
     }
