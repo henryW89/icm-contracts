@@ -1,7 +1,7 @@
 // (c) 2024, Ava Labs, Inc. All rights reserved.
 // See the file LICENSE for licensing terms.
 
-// SPDX-License-Identifier: Ecosystem
+// SPDX-License-Identifier: LicenseRef-Ecosystem
 
 pragma solidity 0.8.25;
 
@@ -360,14 +360,14 @@ interface IStakingManager {
     ) external;
 
     /**
-     * @notice Changes the address of the recipient of the validator's rewards for a validation period. This method can be called any time before {completeEndValidation}.
+     * @notice Changes the address of the recipient of the validator's rewards for a validation period
      * @param validationID The ID of the validation period being ended.
      * @param recipient The address to receive the rewards.
      */
     function changeValidatorRewardRecipient(bytes32 validationID, address recipient) external;
 
     /**
-     * @notice Changes the address of the recipient of the delegator's rewards for a delegation period. This method can be called any time before {completeDelegatorRemoval}.
+     * @notice Changes the address of the recipient of the delegator's rewards for a delegation period
      * @param delegationID The ID of the validation period being ended.
      * @param recipient The address to receive the rewards.
      */

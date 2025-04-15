@@ -1,7 +1,7 @@
 // (c) 2024, Ava Labs, Inc. All rights reserved.
 // See the file LICENSE for licensing terms.
 
-// SPDX-License-Identifier: Ecosystem
+// SPDX-License-Identifier: LicenseRef-Ecosystem
 
 pragma solidity 0.8.25;
 
@@ -110,7 +110,7 @@ abstract contract ValidatorManagerTest is Test {
     }
 
     function testInitiateValidatorRegistrationSuccess() public {
-        _setUpInitializeValidatorRegistration(
+        _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -182,7 +182,28 @@ abstract contract ValidatorManagerTest is Test {
 
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
         vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.PChainOwnerAddressesNotSorted.selector)
+            abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerAddresses.selector)
+        );
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: invalidPChainOwner1,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            registrationExpiry: DEFAULT_EXPIRY,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
+    function testInitiateValidatorRegistrationDuplicatePChainOwnerAddress() public {
+        // Addresses not sorted
+        address[] memory addresses = new address[](2);
+        addresses[0] = 0x1234567812345678123456781234567812345678;
+        addresses[1] = 0x1234567812345678123456781234567812345678;
+        PChainOwner memory invalidPChainOwner1 = PChainOwner({threshold: 1, addresses: addresses});
+
+        _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+        vm.expectRevert(
+            abi.encodeWithSelector(ValidatorManager.InvalidPChainOwnerAddresses.selector)
         );
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
@@ -216,7 +237,7 @@ abstract contract ValidatorManagerTest is Test {
     // only set in NativeTokenValidatorManager. Therefore we call them via the concrete type, rather than a
     // reference to the abstract type.
     function testResendRegisterValidatorMessage() public {
-        bytes32 validationID = _setUpInitializeValidatorRegistration(
+        bytes32 validationID = _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -243,7 +264,7 @@ abstract contract ValidatorManagerTest is Test {
         _registerDefaultValidator();
     }
 
-    function testInitiateEndValidation() public virtual {
+    function testInitiateValidatorRemoval() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -278,12 +299,12 @@ abstract contract ValidatorManagerTest is Test {
         validatorManager.resendValidatorRemovalMessage(validationID);
     }
 
-    function testCompleteEndValidation() public virtual {
+    function testCompleteValidatorRemoval() public virtual {
         _registerAndCompleteDefaultValidator();
     }
 
     function testCompleteInvalidatedValidation() public {
-        bytes32 validationID = _setUpInitializeValidatorRegistration(
+        bytes32 validationID = _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID,
             DEFAULT_SUBNET_ID,
             DEFAULT_WEIGHT,
@@ -495,7 +516,7 @@ abstract contract ValidatorManagerTest is Test {
         return abi.encodePacked(bytes20(sha256(new bytes(nodeIDCounter))));
     }
 
-    function _setUpInitializeValidatorRegistration(
+    function _setUpInitiateValidatorRegistration(
         bytes memory nodeID,
         bytes32 subnetID,
         uint64 weight,
@@ -553,7 +574,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory blsPublicKey,
         uint64 registrationTimestamp
     ) internal returns (bytes32 validationID) {
-        validationID = _setUpInitializeValidatorRegistration(
+        validationID = _setUpInitiateValidatorRegistration(
             nodeID, subnetID, weight, registrationExpiry, blsPublicKey
         );
         bytes memory l1ValidatorRegistrationMessage =
