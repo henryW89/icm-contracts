@@ -696,6 +696,46 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         stakingManager.claimDelegationFees(validationID);
     }
 
+    function testClaimDelegationFeesWithRewardRecipient() public {
+        bytes32 validationID = _registerDefaultValidator();
+        bytes32 delegationID = _registerDefaultDelegator(validationID);
+        address rewardRecipient = address(42);
+
+        _endDefaultValidatorWithChecks(validationID, 2);
+
+        // Validator is Completed, so this will also complete the delegation.
+        _initiateDelegatorRemoval({
+            sender: DEFAULT_DELEGATOR_ADDRESS,
+            delegationID: delegationID,
+            endDelegationTimestamp: DEFAULT_DELEGATOR_END_DELEGATION_TIMESTAMP,
+            includeUptime: true,
+            force: false,
+            rewardRecipient: rewardRecipient
+        });
+
+        uint256 expectedTotalReward = rewardCalculator.calculateReward({
+            stakeAmount: _weightToValue(DEFAULT_DELEGATOR_WEIGHT),
+            validatorStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingStartTime: DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP,
+            stakingEndTime: DEFAULT_COMPLETION_TIMESTAMP,
+            uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        });
+
+        uint256 expectedDelegationFee = expectedTotalReward * DEFAULT_DELEGATION_FEE_BIPS / 10000;
+
+        // Change the reward recipient to a different address
+        address newRewardRecipient = address(43);
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardRecipientChanged(validationID, newRewardRecipient, address(this));
+        stakingManager.changeValidatorRewardRecipient(validationID, newRewardRecipient);
+
+        // Claim delegation fees should now go to the new reward recipient
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardClaimed(validationID, newRewardRecipient, expectedDelegationFee);
+        _expectRewardIssuance(newRewardRecipient, expectedDelegationFee);
+        stakingManager.claimDelegationFees(validationID);
+    }
+
     function testCompleteDelegatorRemovalWithNonDelegatorRewardRecipient() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
