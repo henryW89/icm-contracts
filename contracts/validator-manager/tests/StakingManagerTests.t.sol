@@ -1387,9 +1387,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
         vm.expectRevert(
-            abi.encodeWithSelector(
-                ValidatorManager.InvalidValidationID.selector, validationID
-            )
+            abi.encodeWithSelector(ValidatorManager.InvalidValidationID.selector, validationID)
         );
         _completeValidatorRegistration(0);
     }

@@ -111,10 +111,7 @@ abstract contract ValidatorManagerTest is Test {
 
     function testInitiateValidatorRegistrationSuccess() public {
         _setUpInitializeValidatorRegistration(
-            DEFAULT_NODE_ID,
-            DEFAULT_SUBNET_ID,
-            DEFAULT_WEIGHT,
-            DEFAULT_BLS_PUBLIC_KEY
+            DEFAULT_NODE_ID, DEFAULT_SUBNET_ID, DEFAULT_WEIGHT, DEFAULT_BLS_PUBLIC_KEY
         );
     }
 
@@ -213,10 +210,7 @@ abstract contract ValidatorManagerTest is Test {
     // reference to the abstract type.
     function testResendRegisterValidatorMessage() public {
         bytes32 validationID = _setUpInitializeValidatorRegistration(
-            DEFAULT_NODE_ID,
-            DEFAULT_SUBNET_ID,
-            DEFAULT_WEIGHT,
-            DEFAULT_BLS_PUBLIC_KEY
+            DEFAULT_NODE_ID, DEFAULT_SUBNET_ID, DEFAULT_WEIGHT, DEFAULT_BLS_PUBLIC_KEY
         );
         (, bytes memory registerL1ValidatorMessage) = ValidatorMessages
             .packRegisterL1ValidatorMessage(
@@ -308,19 +302,14 @@ abstract contract ValidatorManagerTest is Test {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
 
         vm.expectRevert(
-            abi.encodeWithSelector(
-                ValidatorManager.InvalidValidationID.selector, validationID
-            )
+            abi.encodeWithSelector(ValidatorManager.InvalidValidationID.selector, validationID)
         );
         _completeValidatorRegistration(0);
     }
 
     function testCompleteInvalidatedValidation() public {
         bytes32 validationID = _setUpInitializeValidatorRegistration(
-            DEFAULT_NODE_ID,
-            DEFAULT_SUBNET_ID,
-            DEFAULT_WEIGHT,
-            DEFAULT_BLS_PUBLIC_KEY
+            DEFAULT_NODE_ID, DEFAULT_SUBNET_ID, DEFAULT_WEIGHT, DEFAULT_BLS_PUBLIC_KEY
         );
         bytes memory l1ValidatorRegistrationMessage =
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
@@ -567,9 +556,7 @@ abstract contract ValidatorManagerTest is Test {
         bytes memory blsPublicKey,
         uint64 registrationTimestamp
     ) internal returns (bytes32 validationID) {
-        validationID = _setUpInitializeValidatorRegistration(
-            nodeID, subnetID, weight, blsPublicKey
-        );
+        validationID = _setUpInitializeValidatorRegistration(nodeID, subnetID, weight, blsPublicKey);
         bytes memory l1ValidatorRegistrationMessage =
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, true);
 

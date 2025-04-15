@@ -99,7 +99,6 @@ func NativeTokenStakingManager(network *localnetwork.LocalNetwork) {
 		nativeStakingManager,
 		stakingManagerProxy.Address,
 		validatorManagerProxy.Address,
-		expiry,
 		nodes[0],
 		network.GetPChainWallet(),
 		network.GetNetworkID(),

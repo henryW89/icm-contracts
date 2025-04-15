@@ -104,7 +104,6 @@ func ERC20TokenStakingManager(network *localnetwork.LocalNetwork) {
 		stakingManagerProxy.Address,
 		validatorManagerProxy.Address,
 		erc20,
-		expiry,
 		nodes[0],
 		network.GetPChainWallet(),
 		network.GetNetworkID(),
