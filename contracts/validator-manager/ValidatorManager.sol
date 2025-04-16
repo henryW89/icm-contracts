@@ -587,6 +587,8 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (validator.status == ValidatorStatus.PendingRemoved) {
             validator.status = ValidatorStatus.Completed;
         } else {
+            // Remove the validator's weight from the total tracked weight, but don't track it as churn.
+            $._churnTracker.totalWeight -= validator.weight;
             validator.status = ValidatorStatus.Invalidated;
         }
         // Remove the validator from the registered validators mapping.
