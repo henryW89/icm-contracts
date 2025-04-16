@@ -494,6 +494,32 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         return _getValidatorManagerStorage()._subnetID;
     }
 
+    /**
+     * @notice Returns the current churn tracker and its configuration
+     */
+    function getChurnTracker() public view returns (uint64, uint8, ValidatorChurnPeriod memory) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return ($._churnPeriodSeconds, $._maximumChurnPercentage, $._churnTracker);
+    }
+
+    /**
+     * @notice Returns the validationID that the provided nodeID is registered under
+     */
+    function getNodeValidationID(
+        bytes calldata nodeID
+    ) public view returns (bytes32) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._registeredValidators[nodeID];
+    }
+
+    /**
+     * @notice Returns true if the ValidatorManager has been initialized with the initial validator set
+     */
+    function getInitializedValidatorSet() public view returns (bool) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._initializedValidatorSet;
+    }
+
     function initiateValidatorRemoval(
         bytes32 validationID
     ) public onlyOwner {

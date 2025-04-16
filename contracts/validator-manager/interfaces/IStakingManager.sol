@@ -19,7 +19,7 @@ enum DelegatorStatus {
 }
 
 /**
- * @notice PoS Validator Manager settings, used to initialize the PoS Validator Manager
+ * @notice Staking Manager settings, used to initialize the Staking Manager
  * @notice baseSettings specified the base settings for the Validator Manager. See {ValidatorManager-ValidatorManagerSettings}
  * @notice minimumStakeAmount is the minimum amount of stake required to stake to a validator
  * @notice maximumStakeAmount is the maximum amount of stake that can be staked to a validator
