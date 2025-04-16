@@ -1,7 +1,7 @@
 // (c) 2024, Ava Labs, Inc. All rights reserved.
 // See the file LICENSE for licensing terms.
 
-// SPDX-License-Identifier: Ecosystem
+// SPDX-License-Identifier: LicenseRef-Ecosystem
 
 pragma solidity 0.8.25;
 
@@ -117,7 +117,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     error NodeAlreadyRegistered(bytes nodeID);
     error UnexpectedRegistrationStatus(bool validRegistration);
     error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
-    error PChainOwnerAddressesNotSorted();
+    error InvalidPChainOwnerAddresses();
     error ZeroAddress();
 
     // solhint-disable ordering
@@ -231,6 +231,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if ($._initializedValidatorSet) {
             revert InvalidInitializationStatus();
         }
+
         // Check that the blockchainID and validator manager address in the ConversionData correspond to this contract.
         // Other validation checks are done by the P-Chain when converting the L1, so are not required here.
         if (conversionData.validatorManagerBlockchainID != WARP_MESSENGER.getBlockchainID()) {
@@ -238,6 +239,16 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         }
         if (address(conversionData.validatorManagerAddress) != address(this)) {
             revert InvalidValidatorManagerAddress(address(conversionData.validatorManagerAddress));
+        }
+
+        // Verify that the sha256 hash of the L1 conversion data matches with the Warp message's conversionID.
+        bytes32 conversionID = ValidatorMessages.unpackSubnetToL1ConversionMessage(
+            _getPChainWarpMessage(messageIndex).payload
+        );
+        bytes memory encodedConversion = ValidatorMessages.packConversionData(conversionData);
+        bytes32 encodedConversionID = sha256(encodedConversion);
+        if (encodedConversionID != conversionID) {
+            revert InvalidConversionID(encodedConversionID, conversionID);
         }
 
         uint256 numInitialValidators = conversionData.initialValidators.length;
@@ -253,7 +264,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             }
 
             // Validation ID of the initial validators is the sha256 hash of the
-            // convert subnet to L1 tx ID and the index of the initial validator.
+            // subnet ID and the index of the initial validator.
             bytes32 validationID = sha256(abi.encodePacked(conversionData.subnetID, i));
 
             // Save the initial validator as an active validator.
@@ -279,16 +290,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             revert InvalidTotalWeight(totalWeight);
         }
 
-        // Verify that the sha256 hash of the L1 conversion data matches with the Warp message's conversionID.
-        bytes32 conversionID = ValidatorMessages.unpackSubnetToL1ConversionMessage(
-            _getPChainWarpMessage(messageIndex).payload
-        );
-        bytes memory encodedConversion = ValidatorMessages.packConversionData(conversionData);
-        bytes32 encodedConversionID = sha256(encodedConversion);
-        if (encodedConversionID != conversionID) {
-            revert InvalidConversionID(encodedConversionID, conversionID);
-        }
-
         $._initializedValidatorSet = true;
     }
 
@@ -307,11 +308,11 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (pChainOwner.addresses.length > 0 && pChainOwner.addresses[0] == address(0)) {
             revert ZeroAddress();
         }
-        // Addresses must be sorted in ascending order
+        // Addresses must be unique and sorted in ascending order
         for (uint256 i = 1; i < pChainOwner.addresses.length; i++) {
             // Compare current address with the previous one
-            if (pChainOwner.addresses[i] < pChainOwner.addresses[i - 1]) {
-                revert PChainOwnerAddressesNotSorted();
+            if (pChainOwner.addresses[i] <= pChainOwner.addresses[i - 1]) {
+                revert InvalidPChainOwnerAddresses();
             }
         }
     }
