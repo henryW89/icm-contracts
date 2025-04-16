@@ -301,10 +301,10 @@ contract ValidatorMessagesTest is Test {
     function testL1ValidatorRegistrationMessage() public pure {
         bytes memory packed =
             ValidatorMessages.packL1ValidatorRegistrationMessage(DEFAULT_VALIDATION_ID, true);
-        (bytes32 validationID, bool valid) =
+        (bytes32 validationID, bool registered) =
             ValidatorMessages.unpackL1ValidatorRegistrationMessage(packed);
         assertEq(validationID, DEFAULT_VALIDATION_ID);
-        assert(valid);
+        assert(registered);
     }
 
     function testSetL1ValidatorWeightMessage() public pure {

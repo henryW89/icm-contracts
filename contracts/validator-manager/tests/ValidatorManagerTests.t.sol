@@ -333,6 +333,9 @@ abstract contract ValidatorManagerTest is Test {
         bytes32 validationID = _setUpInitiateValidatorRegistration(
             DEFAULT_NODE_ID, DEFAULT_SUBNET_ID, DEFAULT_WEIGHT, DEFAULT_BLS_PUBLIC_KEY
         );
+
+        uint64 totalWeight = validatorManager.l1TotalWeight();
+
         bytes memory l1ValidatorRegistrationMessage =
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
 
@@ -342,6 +345,8 @@ abstract contract ValidatorManagerTest is Test {
         emit CompletedValidatorRemoval(validationID);
 
         _completeValidatorRemoval(0);
+
+        assertEq(validatorManager.l1TotalWeight(), totalWeight - DEFAULT_WEIGHT);
     }
 
     function testInitialWeightsTooLow() public {

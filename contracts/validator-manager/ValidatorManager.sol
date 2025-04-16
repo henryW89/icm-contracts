@@ -565,10 +565,10 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Get the Warp message.
-        (bytes32 validationID, bool validRegistration) = ValidatorMessages
+        (bytes32 validationID, bool registered) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
-        if (validRegistration) {
-            revert UnexpectedRegistrationStatus(validRegistration);
+        if (registered) {
+            revert UnexpectedRegistrationStatus(registered);
         }
 
         Validator memory validator = $._validationPeriods[validationID];
@@ -586,6 +586,8 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (validator.status == ValidatorStatus.PendingRemoved) {
             validator.status = ValidatorStatus.Completed;
         } else {
+            // Remove the validator's weight from the total tracked weight, but don't track it as churn.
+            $._churnTracker.totalWeight -= validator.weight;
             validator.status = ValidatorStatus.Invalidated;
         }
         // Remove the validator from the registered validators mapping.
