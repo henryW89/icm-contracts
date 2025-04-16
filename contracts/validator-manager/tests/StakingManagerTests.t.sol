@@ -1387,12 +1387,15 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     }
 
     function testReplayValidatorRegistration() public virtual override {
+        uint64 initialTimestamp = uint64(block.timestamp);
         bytes32 validationID = _registerDefaultValidator();
+
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
         bytes memory uptimeMessage = ValidatorMessages.packValidationUptimeMessage(
             validationID, DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         );
+
         _initiateValidatorRemoval({
             validationID: validationID,
             completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
@@ -1420,16 +1423,18 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             rewardRecipient: validatorOwner
         });
 
+        vm.warp(initialTimestamp);
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
-        bytes memory l1ValidatorRegistrationMessage =
-            ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, true);
 
-        _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidValidatorStatus.selector, 4));
 
-        vm.expectRevert(
-            abi.encodeWithSelector(ValidatorManager.InvalidValidationID.selector, validationID)
-        );
-        _completeValidatorRegistration(0);
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
     }
 
     function testCompleteValidatorRemovalWithNonValidatorRewardRecipient() public virtual {
