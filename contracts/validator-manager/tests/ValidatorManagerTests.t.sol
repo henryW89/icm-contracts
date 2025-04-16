@@ -324,10 +324,7 @@ abstract contract ValidatorManagerTest is Test {
 
         _completeValidatorRemoval(0);
 
-        assertEq(
-            validatorManager.l1TotalWeight(),
-            totalWeight - DEFAULT_WEIGHT
-        );
+        assertEq(validatorManager.l1TotalWeight(), totalWeight - DEFAULT_WEIGHT);
     }
 
     function testInitialWeightsTooLow() public {
