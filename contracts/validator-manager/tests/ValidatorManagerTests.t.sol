@@ -311,6 +311,9 @@ abstract contract ValidatorManagerTest is Test {
             DEFAULT_EXPIRY,
             DEFAULT_BLS_PUBLIC_KEY
         );
+
+        uint64 totalWeight = validatorManager.l1TotalWeight();
+
         bytes memory l1ValidatorRegistrationMessage =
             ValidatorMessages.packL1ValidatorRegistrationMessage(validationID, false);
 
@@ -320,6 +323,11 @@ abstract contract ValidatorManagerTest is Test {
         emit CompletedValidatorRemoval(validationID);
 
         _completeValidatorRemoval(0);
+
+        assertEq(
+            validatorManager.l1TotalWeight(),
+            totalWeight - DEFAULT_WEIGHT
+        );
     }
 
     function testInitialWeightsTooLow() public {
