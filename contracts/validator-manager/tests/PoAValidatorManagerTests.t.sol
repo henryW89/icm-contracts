@@ -48,7 +48,6 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             weight: DEFAULT_WEIGHT
@@ -70,7 +69,6 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
-            registrationExpiry: DEFAULT_EXPIRY,
             weight: weight
         });
     }
@@ -78,7 +76,6 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -88,7 +85,6 @@ contract PoAValidatorManagerTest is ValidatorManagerTest {
             blsPublicKey: blsPublicKey,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
-            registrationExpiry: registrationExpiry,
             weight: weight
         });
     }

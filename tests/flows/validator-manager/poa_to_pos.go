@@ -108,7 +108,6 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		opts,
 		nodes[0].NodeID[:],
 		nodes[0].NodePoP.PublicKey[:],
-		uint64(time.Now().Add(24*time.Hour).Unix()),
 		validatormanager.PChainOwner{},
 		validatormanager.PChainOwner{},
 		nodes[0].Weight,
@@ -119,7 +118,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	// Re-register the validator as a SoV validator
 	//
 	expiry := uint64(time.Now().Add(24 * time.Hour).Unix())
-	poaValidationID := utils.InitiateAndCompletePoAValidatorRegistration(
+	registrationInitiatedEvent := utils.InitiateAndCompletePoAValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		ownerKey,
@@ -132,6 +131,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		network.GetPChainWallet(),
 		network.GetNetworkID(),
 	)
+	poaValidationID := registrationInitiatedEvent.ValidationID
 
 	poaValidator, err := validatorManager.GetValidator(&bind.CallOpts{}, poaValidationID)
 	Expect(err).Should(BeNil())
@@ -176,6 +176,10 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 	Expect(err).Should(BeNil())
 	Expect(validationID[:]).Should(Equal(poaValidationID[:]))
 
+	validator, err := validatorManager.GetValidator(&bind.CallOpts{}, validationID)
+	Expect(err).Should(BeNil())
+	Expect(validator.EndTime).Should(Equal(uint64(0)))
+
 	//
 	// Remove the PoA validator and re-register as a PoS validator
 	//
@@ -191,7 +195,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		stakingManagerAddress,
 		validatorManagerProxy.Address,
 		poaValidationID,
-		expiry,
+		registrationInitiatedEvent.RegistrationExpiry,
 		nodes[0],
 		1,
 		false,
@@ -200,8 +204,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		network.GetNetworkID(),
 	)
 
-	expiry2 := uint64(time.Now().Add(24 * time.Hour).Unix())
-	posValidationID := utils.InitiateAndCompleteNativeValidatorRegistration(
+	posRegistrationInitiatedEvent := utils.InitiateAndCompleteNativeValidatorRegistration(
 		ctx,
 		signatureAggregator,
 		fundedKey,
@@ -210,12 +213,12 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		nativeStakingManager,
 		stakingManagerAddress,
 		validatorManagerProxy.Address,
-		expiry2,
 		nodes[0],
 		network.GetPChainWallet(),
 		network.GetNetworkID(),
 	)
 	validatorStartTime := time.Now()
+	posValidationID := posRegistrationInitiatedEvent.ValidationID
 
 	// Delist the PoS validator
 	utils.InitiateAndCompleteEndPoSValidation(
@@ -228,7 +231,7 @@ func PoAMigrationToPoS(network *localnetwork.LocalNetwork) {
 		stakingManagerAddress,
 		validatorManagerProxy.Address,
 		posValidationID,
-		expiry2,
+		posRegistrationInitiatedEvent.RegistrationExpiry,
 		nodes[0],
 		1,
 		true,

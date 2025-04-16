@@ -206,7 +206,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         app.initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -225,7 +224,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -235,7 +233,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: delegationFeeBips,
@@ -247,7 +244,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -255,7 +251,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,

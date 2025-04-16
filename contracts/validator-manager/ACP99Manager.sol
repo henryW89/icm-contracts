@@ -138,7 +138,6 @@ abstract contract ACP99Manager {
      *
      * @param nodeID The ID of the node to add to the L1.
      * @param blsPublicKey The BLS public key of the validator.
-     * @param registrationExpiry The time after which this message is invalid.
      * @param remainingBalanceOwner The remaining balance owner of the validator.
      * @param disableOwner The disable owner of the validator.
      * @param weight The weight of the node on the L1.
@@ -147,7 +146,6 @@ abstract contract ACP99Manager {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight

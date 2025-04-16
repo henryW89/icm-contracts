@@ -504,7 +504,6 @@ abstract contract StakingManager is
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -536,7 +535,6 @@ abstract contract StakingManager is
         bytes32 validationID = $._manager.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             weight: weight
