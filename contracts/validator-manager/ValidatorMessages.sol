@@ -436,22 +436,22 @@ library ValidatorMessages {
      * +--------------+----------+----------+
      * | validationID : [32]byte | 32 bytes |
      * +--------------+----------+----------+
-     * |        valid :     bool |  1 byte  |
+     * |   registered :     bool |  1 byte  |
      * +--------------+----------+----------+
      *                           | 39 bytes |
      *                           +----------+
      *
      * @param validationID The ID of the validation period.
-     * @param valid true if the validation period was registered, false if it was not and never will be.
+     * @param registered true if the validation period was registered, false if it was not and never will be.
      * @return The packed message.
      *
      */
     function packL1ValidatorRegistrationMessage(
         bytes32 validationID,
-        bool valid
+        bool registered
     ) external pure returns (bytes memory) {
         return abi.encodePacked(
-            CODEC_ID, L1_VALIDATOR_REGISTRATION_MESSAGE_TYPE_ID, validationID, valid
+            CODEC_ID, L1_VALIDATOR_REGISTRATION_MESSAGE_TYPE_ID, validationID, registered
         );
     }
 
@@ -494,9 +494,9 @@ library ValidatorMessages {
         }
 
         // Unpack the validity
-        bool valid = input[38] != 0;
+        bool registered = input[38] != 0;
 
-        return (validationID, valid);
+        return (validationID, registered);
     }
 
     /**
