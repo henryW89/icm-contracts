@@ -315,6 +315,8 @@ abstract contract ValidatorManagerTest is Test {
 
         _completeValidatorRemoval(0);
 
+        // Set the timestamp to be the same as when we registered the initial validator so that the
+        // expiries will be the same, leading to the same validation ID.
         vm.warp(initialTimestamp);
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
 
