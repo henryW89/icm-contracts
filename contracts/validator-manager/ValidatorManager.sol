@@ -567,10 +567,10 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Get the Warp message.
-        (bytes32 validationID, bool validRegistration) = ValidatorMessages
+        (bytes32 validationID, bool registered) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
-        if (validRegistration) {
-            revert UnexpectedRegistrationStatus(validRegistration);
+        if (registered) {
+            revert UnexpectedRegistrationStatus(registered);
         }
 
         Validator memory validator = $._validationPeriods[validationID];
