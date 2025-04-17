@@ -604,7 +604,7 @@ abstract contract StakingManager is
 
     /**
      * @notice Returns the PoS validator information for the given validationID
-     * @notice See {ValidatorManager-getValidator}
+     * See {ValidatorManager-getValidator} to retreive information about the validator not specific to PoS
      */
     function getStakingValidator(
         bytes32 validationID
