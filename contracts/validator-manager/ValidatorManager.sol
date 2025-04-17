@@ -200,7 +200,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-initializeValidatorSet}.
+     * @notice See {IACP99Manager-initializeValidatorSet}.
      */
     function initializeValidatorSet(
         ConversionData calldata conversionData,
@@ -412,7 +412,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRegistration}.
+     * @notice See {IACP99Manager-completeValidatorRegistration}.
      */
     function completeValidatorRegistration(
         uint32 messageIndex
@@ -452,7 +452,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-getValidator}.
+     * @notice See {IACP99Manager-getValidator}.
      */
     function getValidator(
         bytes32 validationID
@@ -462,14 +462,14 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-l1TotalWeight}.
+     * @notice See {IACP99Manager-l1TotalWeight}.
      */
     function l1TotalWeight() public view virtual override returns (uint64) {
         return _getValidatorManagerStorage()._churnTracker.totalWeight;
     }
 
     /**
-     * @notice See {ACP99Manager-subnetID}.
+     * @notice See {IACP99Manager-subnetID}.
      */
     function subnetID() public view virtual override returns (bytes32) {
         return _getValidatorManagerStorage()._subnetID;
@@ -538,7 +538,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRemoval}.
+     * @notice See {IACP99Manager-completeValidatorRemoval}.
      */
     function completeValidatorRemoval(
         uint32 messageIndex
@@ -653,7 +653,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorWeightUpdate}.
+     * @notice See {IACP99Manager-completeValidatorWeightUpdate}.
      */
     function completeValidatorWeightUpdate(
         uint32 messageIndex

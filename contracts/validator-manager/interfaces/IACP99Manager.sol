@@ -67,8 +67,8 @@ struct Validator {
 }
 
 /*
- * @title ACP99Manager
- * @notice The ACP99Manager interface represents the functionality for sovereign L1
+ * @title IACP99Manager
+ * @notice The IACP99Manager interface represents the functionality for sovereign L1
  * validator management, as specified in ACP-77.
  */
 interface IACP99Manager {

@@ -8,7 +8,7 @@ pragma solidity 0.8.25;
 import {PChainOwner, ValidatorStatus, IACP99Manager} from "./IACP99Manager.sol";
 
 /**
- * @dev Implementation of the {ACP99Manager} abstract contract.
+ * @dev Validator Manager interface that provides additional functionality on top of {IACP99Manager}
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
