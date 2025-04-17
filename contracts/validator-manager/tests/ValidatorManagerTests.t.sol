@@ -322,7 +322,7 @@ abstract contract ValidatorManagerTest is Test {
         vm.warp(initialTimestamp);
         _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
 
-        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidValidatorStatus.selector, 4));
+        vm.expectRevert(abi.encodeWithSelector(IValidatorManager.InvalidValidatorStatus.selector, 4));
 
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
