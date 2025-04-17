@@ -131,8 +131,8 @@ interface IACP99Manager {
     ) external returns (bytes32 validationID);
 
     /**
-     * @notice Completes validator removal by consuming an RegisterL1ValidatorMessage from the P-Chain acknowledging
-     * that the validator has been removed.
+     * @notice Completes validator removal by consuming a RegisterL1ValidatorMessage from the P-Chain acknowledging
+     * that the validator has been removed, or that it was not registered on the P-Chain and the expiry time has passed.
      *
      * Emits a {CompletedValidatorRemoval} on success.
      *

@@ -21,9 +21,9 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     uint64 public constant DEFAULT_UPTIME = uint64(100);
     uint64 public constant DEFAULT_DELEGATOR_WEIGHT = uint64(1e5);
     uint64 public constant DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP =
-        DEFAULT_REGISTRATION_TIMESTAMP + DEFAULT_EXPIRY;
+        DEFAULT_REGISTRATION_TIMESTAMP + 1000;
     uint64 public constant DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP =
-        DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP + DEFAULT_EXPIRY;
+        DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP + 1000;
     uint64 public constant DEFAULT_DELEGATOR_END_DELEGATION_TIMESTAMP =
         DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP + DEFAULT_MINIMUM_STAKE_DURATION;
     address public constant DEFAULT_DELEGATOR_ADDRESS =
@@ -89,7 +89,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_MINIMUM_DELEGATION_FEE_BIPS - 1,
@@ -107,7 +106,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: delegationFeeBips,
@@ -125,7 +123,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -143,7 +140,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -161,7 +157,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -1391,6 +1386,59 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
+    function testReplayValidatorRegistration() public virtual override {
+        uint64 initialTimestamp = uint64(block.timestamp);
+        bytes32 validationID = _registerDefaultValidator();
+
+        bytes memory setWeightMessage =
+            ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
+        bytes memory uptimeMessage = ValidatorMessages.packValidationUptimeMessage(
+            validationID, DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        );
+
+        _initiateValidatorRemoval({
+            validationID: validationID,
+            completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
+            setWeightMessage: setWeightMessage,
+            includeUptime: true,
+            uptimeMessage: uptimeMessage,
+            force: false
+        });
+
+        uint256 expectedReward = rewardCalculator.calculateReward({
+            stakeAmount: _weightToValue(DEFAULT_WEIGHT),
+            validatorStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingEndTime: DEFAULT_COMPLETION_TIMESTAMP,
+            uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        });
+
+        address validatorOwner = address(this);
+
+        _completeValidatorRemovalWithChecks({
+            validationID: validationID,
+            validatorOwner: validatorOwner,
+            expectedReward: expectedReward,
+            validatorWeight: DEFAULT_WEIGHT,
+            rewardRecipient: validatorOwner
+        });
+
+        // Set the timestamp to be the same as when we registered the initial validator so that the
+        // expiries will be the same, leading to the same validation ID.
+        vm.warp(initialTimestamp);
+        _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+
+        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidValidatorStatus.selector, 4));
+
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
     function testCompleteValidatorRemovalWithNonValidatorRewardRecipient() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
@@ -2039,7 +2087,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,

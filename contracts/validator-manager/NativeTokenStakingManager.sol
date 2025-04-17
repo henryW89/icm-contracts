@@ -62,7 +62,6 @@ contract NativeTokenStakingManager is Initializable, StakingManager, INativeToke
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -71,7 +70,6 @@ contract NativeTokenStakingManager is Initializable, StakingManager, INativeToke
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: delegationFeeBips,

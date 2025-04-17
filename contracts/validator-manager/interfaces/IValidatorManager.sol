@@ -17,7 +17,6 @@ interface IValidatorManager is IACP99Manager {
     error InvalidWarpOriginSenderAddress(address senderAddress);
     error InvalidValidatorManagerBlockchainID(bytes32 blockchainID);
     error InvalidWarpSourceChainID(bytes32 sourceChainID);
-    error InvalidRegistrationExpiry(uint64 registrationExpiry);
     error InvalidInitializationStatus();
     error InvalidMaximumChurnPercentage(uint8 maximumChurnPercentage);
     error InvalidBLSKeyLength(uint256 length);
@@ -45,7 +44,6 @@ interface IValidatorManager is IACP99Manager {
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight

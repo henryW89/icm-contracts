@@ -94,7 +94,7 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         0xe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb00;
 
     uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
-    uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 2 days;
+    uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
     uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
     bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
@@ -299,7 +299,6 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -307,7 +306,6 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             weight: weight
@@ -321,19 +319,11 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override initializedValidatorSet returns (bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
-
-        if (
-            registrationExpiry <= block.timestamp
-                || registrationExpiry >= block.timestamp + MAXIMUM_REGISTRATION_EXPIRY_LENGTH
-        ) {
-            revert InvalidRegistrationExpiry(registrationExpiry);
-        }
 
         // Ensure the new validator doesn't overflow the total weight
         if (uint256(weight) + uint256($._churnTracker.totalWeight) > type(uint64).max) {
@@ -358,6 +348,8 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         // Check that adding this validator would not exceed the maximum churn rate.
         _checkAndUpdateChurnTracker(weight, 0);
 
+        uint64 registrationExpiry = uint64(block.timestamp) + REGISTRATION_EXPIRY_LENGTH;
+
         (bytes32 validationID, bytes memory registerL1ValidatorMessage) = ValidatorMessages
             .packRegisterL1ValidatorMessage(
             ValidatorMessages.ValidationPeriod({
@@ -370,6 +362,13 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
                 weight: weight
             })
         );
+
+        // Redundant check to ensure no collision or replay is possible, but with the expiry set as
+        // the block timestamp + 1 day, this should not be possible.
+        if ($._validationPeriods[validationID].status != ValidatorStatus.Unknown) {
+            revert InvalidValidatorStatus($._validationPeriods[validationID].status);
+        }
+
         $._pendingRegisterValidationMessages[validationID] = registerL1ValidatorMessage;
         $._registeredValidators[nodeID] = validationID;
 
@@ -546,10 +545,10 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Get the Warp message.
-        (bytes32 validationID, bool validRegistration) = ValidatorMessages
+        (bytes32 validationID, bool registered) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
-        if (validRegistration) {
-            revert UnexpectedRegistrationStatus(validRegistration);
+        if (registered) {
+            revert UnexpectedRegistrationStatus(registered);
         }
 
         Validator memory validator = $._validationPeriods[validationID];
@@ -567,6 +566,8 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         if (validator.status == ValidatorStatus.PendingRemoved) {
             validator.status = ValidatorStatus.Completed;
         } else {
+            // Remove the validator's weight from the total tracked weight, but don't track it as churn.
+            $._churnTracker.totalWeight -= validator.weight;
             validator.status = ValidatorStatus.Invalidated;
         }
         // Remove the validator from the registered validators mapping.

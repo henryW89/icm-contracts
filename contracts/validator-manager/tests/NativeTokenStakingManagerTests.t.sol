@@ -180,7 +180,6 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -190,7 +189,6 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration{value: stakeAmount}({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: delegationFeeBips,
@@ -201,7 +199,6 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -209,7 +206,6 @@ contract NativeTokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration{value: _weightToValue(weight)}({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
