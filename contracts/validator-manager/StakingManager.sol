@@ -614,6 +614,8 @@ abstract contract StakingManager is
 
     /**
      * @notice Returns the reward recipient and claimable reward amount for the given validationID
+     * @return The current validation reward recipient
+     * @return The current claimable validation reward amount
      */
     function getValidatorRewardInfo(
         bytes32 validationID
@@ -633,6 +635,8 @@ abstract contract StakingManager is
 
     /**
      * @notice Returns the reward recipient and claimable reward amount for the given delegationID
+     * @return The current delegation reward recipient
+     * @return The current claimable delegation reward amount
      */
     function getDelegatorRewardInfo(
         bytes32 delegationID

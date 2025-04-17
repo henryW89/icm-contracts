@@ -496,6 +496,9 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
 
     /**
      * @notice Returns the current churn tracker and its configuration
+     * @return The churn period duration in seconds
+     * @return The maximum percentage of total L1 weight churn allowed per period
+     * @return The current churn tracker
      */
     function getChurnTracker() public view returns (uint64, uint8, ValidatorChurnPeriod memory) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
@@ -515,11 +518,14 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     /**
      * @notice Returns true if the ValidatorManager has been initialized with the initial validator set
      */
-    function getInitializedValidatorSet() public view returns (bool) {
+    function isValidatorSetInitialized() public view returns (bool) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
         return $._initializedValidatorSet;
     }
 
+    /**
+     * @notice Initiates the removal of a validator from the active validator set.
+     */
     function initiateValidatorRemoval(
         bytes32 validationID
     ) public onlyOwner {
