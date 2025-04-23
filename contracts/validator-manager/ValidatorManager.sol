@@ -474,6 +474,38 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
         return _getValidatorManagerStorage()._subnetID;
     }
 
+    /**
+     * @notice Returns the current churn tracker and its configuration
+     * @return The churn period duration in seconds
+     * @return The maximum percentage of total L1 weight churn allowed per period
+     * @return The current churn tracker
+     */
+    function getChurnTracker() public view returns (uint64, uint8, ValidatorChurnPeriod memory) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return ($._churnPeriodSeconds, $._maximumChurnPercentage, $._churnTracker);
+    }
+
+    /**
+     * @notice Returns the validationID that the provided nodeID is registered under
+     */
+    function getNodeValidationID(
+        bytes calldata nodeID
+    ) public view returns (bytes32) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._registeredValidators[nodeID];
+    }
+
+    /**
+     * @notice Returns true if the ValidatorManager has been initialized with the initial validator set
+     */
+    function isValidatorSetInitialized() public view returns (bool) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._initializedValidatorSet;
+    }
+
+    /**
+     * @notice Initiates the removal of a validator from the active validator set.
+     */
     function initiateValidatorRemoval(
         bytes32 validationID
     ) public onlyOwner {
