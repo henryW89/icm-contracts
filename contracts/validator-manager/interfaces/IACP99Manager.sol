@@ -70,6 +70,10 @@ struct Validator {
  * @title IACP99Manager
  * @notice The IACP99Manager interface represents the functionality for sovereign L1
  * validator management, as specified in ACP-77.
+ *
+ * @dev IACP99Manager defines the public functions specified in ACP-99.
+ * The counterpart to this interface is ACP99Manager, which defines the private functions specified in ACP-99.
+ * https://github.com/avalanche-foundation/ACPs/tree/main/ACPs/99-validatorsetmanager-contract
  */
 interface IACP99Manager {
     /// @notice Emitted when an initial validator is registered.
