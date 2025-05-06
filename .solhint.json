@@ -36,6 +36,7 @@
       "error",
       5
     ],
-    "one-contract-per-file": "off"
+    "one-contract-per-file": "off",
+    "import-path-check": "off"
   }
 }

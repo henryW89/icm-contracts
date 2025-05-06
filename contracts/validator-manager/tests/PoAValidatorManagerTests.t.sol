@@ -15,9 +15,9 @@ import {IValidatorManager, ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 
 contract PoAValidatorManagerTest is ValidatorManagerTest {
-    ValidatorManager public app;
-
     address public constant DEFAULT_OWNER = address(0x1);
+
+    ValidatorManager public app;
 
     function setUp() public override {
         ValidatorManagerTest.setUp();

@@ -38,14 +38,14 @@ contract TeleporterRegistry {
         IWarpMessenger(0x0200000000000000000000000000000000000005);
 
     /**
-     * @notice The blockchain ID of the chain the contract is deployed on.
-     */
-    bytes32 public immutable blockchainID;
-
-    /**
      * @notice The maximum version increment allowed when adding a new protocol version.
      */
     uint256 public constant MAX_VERSION_INCREMENT = 500;
+
+    /**
+     * @notice The blockchain ID of the chain the contract is deployed on.
+     */
+    bytes32 public immutable blockchainID;
 
     /**
      * @notice The latest protocol version.

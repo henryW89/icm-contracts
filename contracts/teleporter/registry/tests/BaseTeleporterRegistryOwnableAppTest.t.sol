@@ -87,9 +87,10 @@ contract ExampleRegistryOwnableApp is TeleporterRegistryOwnableApp {
 }
 
 abstract contract BaseTeleporterRegistryOwnableAppTest is BaseTeleporterRegistryAppTest {
-    ExampleRegistryOwnableApp public ownerApp;
     address public constant MOCK_INVALID_OWNER_ADDRESS = 0xd54e3E251b9b0EEd3ed70A858e927bbC2659587d;
     address public constant DEFAULT_OWNER_ADDRESS = 0x1234512345123451234512345123451234512345;
+
+    ExampleRegistryOwnableApp public ownerApp;
 
     function setUp() public virtual override {
         BaseTeleporterRegistryAppTest.setUp();

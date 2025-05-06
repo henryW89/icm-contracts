@@ -20,12 +20,13 @@ import {
 // step for ease of use. This test contract is separate to allow for testing the initialization
 // step itself.
 contract InitializeBlockchainIDTest is Test {
-    TeleporterMessenger public teleporterMessenger;
     address public constant WARP_PRECOMPILE_ADDRESS = 0x0200000000000000000000000000000000000005;
     bytes32 public constant DEFAULT_SOURCE_BLOCKCHAIN_ID =
         bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
     bytes32 public constant DEFAULT_DESTINATION_BLOCKCHAIN_ID =
         bytes32(hex"1234567812345678123456781234567812345678123456781234567812345678");
+
+    TeleporterMessenger public teleporterMessenger;
 
     // Set up the Teleporter contract but leave the blockchain ID uninitialized.
     function setUp() public virtual {
