@@ -12,11 +12,11 @@ import {
 } from "@teleporter/TeleporterMessenger.sol";
 
 contract TeleporterRegistryTest is Test {
-    TeleporterRegistry public teleporterRegistry;
-    address public teleporterAddress;
-
     bytes32 public constant MOCK_BLOCK_CHAIN_ID = bytes32(uint256(123456));
     address public constant WARP_PRECOMPILE_ADDRESS = 0x0200000000000000000000000000000000000005;
+
+    TeleporterRegistry public teleporterRegistry;
+    address public teleporterAddress;
 
     event AddProtocolVersion(uint256 indexed version, address indexed protocolAddress);
 

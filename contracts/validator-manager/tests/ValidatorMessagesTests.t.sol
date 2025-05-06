@@ -22,10 +22,11 @@ contract ValidatorMessagesTest is Test {
     bytes32 public constant DEFAULT_VALIDATION_ID =
         bytes32(hex"1234567812345678123456781234567812345678123456781234567812345678");
     uint64 public constant DEFAULT_WEIGHT = 1e6;
-    // solhint-disable-next-line var-name-mixedcase
-    PChainOwner public DEFAULT_P_CHAIN_OWNER;
     address public constant DEFAULT_OWNER = 0x1234567812345678123456781234567812345678;
     uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
+
+    // solhint-disable-next-line var-name-mixedcase
+    PChainOwner public DEFAULT_P_CHAIN_OWNER;
 
     function setUp() public {
         address[] memory addresses = new address[](1);
