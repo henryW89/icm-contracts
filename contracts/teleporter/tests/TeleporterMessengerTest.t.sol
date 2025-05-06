@@ -22,8 +22,6 @@ import {IERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/IERC20.sol";
 // instance in the test setup, and provides helper methods for sending and
 // receiving empty mock messages.
 contract TeleporterMessengerTest is Test {
-    TeleporterMessenger public teleporterMessenger;
-
     bytes32 public constant DEFAULT_SOURCE_BLOCKCHAIN_ID =
         bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
     bytes32 public constant DEFAULT_DESTINATION_BLOCKCHAIN_ID =
@@ -33,6 +31,8 @@ contract TeleporterMessengerTest is Test {
     address public constant WARP_PRECOMPILE_ADDRESS = 0x0200000000000000000000000000000000000005;
     address public constant DEFAULT_RELAYER_REWARD_ADDRESS =
         0xa4CEE7d1aF6aDdDD33E3b1cC680AB84fdf1b6d1d;
+
+    TeleporterMessenger public teleporterMessenger;
 
     UnitTestMockERC20 internal _mockFeeAsset;
 

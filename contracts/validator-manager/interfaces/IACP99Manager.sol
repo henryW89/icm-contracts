@@ -5,6 +5,16 @@
 
 pragma solidity 0.8.25;
 
+/// @notice L1 validator status.
+enum ValidatorStatus {
+    Unknown,
+    PendingAdded,
+    Active,
+    PendingRemoved,
+    Completed,
+    Invalidated
+}
+
 /**
  * @notice Description of the conversion data used to convert
  * a subnet to an L1 on the P-Chain.
@@ -23,16 +33,6 @@ struct InitialValidator {
     bytes nodeID;
     bytes blsPublicKey;
     uint64 weight;
-}
-
-/// @notice L1 validator status.
-enum ValidatorStatus {
-    Unknown,
-    PendingAdded,
-    Active,
-    PendingRemoved,
-    Completed,
-    Invalidated
 }
 
 /**
