@@ -93,8 +93,11 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
     bytes32 public constant VALIDATOR_MANAGER_STORAGE_LOCATION =
         0xe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb00;
 
-    uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
     uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
+    // Limit churn period to the registration expiry length, so that a validation can only
+    // be represented once per churn period
+    uint64 public constant MAXIMUM_CHURN_PERIOD_LENGTH = REGISTRATION_EXPIRY_LENGTH;
+    uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
     uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
     bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
@@ -186,6 +189,9 @@ contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeabl
                 || settings.maximumChurnPercentage == 0
         ) {
             revert InvalidMaximumChurnPercentage(settings.maximumChurnPercentage);
+        }
+        if (settings.churnPeriodSeconds > MAXIMUM_CHURN_PERIOD_LENGTH) {
+            revert InvalidChurnPeriodLength(settings.churnPeriodSeconds);
         }
 
         $._maximumChurnPercentage = settings.maximumChurnPercentage;

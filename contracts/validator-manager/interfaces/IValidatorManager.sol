@@ -19,6 +19,7 @@ interface IValidatorManager is IACP99Manager {
     error InvalidWarpSourceChainID(bytes32 sourceChainID);
     error InvalidInitializationStatus();
     error InvalidMaximumChurnPercentage(uint8 maximumChurnPercentage);
+    error InvalidChurnPeriodLength(uint64 churnPeriodLength);
     error InvalidBLSKeyLength(uint256 length);
     error InvalidNodeID(bytes nodeID);
     error InvalidConversionID(bytes32 encodedConversionID, bytes32 expectedConversionID);
