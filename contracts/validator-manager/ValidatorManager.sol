@@ -5,15 +5,16 @@
 
 pragma solidity 0.8.25;
 
+import {IValidatorManager} from "./interfaces/IValidatorManager.sol";
 import {ValidatorMessages} from "./ValidatorMessages.sol";
 import {
-    ACP99Manager,
     InitialValidator,
     PChainOwner,
     ConversionData,
     Validator,
     ValidatorStatus
-} from "./ACP99Manager.sol";
+} from "./interfaces/IACP99Manager.sol";
+import {ACP99Manager} from "./ACP99Manager.sol";
 import {
     IWarpMessenger,
     WarpMessage
@@ -63,7 +64,7 @@ struct ValidatorLegacy {
  *
  * @custom:security-contact https://github.com/ava-labs/icm-contracts/blob/main/SECURITY.md
  */
-contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
+contract ValidatorManager is IValidatorManager, Initializable, OwnableUpgradeable, ACP99Manager {
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.ValidatorManager
     struct ValidatorManagerStorage {
@@ -92,33 +93,14 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     bytes32 public constant VALIDATOR_MANAGER_STORAGE_LOCATION =
         0xe92546d698950ddd38910d2e15ed1d923cd0a7b3dde9e2a6a3f380565559cb00;
 
+    uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
+    // Limit churn period to the registration expiry length, so that a validation can only
+    // be represented once per churn period
+    uint64 public constant MAXIMUM_CHURN_PERIOD_LENGTH = REGISTRATION_EXPIRY_LENGTH;
     uint8 public constant MAXIMUM_CHURN_PERCENTAGE_LIMIT = 20;
-    uint64 public constant MAXIMUM_REGISTRATION_EXPIRY_LENGTH = 2 days;
     uint32 public constant NODE_ID_LENGTH = 20;
     uint8 public constant BLS_PUBLIC_KEY_LENGTH = 48;
     bytes32 public constant P_CHAIN_BLOCKCHAIN_ID = bytes32(0);
-
-    error InvalidValidatorManagerAddress(address validatorManagerAddress);
-    error InvalidWarpOriginSenderAddress(address senderAddress);
-    error InvalidValidatorManagerBlockchainID(bytes32 blockchainID);
-    error InvalidWarpSourceChainID(bytes32 sourceChainID);
-    error InvalidRegistrationExpiry(uint64 registrationExpiry);
-    error InvalidInitializationStatus();
-    error InvalidMaximumChurnPercentage(uint8 maximumChurnPercentage);
-    error InvalidBLSKeyLength(uint256 length);
-    error InvalidNodeID(bytes nodeID);
-    error InvalidConversionID(bytes32 encodedConversionID, bytes32 expectedConversionID);
-    error InvalidTotalWeight(uint64 weight);
-    error InvalidValidationID(bytes32 validationID);
-    error InvalidValidatorStatus(ValidatorStatus status);
-    error InvalidNonce(uint64 nonce);
-    error InvalidWarpMessage();
-    error MaxChurnRateExceeded(uint64 churnAmount);
-    error NodeAlreadyRegistered(bytes nodeID);
-    error UnexpectedRegistrationStatus(bool validRegistration);
-    error InvalidPChainOwnerThreshold(uint256 threshold, uint256 addressesLength);
-    error PChainOwnerAddressesNotSorted();
-    error ZeroAddress();
 
     // solhint-disable ordering
     /**
@@ -208,6 +190,9 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         ) {
             revert InvalidMaximumChurnPercentage(settings.maximumChurnPercentage);
         }
+        if (settings.churnPeriodSeconds > MAXIMUM_CHURN_PERIOD_LENGTH) {
+            revert InvalidChurnPeriodLength(settings.churnPeriodSeconds);
+        }
 
         $._maximumChurnPercentage = settings.maximumChurnPercentage;
         $._churnPeriodSeconds = settings.churnPeriodSeconds;
@@ -221,7 +206,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-initializeValidatorSet}.
+     * @notice See {IACP99Manager-initializeValidatorSet}.
      */
     function initializeValidatorSet(
         ConversionData calldata conversionData,
@@ -264,7 +249,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
             }
 
             // Validation ID of the initial validators is the sha256 hash of the
-            // convert subnet to L1 tx ID and the index of the initial validator.
+            // subnet ID and the index of the initial validator.
             bytes32 validationID = sha256(abi.encodePacked(conversionData.subnetID, i));
 
             // Save the initial validator as an active validator.
@@ -308,11 +293,11 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (pChainOwner.addresses.length > 0 && pChainOwner.addresses[0] == address(0)) {
             revert ZeroAddress();
         }
-        // Addresses must be sorted in ascending order
+        // Addresses must be unique and sorted in ascending order
         for (uint256 i = 1; i < pChainOwner.addresses.length; i++) {
             // Compare current address with the previous one
-            if (pChainOwner.addresses[i] < pChainOwner.addresses[i - 1]) {
-                revert PChainOwnerAddressesNotSorted();
+            if (pChainOwner.addresses[i] <= pChainOwner.addresses[i - 1]) {
+                revert InvalidPChainOwnerAddresses();
             }
         }
     }
@@ -320,7 +305,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     function initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -328,7 +312,6 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         return _initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             weight: weight
@@ -342,19 +325,11 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
     ) internal virtual override initializedValidatorSet returns (bytes32) {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
-
-        if (
-            registrationExpiry <= block.timestamp
-                || registrationExpiry >= block.timestamp + MAXIMUM_REGISTRATION_EXPIRY_LENGTH
-        ) {
-            revert InvalidRegistrationExpiry(registrationExpiry);
-        }
 
         // Ensure the new validator doesn't overflow the total weight
         if (uint256(weight) + uint256($._churnTracker.totalWeight) > type(uint64).max) {
@@ -379,6 +354,8 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         // Check that adding this validator would not exceed the maximum churn rate.
         _checkAndUpdateChurnTracker(weight, 0);
 
+        uint64 registrationExpiry = uint64(block.timestamp) + REGISTRATION_EXPIRY_LENGTH;
+
         (bytes32 validationID, bytes memory registerL1ValidatorMessage) = ValidatorMessages
             .packRegisterL1ValidatorMessage(
             ValidatorMessages.ValidationPeriod({
@@ -391,6 +368,13 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
                 weight: weight
             })
         );
+
+        // Redundant check to ensure no collision or replay is possible, but with the expiry set as
+        // the block timestamp + 1 day, this should not be possible.
+        if ($._validationPeriods[validationID].status != ValidatorStatus.Unknown) {
+            revert InvalidValidatorStatus($._validationPeriods[validationID].status);
+        }
+
         $._pendingRegisterValidationMessages[validationID] = registerL1ValidatorMessage;
         $._registeredValidators[nodeID] = validationID;
 
@@ -433,7 +417,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRegistration}.
+     * @notice See {IACP99Manager-completeValidatorRegistration}.
      */
     function completeValidatorRegistration(
         uint32 messageIndex
@@ -473,7 +457,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-getValidator}.
+     * @notice See {IACP99Manager-getValidator}.
      */
     function getValidator(
         bytes32 validationID
@@ -483,19 +467,51 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-l1TotalWeight}.
+     * @notice See {IACP99Manager-l1TotalWeight}.
      */
     function l1TotalWeight() public view virtual override returns (uint64) {
         return _getValidatorManagerStorage()._churnTracker.totalWeight;
     }
 
     /**
-     * @notice See {ACP99Manager-subnetID}.
+     * @notice See {IACP99Manager-subnetID}.
      */
     function subnetID() public view virtual override returns (bytes32) {
         return _getValidatorManagerStorage()._subnetID;
     }
 
+    /**
+     * @notice Returns the current churn tracker and its configuration
+     * @return The churn period duration in seconds
+     * @return The maximum percentage of total L1 weight churn allowed per period
+     * @return The current churn tracker
+     */
+    function getChurnTracker() public view returns (uint64, uint8, ValidatorChurnPeriod memory) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return ($._churnPeriodSeconds, $._maximumChurnPercentage, $._churnTracker);
+    }
+
+    /**
+     * @notice Returns the validationID that the provided nodeID is registered under
+     */
+    function getNodeValidationID(
+        bytes calldata nodeID
+    ) public view returns (bytes32) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._registeredValidators[nodeID];
+    }
+
+    /**
+     * @notice Returns true if the ValidatorManager has been initialized with the initial validator set
+     */
+    function isValidatorSetInitialized() public view returns (bool) {
+        ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
+        return $._initializedValidatorSet;
+    }
+
+    /**
+     * @notice Initiates the removal of a validator from the active validator set.
+     */
     function initiateValidatorRemoval(
         bytes32 validationID
     ) public onlyOwner {
@@ -559,7 +575,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorRemoval}.
+     * @notice See {IACP99Manager-completeValidatorRemoval}.
      */
     function completeValidatorRemoval(
         uint32 messageIndex
@@ -567,10 +583,10 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         ValidatorManagerStorage storage $ = _getValidatorManagerStorage();
 
         // Get the Warp message.
-        (bytes32 validationID, bool validRegistration) = ValidatorMessages
+        (bytes32 validationID, bool registered) = ValidatorMessages
             .unpackL1ValidatorRegistrationMessage(_getPChainWarpMessage(messageIndex).payload);
-        if (validRegistration) {
-            revert UnexpectedRegistrationStatus(validRegistration);
+        if (registered) {
+            revert UnexpectedRegistrationStatus(registered);
         }
 
         Validator memory validator = $._validationPeriods[validationID];
@@ -588,6 +604,8 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
         if (validator.status == ValidatorStatus.PendingRemoved) {
             validator.status = ValidatorStatus.Completed;
         } else {
+            // Remove the validator's weight from the total tracked weight, but don't track it as churn.
+            $._churnTracker.totalWeight -= validator.weight;
             validator.status = ValidatorStatus.Invalidated;
         }
         // Remove the validator from the registered validators mapping.
@@ -674,7 +692,7 @@ contract ValidatorManager is Initializable, OwnableUpgradeable, ACP99Manager {
     }
 
     /**
-     * @notice See {ACP99Manager-completeValidatorWeightUpdate}.
+     * @notice See {IACP99Manager-completeValidatorWeightUpdate}.
      */
     function completeValidatorWeightUpdate(
         uint32 messageIndex

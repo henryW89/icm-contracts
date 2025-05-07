@@ -12,11 +12,12 @@ import {IERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/IERC20.sol";
 import {ExampleERC20} from "@mocks/ExampleERC20.sol";
 
 contract MockERC20SendAndCallReceiverTest is Test {
+    bytes32 public constant DEFAULT_TOKEN_HOME_BLOCKCHAIN_ID =
+        bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
+
     IERC20 public erc20;
     MockERC20SendAndCallReceiver public erc20SendAndCallReceiver;
 
-    bytes32 public constant DEFAULT_TOKEN_HOME_BLOCKCHAIN_ID =
-        bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
     address internal _originSenderAddress = vm.addr(0x1);
     address internal _originTokenTransferrerAddress = vm.addr(0x2);
 
@@ -96,10 +97,11 @@ contract MockERC20SendAndCallReceiverTest is Test {
 }
 
 contract MockNativeSendAndCallReceiverTest is Test {
-    MockNativeSendAndCallReceiver public nativeSendAndCallReceiver;
-
     bytes32 public constant DEFAULT_TOKEN_HOME_BLOCKCHAIN_ID =
         bytes32(hex"abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd");
+
+    MockNativeSendAndCallReceiver public nativeSendAndCallReceiver;
+
     address internal _originSenderAddress = vm.addr(0x1);
     address internal _originTokenTransferrerAddress = vm.addr(0x2);
 

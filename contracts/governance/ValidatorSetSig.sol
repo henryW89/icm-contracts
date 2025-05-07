@@ -49,9 +49,27 @@ struct ValidatorSetSigMessage {
  */
 contract ValidatorSetSig is ReentrancyGuard {
     /**
+     * @notice Address that the off-chain ICM message sets as the "source" address.
+     * @dev The address is not owned by any EOA or smart contract account, so it
+     * cannot possibly be the source address of any other ICM message emitted by the VM.
+     */
+    address public constant VALIDATORS_SOURCE_ADDRESS = address(0);
+
+    /**
+     * @notice ICM precompile used for sending and receiving ICM messages.
+     */
+    IWarpMessenger public constant WARP_MESSENGER =
+        IWarpMessenger(0x0200000000000000000000000000000000000005);
+
+    /**
      * @notice A blockchain ID whose validators need to sign the message for it to be considered valid.
      */
     bytes32 public immutable validatorBlockchainID;
+
+    /**
+     * @notice The blockchain ID of the chain the contract is deployed on.
+     */
+    bytes32 public immutable blockchainID;
 
     /**
      * @dev Tracks nonces for messages sent to a specific contract address to provide replay protection.
@@ -60,24 +78,6 @@ contract ValidatorSetSig is ReentrancyGuard {
      * in case a single instance of ValidatorSetSig contract is used to manage multiple downstream contracts.
      */
     mapping(address targetContractAddress => uint256 nonce) public nonces;
-
-    /**
-     * @notice Address that the off-chain ICM message sets as the "source" address.
-     * @dev The address is not owned by any EOA or smart contract account, so it
-     * cannot possibly be the source address of any other ICM message emitted by the VM.
-     */
-    address public constant VALIDATORS_SOURCE_ADDRESS = address(0);
-
-    /**
-     * @notice The blockchain ID of the chain the contract is deployed on.
-     */
-    bytes32 public immutable blockchainID;
-
-    /**
-     * @notice ICM precompile used for sending and receiving ICM messages.
-     */
-    IWarpMessenger public constant WARP_MESSENGER =
-        IWarpMessenger(0x0200000000000000000000000000000000000005);
 
     /**
      * @notice Emited when the payload is successfully delivered to the target contract.

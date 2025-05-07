@@ -9,7 +9,7 @@ import {IRewardCalculator} from "../interfaces/IRewardCalculator.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
 import {StakingManager} from "../StakingManager.sol";
 import {DelegatorStatus, StakingManagerSettings} from "../interfaces/IStakingManager.sol";
-import {ValidatorManager, ValidatorStatus} from "../ValidatorManager.sol";
+import {IValidatorManager, ValidatorManager, ValidatorStatus} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 import {
     WarpMessage,
@@ -21,9 +21,9 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     uint64 public constant DEFAULT_UPTIME = uint64(100);
     uint64 public constant DEFAULT_DELEGATOR_WEIGHT = uint64(1e5);
     uint64 public constant DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP =
-        DEFAULT_REGISTRATION_TIMESTAMP + DEFAULT_EXPIRY;
+        DEFAULT_REGISTRATION_TIMESTAMP + 1000;
     uint64 public constant DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP =
-        DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP + DEFAULT_EXPIRY;
+        DEFAULT_DELEGATOR_INIT_REGISTRATION_TIMESTAMP + 1000;
     uint64 public constant DEFAULT_DELEGATOR_END_DELEGATION_TIMESTAMP =
         DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP + DEFAULT_MINIMUM_STAKE_DURATION;
     address public constant DEFAULT_DELEGATOR_ADDRESS =
@@ -89,7 +89,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_MINIMUM_DELEGATION_FEE_BIPS - 1,
@@ -107,7 +106,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: delegationFeeBips,
@@ -125,7 +123,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -143,7 +140,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -161,7 +157,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -186,7 +181,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         _mockGetUptimeWarpMessage(new bytes(0), false);
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP);
-        vm.expectRevert(ValidatorManager.InvalidWarpMessage.selector);
+        vm.expectRevert(IValidatorManager.InvalidWarpMessage.selector);
         stakingManager.initiateValidatorRemoval(validationID, true, 0);
     }
 
@@ -212,7 +207,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP);
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidWarpOriginSenderAddress.selector, address(this)
+                IValidatorManager.InvalidWarpOriginSenderAddress.selector, address(this)
             )
         );
         stakingManager.initiateValidatorRemoval(validationID, true, 0);
@@ -285,7 +280,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -297,7 +292,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
             )
         );
         _initiateDelegatorRegistration(
@@ -362,7 +357,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
         vm.warp(DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP);
-        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, nonce));
+        vm.expectRevert(abi.encodeWithSelector(IValidatorManager.InvalidNonce.selector, nonce));
         stakingManager.completeDelegatorRegistration(delegationID2, 0);
     }
 
@@ -488,7 +483,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testCompleteEndDelegationChurnPeriodSecondsNotPassed() public {
+    function testCompleteDelegatorRemovalChurnPeriodSecondsNotPassed() public {
         bytes32 validationID = _registerDefaultValidator();
         uint64 delegatorRegistrationTime =
             DEFAULT_REGISTRATION_TIMESTAMP + DEFAULT_MINIMUM_STAKE_DURATION + 1;
@@ -627,7 +622,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         validatorManager.resendValidatorRemovalMessage(validationID);
     }
 
-    function testCompleteEndDelegation() public {
+    function testCompleteDelegatorRemoval() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -642,7 +637,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Active
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Active
             )
         );
 
@@ -696,7 +691,47 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         stakingManager.claimDelegationFees(validationID);
     }
 
-    function testCompleteEndDelegationWithNonDelegatorRewardRecipient() public {
+    function testClaimDelegationFeesWithRewardRecipient() public {
+        bytes32 validationID = _registerDefaultValidator();
+        bytes32 delegationID = _registerDefaultDelegator(validationID);
+        address rewardRecipient = address(42);
+
+        _endDefaultValidatorWithChecks(validationID, 2);
+
+        // Validator is Completed, so this will also complete the delegation.
+        _initiateDelegatorRemoval({
+            sender: DEFAULT_DELEGATOR_ADDRESS,
+            delegationID: delegationID,
+            endDelegationTimestamp: DEFAULT_DELEGATOR_END_DELEGATION_TIMESTAMP,
+            includeUptime: true,
+            force: false,
+            rewardRecipient: rewardRecipient
+        });
+
+        uint256 expectedTotalReward = rewardCalculator.calculateReward({
+            stakeAmount: _weightToValue(DEFAULT_DELEGATOR_WEIGHT),
+            validatorStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingStartTime: DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP,
+            stakingEndTime: DEFAULT_COMPLETION_TIMESTAMP,
+            uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        });
+
+        uint256 expectedDelegationFee = expectedTotalReward * DEFAULT_DELEGATION_FEE_BIPS / 10000;
+
+        // Change the reward recipient to a different address
+        address newRewardRecipient = address(43);
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardRecipientChanged(validationID, newRewardRecipient, address(this));
+        stakingManager.changeValidatorRewardRecipient(validationID, newRewardRecipient);
+
+        // Claim delegation fees should now go to the new reward recipient
+        vm.expectEmit(true, true, true, true, address(stakingManager));
+        emit ValidatorRewardClaimed(validationID, newRewardRecipient, expectedDelegationFee);
+        _expectRewardIssuance(newRewardRecipient, expectedDelegationFee);
+        stakingManager.claimDelegationFees(validationID);
+    }
+
+    function testCompleteDelegatorRemovalWithNonDelegatorRewardRecipient() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
         address rewardRecipient = address(42);
@@ -920,7 +955,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
             )
         );
         _initiateDelegatorRegistration(
@@ -986,7 +1021,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
             )
         );
         _initiateDelegatorRegistration(
@@ -995,7 +1030,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     }
 
     // Delegator may complete end delegation while validator is pending removed.
-    function testCompleteEndDelegationValidatorPendingRemoved() public {
+    function testCompleteDelegatorRemovalValidatorPendingRemoved() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -1064,7 +1099,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP + 1);
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.Completed
             )
         );
         _initiateDelegatorRegistration(
@@ -1137,7 +1172,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         );
     }
 
-    function testCompleteEndDelegationValidatorCompleted() public {
+    function testCompleteDelegatorRemovalValidatorCompleted() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -1178,7 +1213,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         );
     }
 
-    function testCompleteEndDelegationWrongNonce() public {
+    function testCompleteDelegatorRemovalWrongNonce() public {
         bytes32 validationID = _registerDefaultValidator();
         // Register two delegations
         address delegator1 = DEFAULT_DELEGATOR_ADDRESS;
@@ -1237,11 +1272,11 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         );
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
-        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, nonce));
+        vm.expectRevert(abi.encodeWithSelector(IValidatorManager.InvalidNonce.selector, nonce));
         stakingManager.completeDelegatorRemoval(delegationID2, 0);
     }
 
-    function testCompleteEndDelegationImplicitNonce() public {
+    function testCompleteDelegatorRemovalImplicitNonce() public {
         bytes32 validationID = _registerDefaultValidator();
 
         // Register two delegations
@@ -1316,7 +1351,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testCompleteEndValidation() public virtual override {
+    function testCompleteValidatorRemoval() public virtual override {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1342,7 +1377,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1351,7 +1386,62 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testCompleteEndValidationWithNonValidatorRewardRecipient() public virtual {
+    function testReplayValidatorRegistration() public virtual override {
+        uint64 initialTimestamp = uint64(block.timestamp);
+        bytes32 validationID = _registerDefaultValidator();
+
+        bytes memory setWeightMessage =
+            ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
+        bytes memory uptimeMessage = ValidatorMessages.packValidationUptimeMessage(
+            validationID, DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        );
+
+        _initiateValidatorRemoval({
+            validationID: validationID,
+            completionTimestamp: DEFAULT_COMPLETION_TIMESTAMP,
+            setWeightMessage: setWeightMessage,
+            includeUptime: true,
+            uptimeMessage: uptimeMessage,
+            force: false
+        });
+
+        uint256 expectedReward = rewardCalculator.calculateReward({
+            stakeAmount: _weightToValue(DEFAULT_WEIGHT),
+            validatorStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingStartTime: DEFAULT_REGISTRATION_TIMESTAMP,
+            stakingEndTime: DEFAULT_COMPLETION_TIMESTAMP,
+            uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
+        });
+
+        address validatorOwner = address(this);
+
+        _completeValidatorRemovalWithChecks({
+            validationID: validationID,
+            validatorOwner: validatorOwner,
+            expectedReward: expectedReward,
+            validatorWeight: DEFAULT_WEIGHT,
+            rewardRecipient: validatorOwner
+        });
+
+        // Set the timestamp to be the same as when we registered the initial validator so that the
+        // expiries will be the same, leading to the same validation ID.
+        vm.warp(initialTimestamp);
+        _beforeSend(_weightToValue(DEFAULT_WEIGHT), address(this));
+
+        vm.expectRevert(
+            abi.encodeWithSelector(IValidatorManager.InvalidValidatorStatus.selector, 4)
+        );
+
+        _initiateValidatorRegistration({
+            nodeID: DEFAULT_NODE_ID,
+            blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
+            remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
+            disableOwner: DEFAULT_P_CHAIN_OWNER,
+            weight: DEFAULT_WEIGHT
+        });
+    }
+
+    function testCompleteValidatorRemovalWithNonValidatorRewardRecipient() public virtual {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1380,7 +1470,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1421,7 +1511,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: address(this),
             expectedReward: expectedReward,
@@ -1464,7 +1554,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         address validatorOwner = address(this);
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -1527,7 +1617,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         stakingManager.changeValidatorRewardRecipient(validationID, badActor);
     }
 
-    function testInitiateEndValidation() public virtual override {
+    function testInitiateValidatorRemoval() public virtual override {
         bytes32 validationID = _registerDefaultValidator();
         bytes memory setWeightMessage =
             ValidatorMessages.packL1ValidatorWeightMessage(validationID, 1, 0);
@@ -1544,7 +1634,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function testInitiateEndValidationUseStoredUptime() public {
+    function testInitiateValidatorRemovalUseStoredUptime() public {
         bytes32 validationID = _registerDefaultValidator();
 
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP);
@@ -1583,7 +1673,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRemoval(validationID, true, address(0));
     }
 
-    function testInitiateEndValidationWithoutNewUptime() public {
+    function testInitiateValidatorRemovalWithoutNewUptime() public {
         bytes32 validationID = _registerDefaultValidator();
 
         vm.warp(DEFAULT_COMPLETION_TIMESTAMP);
@@ -1612,7 +1702,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _initiateValidatorRemoval(validationID, false, address(0));
     }
 
-    function testInitiateEndValidationInsufficientUptime() public {
+    function testInitiateValidatorRemovalInsufficientUptime() public {
         bytes32 validationID = _registerDefaultValidator();
         uint64 uptimePercentage = 79;
 
@@ -1670,7 +1760,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
             )
         );
         stakingManager.submitUptimeProof(validationID, 0);
@@ -1757,13 +1847,13 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
         // The invalid validationID has sent no weight updates, so its nonce should be 0
-        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 1));
+        vm.expectRevert(abi.encodeWithSelector(IValidatorManager.InvalidNonce.selector, 1));
 
         vm.warp(DEFAULT_DELEGATOR_COMPLETE_REGISTRATION_TIMESTAMP);
         stakingManager.completeDelegatorRegistration(delegationID, 0);
     }
 
-    function testCompleteEndDelegationWrongValidationID() public {
+    function testCompleteDelegatorRemovalWrongValidationID() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -1784,7 +1874,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             ValidatorMessages.packL1ValidatorWeightMessage(delegationID, 2, DEFAULT_WEIGHT);
         _mockGetPChainWarpMessage(setValidatorWeightPayload, true);
 
-        vm.expectRevert(abi.encodeWithSelector(ValidatorManager.InvalidNonce.selector, 2));
+        vm.expectRevert(abi.encodeWithSelector(IValidatorManager.InvalidNonce.selector, 2));
 
         stakingManager.completeDelegatorRemoval(delegationID, 0);
     }
@@ -1846,7 +1936,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: DEFAULT_COMPLETION_TIMESTAMP - DEFAULT_REGISTRATION_TIMESTAMP
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: address(this),
             expectedReward: expectedReward,
@@ -1859,7 +1949,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         stakingManager.initiateDelegatorRemoval(delegationID, true, 0);
     }
 
-    function testCompleteEndDelegationWhileActive() public {
+    function testCompleteDelegatorRemovalWhileActive() public {
         bytes32 validationID = _registerDefaultValidator();
         bytes32 delegationID = _registerDefaultDelegator(validationID);
 
@@ -1897,7 +1987,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                ValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
+                IValidatorManager.InvalidValidatorStatus.selector, ValidatorStatus.PendingRemoved
             )
         );
 
@@ -1999,7 +2089,6 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -2357,7 +2446,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
             uptimeSeconds: completionTimestamp - completeRegistrationTimestamp
         });
 
-        _completeEndValidationWithChecks({
+        _completeValidatorRemovalWithChecks({
             validationID: validationID,
             validatorOwner: validatorOwner,
             expectedReward: expectedReward,
@@ -2366,7 +2455,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         });
     }
 
-    function _completeEndValidationWithChecks(
+    function _completeValidatorRemovalWithChecks(
         bytes32 validationID,
         address validatorOwner,
         uint256 expectedReward,
@@ -2387,7 +2476,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         emit ValidatorRewardClaimed(validationID, rewardRecipient, expectedReward);
         _expectRewardIssuance(rewardRecipient, expectedReward);
 
-        _completeEndValidation(l1ValidatorRegistrationMessage);
+        _completeValidatorRemoval(l1ValidatorRegistrationMessage);
 
         if (rewardRecipient == validatorOwner) {
             assertEq(
@@ -2407,7 +2496,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         }
     }
 
-    function _completeEndValidation(
+    function _completeValidatorRemoval(
         bytes memory l1ValidatorRegistrationMessage
     ) internal {
         _mockGetPChainWarpMessage(l1ValidatorRegistrationMessage, true);
@@ -2474,7 +2563,7 @@ abstract contract StakingManagerTest is ValidatorManagerTest {
         stakingManager.completeDelegatorRemoval(delegationID, 0);
     }
 
-    function _initiateAndCompleteEndDelegationWithChecks(
+    function _initiateAndCompleteDelegatorRemovalWithChecks(
         bytes32 validationID,
         bytes32 delegationID
     ) internal {

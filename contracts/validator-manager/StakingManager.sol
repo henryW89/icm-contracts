@@ -5,8 +5,8 @@
 
 pragma solidity 0.8.25;
 
-import {ValidatorManager} from "./ValidatorManager.sol";
 import {ValidatorMessages} from "./ValidatorMessages.sol";
+import {IValidatorManager} from "./interfaces/IValidatorManager.sol";
 import {
     Delegator,
     DelegatorStatus,
@@ -14,7 +14,7 @@ import {
     PoSValidatorInfo,
     StakingManagerSettings
 } from "./interfaces/IStakingManager.sol";
-import {Validator, ValidatorStatus, PChainOwner} from "./ACP99Manager.sol";
+import {Validator, ValidatorStatus, PChainOwner} from "./interfaces/IACP99Manager.sol";
 import {IRewardCalculator} from "./interfaces/IRewardCalculator.sol";
 import {
     IWarpMessenger,
@@ -38,7 +38,7 @@ abstract contract StakingManager is
     // solhint-disable private-vars-leading-underscore
     /// @custom:storage-location erc7201:avalanche-icm.storage.StakingManager
     struct StakingManagerStorage {
-        ValidatorManager _manager;
+        IValidatorManager _manager;
         /// @notice The minimum amount of stake required to be a validator.
         uint256 _minimumStakeAmount;
         /// @notice The maximum amount of stake allowed to be a validator.
@@ -144,7 +144,7 @@ abstract contract StakingManager is
 
     // solhint-disable-next-line func-name-mixedcase
     function __StakingManager_init_unchained(
-        ValidatorManager manager,
+        IValidatorManager manager,
         uint256 minimumStakeAmount,
         uint256 maximumStakeAmount,
         uint64 minimumStakeDuration,
@@ -229,7 +229,13 @@ abstract contract StakingManager is
             revert UnauthorizedOwner(_msgSender());
         }
 
-        _withdrawValidationRewards($._posValidatorInfo[validationID].owner, validationID);
+        address rewardRecipient = $._rewardRecipients[validationID];
+
+        if (rewardRecipient == address(0)) {
+            rewardRecipient = $._posValidatorInfo[validationID].owner;
+        }
+
+        _withdrawValidationRewards(rewardRecipient, validationID);
     }
 
     /**
@@ -432,7 +438,6 @@ abstract contract StakingManager is
 
         address owner = $._posValidatorInfo[validationID].owner;
         address rewardRecipient = $._rewardRecipients[validationID];
-        delete $._rewardRecipients[validationID];
 
         // the reward-recipient should always be set, but just in case it isn't, we won't burn the reward
         if (rewardRecipient == address(0)) {
@@ -499,7 +504,6 @@ abstract contract StakingManager is
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -531,7 +535,6 @@ abstract contract StakingManager is
         bytes32 validationID = $._manager.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             weight: weight
@@ -579,6 +582,69 @@ abstract contract StakingManager is
         uint64 weight
     ) public view returns (uint256) {
         return uint256(weight) * _getStakingManagerStorage()._weightToValueFactor;
+    }
+
+    /**
+     * @notice Returns the settings used to initialize the StakingManager
+     */
+    function getStakingManagerSettings() public view returns (StakingManagerSettings memory) {
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
+        return StakingManagerSettings({
+            manager: $._manager,
+            minimumStakeAmount: $._minimumStakeAmount,
+            maximumStakeAmount: $._maximumStakeAmount,
+            minimumStakeDuration: $._minimumStakeDuration,
+            minimumDelegationFeeBips: $._minimumDelegationFeeBips,
+            maximumStakeMultiplier: uint8($._maximumStakeMultiplier),
+            weightToValueFactor: $._weightToValueFactor,
+            rewardCalculator: $._rewardCalculator,
+            uptimeBlockchainID: $._uptimeBlockchainID
+        });
+    }
+
+    /**
+     * @notice Returns the PoS validator information for the given validationID
+     * See {ValidatorManager-getValidator} to retreive information about the validator not specific to PoS
+     */
+    function getStakingValidator(
+        bytes32 validationID
+    ) public view returns (PoSValidatorInfo memory) {
+        return _getStakingManagerStorage()._posValidatorInfo[validationID];
+    }
+
+    /**
+     * @notice Returns the reward recipient and claimable reward amount for the given validationID
+     * @return The current validation reward recipient
+     * @return The current claimable validation reward amount
+     */
+    function getValidatorRewardInfo(
+        bytes32 validationID
+    ) public view returns (address, uint256) {
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
+        return ($._rewardRecipients[validationID], $._redeemableValidatorRewards[validationID]);
+    }
+
+    /**
+     * @notice Returns the delegator information for the given delegationID
+     */
+    function getDelegatorInfo(
+        bytes32 delegationID
+    ) public view returns (Delegator memory) {
+        return _getStakingManagerStorage()._delegatorStakes[delegationID];
+    }
+
+    /**
+     * @notice Returns the reward recipient and claimable reward amount for the given delegationID
+     * @return The current delegation reward recipient
+     * @return The current claimable delegation reward amount
+     */
+    function getDelegatorRewardInfo(
+        bytes32 delegationID
+    ) public view returns (address, uint256) {
+        StakingManagerStorage storage $ = _getStakingManagerStorage();
+        return (
+            $._delegatorRewardRecipients[delegationID], $._redeemableDelegatorRewards[delegationID]
+        );
     }
 
     /**

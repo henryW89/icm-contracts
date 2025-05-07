@@ -7,6 +7,14 @@ pragma solidity 0.8.25;
 
 import {ITeleporterReceiver} from "@teleporter/ITeleporterReceiver.sol";
 
+enum TransferrerMessageType {
+    REGISTER_REMOTE,
+    SINGLE_HOP_SEND,
+    SINGLE_HOP_CALL,
+    MULTI_HOP_SEND,
+    MULTI_HOP_CALL
+}
+
 /**
  * @notice Input parameters for transferring tokens to another chain as part of a simple transfer.
  * @param destinationBlockchainID Blockchain ID of the destination
@@ -65,14 +73,6 @@ struct SendAndCallInput {
     address primaryFeeTokenAddress;
     uint256 primaryFee;
     uint256 secondaryFee;
-}
-
-enum TransferrerMessageType {
-    REGISTER_REMOTE,
-    SINGLE_HOP_SEND,
-    SINGLE_HOP_CALL,
-    MULTI_HOP_SEND,
-    MULTI_HOP_CALL
 }
 
 /**

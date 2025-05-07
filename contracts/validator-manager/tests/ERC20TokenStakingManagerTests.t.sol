@@ -16,7 +16,7 @@ import {IERC20Mintable} from "../interfaces/IERC20Mintable.sol";
 import {SafeERC20} from "@openzeppelin/contracts@5.0.2/token/ERC20/utils/SafeERC20.sol";
 import {Initializable} from "@openzeppelin/contracts@5.0.2/proxy/utils/Initializable.sol";
 import {ValidatorManagerTest} from "./ValidatorManagerTests.t.sol";
-import {ACP99Manager, PChainOwner, ConversionData} from "../ACP99Manager.sol";
+import {IACP99Manager, PChainOwner, ConversionData} from "../interfaces/IACP99Manager.sol";
 import {ValidatorManager} from "../ValidatorManager.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
 
@@ -206,7 +206,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         app.initiateValidatorRegistration({
             nodeID: DEFAULT_NODE_ID,
             blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
-            registrationExpiry: DEFAULT_EXPIRY,
             remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
             disableOwner: DEFAULT_P_CHAIN_OWNER,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -225,7 +224,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint16 delegationFeeBips,
@@ -235,7 +233,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: delegationFeeBips,
@@ -247,7 +244,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
     function _initiateValidatorRegistration(
         bytes memory nodeID,
         bytes memory blsPublicKey,
-        uint64 registrationExpiry,
         PChainOwner memory remainingBalanceOwner,
         PChainOwner memory disableOwner,
         uint64 weight
@@ -255,7 +251,6 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         return app.initiateValidatorRegistration({
             nodeID: nodeID,
             blsPublicKey: blsPublicKey,
-            registrationExpiry: registrationExpiry,
             remainingBalanceOwner: remainingBalanceOwner,
             disableOwner: disableOwner,
             delegationFeeBips: DEFAULT_DELEGATION_FEE_BIPS,
@@ -294,7 +289,7 @@ contract ERC20TokenStakingManagerTest is StakingManagerTest {
         vm.expectCall(address(token), abi.encodeCall(IERC20Mintable.mint, (account, amount)));
     }
 
-    function _setUp() internal override returns (ACP99Manager) {
+    function _setUp() internal override returns (IACP99Manager) {
         // Construct the object under test
         app = new ERC20TokenStakingManager(ICMInitializable.Allowed);
         token = new ExampleERC20();

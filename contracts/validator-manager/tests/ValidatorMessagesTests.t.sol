@@ -7,7 +7,7 @@ pragma solidity 0.8.25;
 
 import {Test} from "@forge-std/Test.sol";
 import {ValidatorMessages} from "../ValidatorMessages.sol";
-import {PChainOwner, ConversionData, InitialValidator} from "../ACP99Manager.sol";
+import {PChainOwner, ConversionData, InitialValidator} from "../interfaces/IACP99Manager.sol";
 
 contract ValidatorMessagesTest is Test {
     bytes32 public constant DEFAULT_SUBNET_ID =
@@ -22,10 +22,11 @@ contract ValidatorMessagesTest is Test {
     bytes32 public constant DEFAULT_VALIDATION_ID =
         bytes32(hex"1234567812345678123456781234567812345678123456781234567812345678");
     uint64 public constant DEFAULT_WEIGHT = 1e6;
-    uint64 public constant DEFAULT_EXPIRY = 1000;
+    address public constant DEFAULT_OWNER = 0x1234567812345678123456781234567812345678;
+    uint64 public constant REGISTRATION_EXPIRY_LENGTH = 1 days;
+
     // solhint-disable-next-line var-name-mixedcase
     PChainOwner public DEFAULT_P_CHAIN_OWNER;
-    address public constant DEFAULT_OWNER = 0x1234567812345678123456781234567812345678;
 
     function setUp() public {
         address[] memory addresses = new address[](1);
@@ -80,7 +81,7 @@ contract ValidatorMessagesTest is Test {
             ValidatorMessages.ValidationPeriod({
                 subnetID: DEFAULT_SUBNET_ID,
                 nodeID: DEFAULT_NODE_ID,
-                registrationExpiry: DEFAULT_EXPIRY,
+                registrationExpiry: uint64(block.timestamp + REGISTRATION_EXPIRY_LENGTH),
                 blsPublicKey: invalidBLSKey,
                 remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
                 disableOwner: DEFAULT_P_CHAIN_OWNER,
@@ -252,7 +253,7 @@ contract ValidatorMessagesTest is Test {
             ValidatorMessages.ValidationPeriod({
                 subnetID: DEFAULT_SUBNET_ID,
                 nodeID: DEFAULT_NODE_ID,
-                registrationExpiry: DEFAULT_EXPIRY,
+                registrationExpiry: uint64(block.timestamp + REGISTRATION_EXPIRY_LENGTH),
                 blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
                 remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
                 disableOwner: DEFAULT_P_CHAIN_OWNER,
@@ -265,7 +266,7 @@ contract ValidatorMessagesTest is Test {
         assertEq(info.subnetID, DEFAULT_SUBNET_ID);
         assertEq(info.nodeID, DEFAULT_NODE_ID);
         assertEq(info.weight, DEFAULT_WEIGHT);
-        assertEq(info.registrationExpiry, DEFAULT_EXPIRY);
+        assertEq(info.registrationExpiry, uint64(block.timestamp + REGISTRATION_EXPIRY_LENGTH));
         assertEq(info.blsPublicKey, DEFAULT_BLS_PUBLIC_KEY);
 
         (bytes32 recoveredID,) = ValidatorMessages.packRegisterL1ValidatorMessage(info);
@@ -301,10 +302,10 @@ contract ValidatorMessagesTest is Test {
     function testL1ValidatorRegistrationMessage() public pure {
         bytes memory packed =
             ValidatorMessages.packL1ValidatorRegistrationMessage(DEFAULT_VALIDATION_ID, true);
-        (bytes32 validationID, bool valid) =
+        (bytes32 validationID, bool registered) =
             ValidatorMessages.unpackL1ValidatorRegistrationMessage(packed);
         assertEq(validationID, DEFAULT_VALIDATION_ID);
-        assert(valid);
+        assert(registered);
     }
 
     function testSetL1ValidatorWeightMessage() public pure {
@@ -343,7 +344,7 @@ contract ValidatorMessagesTest is Test {
             ValidatorMessages.ValidationPeriod({
                 subnetID: DEFAULT_SUBNET_ID,
                 nodeID: DEFAULT_NODE_ID,
-                registrationExpiry: DEFAULT_EXPIRY,
+                registrationExpiry: uint64(block.timestamp + REGISTRATION_EXPIRY_LENGTH),
                 blsPublicKey: DEFAULT_BLS_PUBLIC_KEY,
                 remainingBalanceOwner: DEFAULT_P_CHAIN_OWNER,
                 disableOwner: DEFAULT_P_CHAIN_OWNER,
